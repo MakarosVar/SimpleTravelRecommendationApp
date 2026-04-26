@@ -158,14 +158,12 @@
     }
 
     .results {
-      position: absolute;
-      top: 95px;
-      right: 35px;
-      width: 520px;
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-      z-index: 800;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(350px, 40vw);
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 10px;
     }
 
     .card {
@@ -373,7 +371,7 @@
   </div>
 
   <section id="home" class="page-section active">
-    <div class="hero">
+    <div class="hero" id='heroSection'>
       <h1>Explore Dream Destination</h1>
       <p>
         TravelBloom encourages exploration of unfamiliar territories, embracing diverse cultures

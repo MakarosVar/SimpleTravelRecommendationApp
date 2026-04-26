@@ -27,6 +27,7 @@ function showPage(pageId) {
 }
 
 function searchRecommendations() {
+  document.getElementById('heroSection').style.display = 'none';
   const input = document
     .getElementById('searchInput')
     .value.toLowerCase()
@@ -99,10 +100,17 @@ function searchRecommendations() {
     `;
     return;
   }
-  const shuffled = shuffleArray(results);
+  const uniqueResults = removeDuplicates(results);
+  const shuffled = shuffleArray(uniqueResults);
   displayResults(shuffled.slice(0, 2));
 }
 
+function removeDuplicates(results) {
+  return results.filter(
+    (place, index, self) =>
+      index === self.findIndex((item) => item.name === place.name),
+  );
+}
 function shuffleArray(array) {
   const shuffled = [...array]; // copy (important)
 
@@ -140,4 +148,5 @@ function displayResults(results) {
 function clearResults() {
   document.getElementById('searchInput').value = '';
   document.getElementById('results').innerHTML = '';
+  document.getElementById('heroSection').style.display = 'block';
 }
