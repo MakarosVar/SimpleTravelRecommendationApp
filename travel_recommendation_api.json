@@ -1,0 +1,80 @@
+{
+  "countries": [
+    {
+      "id": 1,
+      "name": "Australia",
+      "cities": [
+        {
+          "name": "Sydney, Australia",
+          "imageUrl": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1000&q=80",
+          "description": "A vibrant city known for its iconic Sydney Opera House, beautiful harbor, and stunning beaches."
+        },
+        {
+          "name": "Melbourne, Australia",
+          "imageUrl": "https://images.unsplash.com/photo-1514395462725-fb4566210144?auto=format&fit=crop&w=1000&q=80",
+          "description": "A cultural hub famous for its art, food, coffee culture, laneways, and lively entertainment scene."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Japan",
+      "cities": [
+        {
+          "name": "Tokyo, Japan",
+          "imageUrl": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1000&q=80",
+          "description": "A bustling metropolis blending modern technology, traditional temples, shopping districts, and world-class cuisine."
+        },
+        {
+          "name": "Kyoto, Japan",
+          "imageUrl": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1000&q=80",
+          "description": "A historic city filled with peaceful temples, traditional wooden houses, gardens, and cultural landmarks."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Brazil",
+      "cities": [
+        {
+          "name": "Rio de Janeiro, Brazil",
+          "imageUrl": "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1000&q=80",
+          "description": "A lively city famous for Christ the Redeemer, Copacabana Beach, Sugarloaf Mountain, and carnival celebrations."
+        },
+        {
+          "name": "São Paulo, Brazil",
+          "imageUrl": "https://images.unsplash.com/photo-1543059080-f9b1272213d5?auto=format&fit=crop&w=1000&q=80",
+          "description": "Brazil's largest city, known for its cultural diversity, restaurants, museums, and energetic urban lifestyle."
+        }
+      ]
+    }
+  ],
+  "temples": [
+    {
+      "id": 1,
+      "name": "Angkor Wat, Cambodia",
+      "imageUrl": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1000&q=80",
+      "description": "A magnificent temple complex and UNESCO World Heritage site, known for its ancient Khmer architecture."
+    },
+    {
+      "id": 2,
+      "name": "Kinkaku-ji, Japan",
+      "imageUrl": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1000&q=80",
+      "description": "Also known as the Golden Pavilion, this Zen Buddhist temple is famous for its stunning gold-covered exterior."
+    }
+  ],
+  "beaches": [
+    {
+      "id": 1,
+      "name": "Bora Bora, French Polynesia",
+      "imageUrl": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1000&q=80",
+      "description": "A tropical paradise known for turquoise waters, luxury resorts, coral reefs, and breathtaking lagoon views."
+    },
+    {
+      "id": 2,
+      "name": "Copacabana Beach, Brazil",
+      "imageUrl": "https://images.unsplash.com/photo-1516306580123-e6e52b1b7b5f?auto=format&fit=crop&w=1000&q=80",
+      "description": "A world-famous beach in Rio de Janeiro, celebrated for its lively atmosphere, golden sand, and scenic coastline."
+    }
+  ]
+}
