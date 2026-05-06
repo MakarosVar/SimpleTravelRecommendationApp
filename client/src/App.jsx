@@ -6,20 +6,20 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import travelData from './data/travelData.json';
 import { searchRecommendations } from './utils/searchRecommendations';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
-  const [activePage, setActivePage] = useState('home');
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
 
-  function handlePageChange(page) {
-    setActivePage(page);
+  // function handlePageChange(page) {
+  //   setActivePage(page);
 
-    if (page !== 'home') {
-      setSearchTerm('');
-      setResults([]);
-    }
-  }
+  //   if (page !== 'home') {
+  //     setSearchTerm('');
+  //     setResults([]);
+  //   }
+  // }
 
   function handleSearch() {
     const searchResults = searchRecommendations(
@@ -35,18 +35,20 @@ function App() {
   }
   return (
     <>
-      <NavBar
-        activePage={activePage}
-        onPageChange={handlePageChange}
-        searchTerm={searchTerm}
-        onSearchTermChange={setSearchTerm}
-        onSearch={handleSearch}
-        onClear={handleClear}
-      />
-      <SocialLinks />
-      {activePage === 'home' && <Home results={results} />}
-      {activePage === 'about' && <About />}
-      {activePage === 'contact' && <Contact />}
+      <BrowserRouter>
+        <NavBar
+          searchTerm={searchTerm}
+          onSearchTermChange={setSearchTerm}
+          onSearch={handleSearch}
+          onClear={handleClear}
+        />
+        <SocialLinks />
+        <Routes>
+          <Route path="/" element={<Home results={results} />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
