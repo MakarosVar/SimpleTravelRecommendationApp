@@ -11,6 +11,16 @@ function App() {
   const [activePage, setActivePage] = useState('home');
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
+
+  function handlePageChange(page) {
+    setActivePage(page);
+
+    if (page !== 'home') {
+      setSearchTerm('');
+      setResults([]);
+    }
+  }
+
   function handleSearch() {
     const searchResults = searchRecommendations(
       travelData,
@@ -27,7 +37,7 @@ function App() {
     <>
       <NavBar
         activePage={activePage}
-        onPageChange={setActivePage}
+        onPageChange={handlePageChange}
         searchTerm={searchTerm}
         onSearchTermChange={setSearchTerm}
         onSearch={handleSearch}

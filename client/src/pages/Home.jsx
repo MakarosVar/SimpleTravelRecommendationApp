@@ -5,7 +5,9 @@ function Home({ results }) {
   return (
     <section className="min-h-screen px-16 pt-30">
       {results.length === 0 && <Hero />}
-      <RecommendationList results={results} />
+      <div className={results.length > 0 ? 'ml-30' : ''}>
+        <RecommendationList results={results} />
+      </div>
     </section>
   );
 }
