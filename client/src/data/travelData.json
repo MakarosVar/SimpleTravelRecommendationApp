@@ -47,6 +47,38 @@
           "description": "Brazil's largest city, known for its cultural diversity, restaurants, museums, and energetic urban lifestyle."
         }
       ]
+    },
+    {
+      "id": 4,
+      "name": "Italy",
+      "cities": [
+        {
+          "name": "Rome, Italy",
+          "imageUrl": "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1000&q=80",
+          "description": "A historic capital filled with ancient ruins, piazzas, museums, and world-famous architecture."
+        },
+        {
+          "name": "Venice, Italy",
+          "imageUrl": "https://images.unsplash.com/photo-1514890547357-a9ee288728e0?auto=format&fit=crop&w=1000&q=80",
+          "description": "A romantic canal city known for gondolas, bridges, historic palaces, and unique lagoon views."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "France",
+      "cities": [
+        {
+          "name": "Paris, France",
+          "imageUrl": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1000&q=80",
+          "description": "A timeless city known for the Eiffel Tower, art museums, elegant streets, cafés, and fashion."
+        },
+        {
+          "name": "Nice, France",
+          "imageUrl": "https://images.unsplash.com/photo-1533614767277-8788fb583450?auto=format&fit=crop&w=1000&q=80",
+          "description": "A sunny Mediterranean city with beaches, colorful old streets, seaside promenades, and relaxed coastal charm."
+        }
+      ]
     }
   ],
   "temples": [
@@ -61,6 +93,24 @@
       "name": "Kinkaku-ji, Japan",
       "imageUrl": "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=1000&q=80",
       "description": "Also known as the Golden Pavilion, this Zen Buddhist temple is famous for its stunning gold-covered exterior."
+    },
+    {
+      "id": 3,
+      "name": "Wat Arun, Thailand",
+      "imageUrl": "https://images.unsplash.com/photo-1563492065599-3520f775eeed?auto=format&fit=crop&w=1000&q=80",
+      "description": "A riverside Buddhist temple in Bangkok, known for its colorful spires and beautiful views at sunset."
+    },
+    {
+      "id": 4,
+      "name": "Borobudur, Indonesia",
+      "imageUrl": "https://images.unsplash.com/photo-1602028678417-1db7d19d54de?auto=format&fit=crop&w=1000&q=80",
+      "description": "A massive Buddhist temple complex famous for stone stupas, ancient carvings, and sunrise views."
+    },
+    {
+      "id": 5,
+      "name": "Meenakshi Temple, India",
+      "imageUrl": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1000&q=80",
+      "description": "A colorful South Indian temple known for its towering gateways, detailed sculptures, and spiritual atmosphere."
     }
   ],
   "beaches": [
@@ -75,6 +125,30 @@
       "name": "Copacabana Beach, Brazil",
       "imageUrl": "https://images.unsplash.com/photo-1516306580123-e6e52b1b7b5f?auto=format&fit=crop&w=1000&q=80",
       "description": "A world-famous beach in Rio de Janeiro, celebrated for its lively atmosphere, golden sand, and scenic coastline."
+    },
+    {
+      "id": 3,
+      "name": "Navagio Beach, Greece",
+      "imageUrl": "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1000&q=80",
+      "description": "A dramatic cove in Zakynthos known for clear blue water, limestone cliffs, and its famous shipwreck."
+    },
+    {
+      "id": 4,
+      "name": "Whitehaven Beach, Australia",
+      "imageUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80",
+      "description": "A stunning beach famous for bright white silica sand, crystal-clear water, and peaceful island scenery."
+    },
+    {
+      "id": 5,
+      "name": "Maya Bay, Thailand",
+      "imageUrl": "https://images.unsplash.com/photo-1504214208698-ea1916a2195a?auto=format&fit=crop&w=1000&q=80",
+      "description": "A scenic bay surrounded by limestone cliffs, turquoise water, and tropical island landscapes."
+    },
+    {
+      "id": 6,
+      "name": "Anse Source d'Argent, Seychelles",
+      "imageUrl": "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1000&q=80",
+      "description": "A postcard-like beach known for granite boulders, shallow turquoise water, and soft white sand."
     }
   ]
 }
