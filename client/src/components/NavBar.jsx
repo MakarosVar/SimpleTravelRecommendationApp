@@ -1,6 +1,13 @@
 import SearchBox from './SearchBox';
 
-function NavBar({ activePage, onPageChange }) {
+function NavBar({
+  activePage,
+  onPageChange,
+  searchTerm,
+  onSearchTermChange,
+  onSearch,
+  onClear,
+}) {
   return (
     <nav className="fixed top-0 left-0 z-50 flex h-17.5 w-full items-center justify-between bg-black/75 px-8 text-white">
       <div className="flex items-center gap-2.5 text-3xl font-bold italic">
@@ -38,7 +45,14 @@ function NavBar({ activePage, onPageChange }) {
         </button>
       </div>
       <div className="ml-auto">
-        {activePage === 'home' && <SearchBox />}
+        {activePage === 'home' && (
+          <SearchBox
+            searchTerm={searchTerm}
+            onSearchTermChange={onSearchTermChange}
+            onSearch={onSearch}
+            onClear={onClear}
+          />
+        )}
       </div>
     </nav>
   );

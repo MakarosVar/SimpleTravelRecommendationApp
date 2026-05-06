@@ -1,10 +1,11 @@
 import Hero from '../components/Hero';
-// import RecommendationList from '../components/RecommendationList';
+import RecommendationList from '../components/RecommendationList';
 
-function Home() {
+function Home({ results }) {
   return (
     <section className="min-h-screen px-16 pt-30">
-      <Hero />
+      {results.length === 0 && <Hero />}
+      <RecommendationList results={results} />
     </section>
   );
 }
