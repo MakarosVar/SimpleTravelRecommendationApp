@@ -5,46 +5,16 @@ export function searchRecommendations(travelData, searchTerm) {
     return [];
   }
 
-  let results = [];
-
-  if (input.includes('beach') || input.includes('beaches')) {
-    results = travelData.beaches;
-  } else if (input.includes('temple') || input.includes('temples')) {
-    results = travelData.temples;
-  } else if (
-    input.includes('country') ||
-    input.includes('countries') ||
-    input.includes('city') ||
-    input.includes('cities')
-  ) {
-    results = travelData.countries.flatMap(
-      (country) => country.cities,
+  let results = travelData.destinations.filter((destination) => {
+    return (
+      destination.name.toLowerCase().includes(input) ||
+      destination.country.toLowerCase().includes(input) ||
+      destination.type.toLowerCase().includes(input) ||
+      destination.tags.some((tag) =>
+        tag.toLowerCase().includes(input),
+      )
     );
-  } else {
-    travelData.countries.forEach((country) => {
-      if (country.name.toLowerCase().includes(input)) {
-        results = country.cities;
-      }
-
-      country.cities.forEach((city) => {
-        if (city.name.toLowerCase().includes(input)) {
-          results.push(city);
-        }
-      });
-    });
-
-    travelData.temples.forEach((temple) => {
-      if (temple.name.toLowerCase().includes(input)) {
-        results.push(temple);
-      }
-    });
-
-    travelData.beaches.forEach((beach) => {
-      if (beach.name.toLowerCase().includes(input)) {
-        results.push(beach);
-      }
-    });
-  }
+  });
   const uniqueResults = removeDuplicates(results);
   const shuffledResults = shuffleArray(uniqueResults);
 
