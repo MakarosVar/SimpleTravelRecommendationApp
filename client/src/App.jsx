@@ -7,6 +7,7 @@ import Contact from './pages/Contact';
 import travelData from './data/travelData.json';
 import { searchRecommendations } from './utils/searchRecommendations';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import DestinationDetails from './pages/DestinationDetails';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -47,6 +48,10 @@ function App() {
           <Route path="/" element={<Home results={results} />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route
+            path="/destination/:id"
+            element={<DestinationDetails />}
+          />
         </Routes>
       </BrowserRouter>
     </>
