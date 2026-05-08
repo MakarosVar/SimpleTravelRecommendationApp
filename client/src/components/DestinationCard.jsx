@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 function DestinationCard({ place }) {
   return (
-    <article className="flex flex-col h-108 overflow-hidden rounded-xl bg-white text-gray-900 shadow-2xl">
+    <article className="flex flex-col p-4.5 flex-1 min-h-108 overflow-hidden rounded-xl bg-white text-gray-900 shadow-2xl">
       <img
         src={place.imageUrl}
         alt={place.name}
@@ -15,8 +15,11 @@ function DestinationCard({ place }) {
           {place.description}
         </p>
 
-        <Link to={`/destination/${place.id}`}>
-          <button className="mt-auto w-fit rounded bg-teal-700 px-5 py-2.5 text-white transition hover:bg-teal-600">
+        <Link
+          to={`/destination/${place.id}`}
+          className="mt-auto w-fit"
+        >
+          <button className="rounded bg-teal-700 px-5 py-2.5 text-white transition hover:bg-teal-600">
             Visit
           </button>
         </Link>

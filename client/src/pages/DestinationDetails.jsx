@@ -1,8 +1,9 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import travelData from '../data/travelData.json';
 
 function DestinationDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const destination = travelData.destinations.find(
     (destination) => destination.id === Number(id),
   );
@@ -15,7 +16,13 @@ function DestinationDetails() {
   }
   return (
     <div className="min-h-screen px-6 pt-28 pb-16 text-white">
-      <section className="mx-auto max-w-5xl overflow-hidden rounded-3xl bg-black/50 shadow-2xl backdrop-blur">
+      <section className="mx-auto relative max-w-5xl overflow-hidden rounded-3xl bg-black/50 shadow-2xl backdrop-blur">
+        <button
+          className="absolute left-6 top-6 z-10  rounded-full  bg-black/60  px-4 py-2  text-white  shadow-lg  backdrop-blur-md  border border-white/20"
+          onClick={() => navigate(-1)}
+        >
+          ← Back
+        </button>
         <img
           className="h-105 w-full object-cover"
           src={destination.imageUrl}

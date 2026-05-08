@@ -18,6 +18,7 @@ function NavBar({
       <div className="absolute left-1/2 flex -translate-x-1/2 gap-8">
         <NavLink
           to="/"
+          onClick={onClear}
           className={({ isActive }) =>
             `text-base font-bold transition hover:text-teal-300 ${
               isActive ? 'text-teal-300' : 'text-white'
@@ -28,6 +29,7 @@ function NavBar({
         </NavLink>
         <NavLink
           to="/about"
+          onClick={onClear}
           className={({ isActive }) =>
             `text-base font-bold transition hover:text-teal-300 ${
               isActive ? 'text-teal-300' : 'text-white'
@@ -38,6 +40,7 @@ function NavBar({
         </NavLink>
         <NavLink
           to="/contact"
+          onClick={onClear}
           className={({ isActive }) =>
             `text-base font-bold transition hover:text-teal-300 ${
               isActive ? 'text-teal-300' : 'text-white'
