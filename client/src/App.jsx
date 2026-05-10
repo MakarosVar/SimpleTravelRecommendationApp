@@ -13,15 +13,6 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
 
-  // function handlePageChange(page) {
-  //   setActivePage(page);
-
-  //   if (page !== 'home') {
-  //     setSearchTerm('');
-  //     setResults([]);
-  //   }
-  // }
-
   function handleSearch() {
     const searchResults = searchRecommendations(
       travelData,

@@ -1,12 +1,19 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import travelData from '../data/travelData.json';
+import { useContext } from 'react';
+import { FavContext } from '../context/FavoriteContext';
 
 function DestinationDetails() {
   const { id } = useParams();
+  const destinationId = Number(id);
   const navigate = useNavigate();
   const destination = travelData.destinations.find(
-    (destination) => destination.id === Number(id),
+    (destination) => destination.id === destinationId,
   );
+
+  const { toggleFavorite, isFavorite } = useContext(FavContext);
+  const favorite = isFavorite(destinationId);
+
   if (!destination) {
     return (
       <div className="min-h-screen pt-32 text-center text-white">
@@ -22,6 +29,12 @@ function DestinationDetails() {
           onClick={() => navigate(-1)}
         >
           ← Back
+        </button>
+        <button
+          className="absolute right-6 top-6 z-10  rounded-full  bg-teal-700/60  px-4 py-2  text-white  shadow-lg  backdrop-blur-md  border border-white/20"
+          onClick={() => toggleFavorite(destination.id)}
+        >
+          {favorite ? '♥ Saved' : '♡ Save'}
         </button>
         <img
           className="h-105 w-full object-cover"
