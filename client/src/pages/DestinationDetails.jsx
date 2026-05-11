@@ -3,7 +3,7 @@ import travelData from '../data/travelData.json';
 import { useContext } from 'react';
 import { FavContext } from '../context/FavoriteContext';
 
-function DestinationDetails() {
+export default function DestinationDetails() {
   const { id } = useParams();
   const destinationId = Number(id);
   const navigate = useNavigate();
@@ -65,4 +65,3 @@ function DestinationDetails() {
     </div>
   );
 }
-export default DestinationDetails;

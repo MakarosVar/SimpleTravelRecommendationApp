@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-function DestinationCard({ place }) {
+export default function DestinationCard({ place }) {
   return (
     <article className="flex flex-col p-4.5 flex-1 min-h-108 overflow-hidden rounded-xl bg-white text-gray-900 shadow-2xl">
       <img
@@ -27,5 +27,3 @@ function DestinationCard({ place }) {
     </article>
   );
 }
-
-export default DestinationCard;

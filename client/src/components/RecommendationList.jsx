@@ -1,6 +1,6 @@
 import DestinationCard from './DestinationCard';
 
-function RecommendationList({ results }) {
+export default function RecommendationList({ results }) {
   if (!results || results.length === 0) {
     return null;
   }
@@ -13,5 +13,3 @@ function RecommendationList({ results }) {
     </div>
   );
 }
-
-export default RecommendationList;

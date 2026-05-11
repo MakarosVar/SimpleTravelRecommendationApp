@@ -1,21 +1,36 @@
-function Hero() {
+import SearchBox from './SearchBox';
+
+export default function Hero({
+  searchTerm,
+  onSearchTermChange,
+  onSearch,
+  onClear,
+  hasResults,
+}) {
   return (
-    <div className="ml-15 mt-17.5 max-w-130">
-      <h1 className="mb-6 text-[72px] text-white leading-[1.05] font-black uppercase">
-        Explore Dream Destination
-      </h1>
+    <div
+      className={hasResults ? 'ml-30 max-w-160' : 'ml-15 max-w-130'}
+    >
+      {!hasResults && (
+        <>
+          <h1 className="mb-6 text-[72px] leading-[1.05] font-black text-white uppercase">
+            Explore Dream Destination
+          </h1>
 
-      <p className="mb-6 text-white rounded-md bg-black/25 p-4 text-lg leading-[1.8]">
-        TravelBloom encourages exploration of unfamiliar territories,
-        embracing diverse cultures and landscapes, while pursuing the
-        desired destination that captivates the heart and ignites a
-        sense of wonder.
-      </p>
-
-      <button className="rounded bg-teal-700 px-8 py-3 font-bold text-white hover:bg-teal-600 transition">
-        Book Now
-      </button>
+          <p className="mb-6 rounded-md bg-black/25 p-4 text-lg leading-[1.8] text-white">
+            TravelBloom encourages exploration of unfamiliar
+            territories, embracing diverse cultures and landscapes,
+            while pursuing the desired destination that captivates the
+            heart and ignites a sense of wonder.
+          </p>
+        </>
+      )}
+      <SearchBox
+        searchTerm={searchTerm}
+        onSearchTermChange={onSearchTermChange}
+        onSearch={onSearch}
+        onClear={onClear}
+      />
     </div>
   );
 }
-export default Hero;

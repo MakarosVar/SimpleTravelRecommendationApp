@@ -1,4 +1,4 @@
-function Contact() {
+export default function Contact() {
   return (
     <section className="min-h-screen px-16 pt-30 pb-12.5">
       <div className="max-w-275 ml-15 p-9 rounded-2xl bg-black/45 ">
@@ -66,4 +66,3 @@ function Contact() {
     </section>
   );
 }
-export default Contact;
