@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { FavContext } from '../context/FavoriteContext';
 import travelData from '../data/travelData.json';
 import DestinationCard from '../components/DestinationCard';
+import PageContainer from '../components/layout/PageContainer';
 
 export default function Favorites() {
   const { favorites } = useContext(FavContext);
@@ -16,12 +17,14 @@ export default function Favorites() {
     );
   }
   return (
-    <section className="min-h-screen px-16 pt-30 ml-10">
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 overflow-x-auto pb-2.5">
-        {favoriteDestinations.map((place) => (
-          <DestinationCard key={place.name} place={place} />
-        ))}
-      </div>
-    </section>
+    <PageContainer>
+      <section className="min-h-screen">
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 overflow-x-auto pb-2.5">
+          {favoriteDestinations.map((place) => (
+            <DestinationCard key={place.name} place={place} />
+          ))}
+        </div>
+      </section>
+    </PageContainer>
   );
 }

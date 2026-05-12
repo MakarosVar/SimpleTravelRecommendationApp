@@ -27,7 +27,28 @@ export default function NavBar({ onClear }) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  const navLinks = [
+  function getNavLinkClass({ isActive }, extraClasses = '') {
+    return `
+    text-base font-bold transition
+    ${extraClasses}
+    ${isActive ? 'text-teal-300' : 'text-white hover:text-teal-300'}
+  `;
+  }
+  function renderLinks(links, extraClasses = '', onClick) {
+    return links.map((link) => (
+      <NavLink
+        key={link.path}
+        to={link.path}
+        onClick={onClick}
+        className={(navData) =>
+          getNavLinkClass(navData, extraClasses)
+        }
+      >
+        {link.label}
+      </NavLink>
+    ));
+  }
+  const mainNavLinks = [
     { label: 'Home', path: '/' },
     { label: 'About Us', path: '/about' },
     { label: 'Contact Us', path: '/contact' },
@@ -47,20 +68,7 @@ export default function NavBar({ onClear }) {
         <span>TravelBloom</span>
       </div>
       <div className="hidden md:absolute md:left-1/2 md:flex md:-translate-x-1/2 md:items-center md:gap-8">
-        {navLinks.map((link) => (
-          <NavLink
-            key={link.path}
-            to={link.path}
-            onClick={onClear}
-            className={({ isActive }) =>
-              `text-base font-bold transition hover:text-teal-300 ${
-                isActive ? 'text-teal-300' : 'text-white'
-              }`
-            }
-          >
-            {link.label}
-          </NavLink>
-        ))}
+        {renderLinks(mainNavLinks)}
       </div>
       <div className="hidden md:flex items-center gap-4">
         {userLinks.map((link) => (
@@ -68,10 +76,8 @@ export default function NavBar({ onClear }) {
             key={link.path}
             to={link.path}
             onClick={onClear}
-            className={({ isActive }) =>
-              `text-base font-bold transition inline-flex items-center gap-2 hover:text-teal-300 ${
-                isActive ? 'text-teal-300' : 'text-white'
-              }`
+            className={(navData) =>
+              `${getNavLinkClass(navData)} relative inline-flex items-center gap-2`
             }
           >
             <span>{link.label}</span>
@@ -99,30 +105,19 @@ export default function NavBar({ onClear }) {
                 : '-translate-y-6 opacity-0 pointer-events-none'
             }`}
         >
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.path}
-              to={link.path}
-              onClick={handleMobileNavigation}
-              className={({ isActive }) =>
-                `text-base font-bold transition hover:text-teal-300 ${
-                  isActive ? 'text-teal-300' : 'text-white'
-                }`
-              }
-            >
-              {link.label}
-            </NavLink>
-          ))}
+          {renderLinks(
+            mainNavLinks,
+            'block py-2',
+            handleMobileNavigation,
+          )}
           <div className="mb-2.5 ml-3 w-50 h-0.5 bg-white"></div>
           {userLinks.map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
               onClick={handleMobileNavigation}
-              className={({ isActive }) =>
-                `text-base font-bold transition inline-flex items-center gap-2 hover:text-teal-300 ${
-                  isActive ? 'text-teal-300' : 'text-white'
-                }`
+              className={(navData) =>
+                `${getNavLinkClass(navData, 'flex items-center gap-2 py-2')}`
               }
             >
               <span>{link.label}</span>

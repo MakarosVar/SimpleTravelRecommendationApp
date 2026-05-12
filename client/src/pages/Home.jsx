@@ -1,18 +1,10 @@
 import Hero from '../components/Hero';
 import RecommendationList from '../components/RecommendationList';
 
-export default function Home({
-  results,
-  searchTerm,
-  onSearchTermChange,
-  onSearch,
-  onClear,
-}) {
+export default function Home({ results, onSearch, onClear }) {
   return (
     <section className="min-h-screen px-16 pt-30">
       <Hero
-        searchTerm={searchTerm}
-        onSearchTermChange={onSearchTermChange}
         onSearch={onSearch}
         onClear={onClear}
         hasResults={results.length > 0}

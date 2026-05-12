@@ -11,19 +11,19 @@ import DestinationDetails from './pages/DestinationDetails';
 import Favorites from './pages/Favorites';
 
 export default function App() {
-  const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
 
-  function handleSearch() {
+  function handleSearch(searchTerm, selectedType) {
     const searchResults = searchRecommendations(
       travelData,
       searchTerm,
+      selectedType,
     );
+
     setResults(searchResults);
   }
 
   function handleClear() {
-    setSearchTerm('');
     setResults([]);
   }
   return (
@@ -37,8 +37,6 @@ export default function App() {
             element={
               <Home
                 results={results}
-                searchTerm={searchTerm}
-                onSearchTermChange={setSearchTerm}
                 onSearch={handleSearch}
                 onClear={handleClear}
               />
