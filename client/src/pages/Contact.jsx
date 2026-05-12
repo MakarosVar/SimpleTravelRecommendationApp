@@ -1,6 +1,6 @@
 export default function Contact() {
   return (
-    <section className="min-h-[calc(100vh-70px)] items-center justify-center px-4 py-24 md:px-16">
+    <section className="min-h-[calc(100vh-70px)] items-center justify-center px-16 py-24 md:px-16 pl-20 md:pl-32">
       <div className=" flex w-full max-w-7xl flex-col gap-10 rounded-3xl bg-black/25 p-8 md:flex-row md:items-center md:justify-between md:p-12 ">
         <div className="w-full text-center md:w-1/2 md:text-left">
           <h1 className="mb-6 text-5xl font-black text-white uppercase md:text-7xl">
