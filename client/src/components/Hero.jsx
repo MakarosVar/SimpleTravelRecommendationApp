@@ -13,7 +13,7 @@ export default function Hero({
     >
       {!hasResults && (
         <>
-          <h1 className="mb-6 text-[72px] leading-[1.05] font-black text-white uppercase">
+          <h1 className="mb-6 text-5xl md:text-[72px] leading-[1.05] font-black text-white uppercase">
             Explore Dream Destination
           </h1>
 

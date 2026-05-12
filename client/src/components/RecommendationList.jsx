@@ -6,7 +6,7 @@ export default function RecommendationList({ results }) {
   }
 
   return (
-    <div className="mt-10 grid auto-cols-[minmax(350px,40vw)] grid-flow-col gap-5 overflow-x-auto pb-2.5">
+    <div className="flex flex-col mt-10 md:grid md:auto-cols-[minmax(350px,40vw)] md:grid-flow-col gap-6 md:overflow-x-auto pb-2.5">
       {results.map((place) => (
         <DestinationCard key={place.name} place={place} />
       ))}
