@@ -25,9 +25,8 @@ export function searchRecommendations(
     return (matchesFields || matchesTags) && matchesType;
   });
   const uniqueResults = removeDuplicates(results);
-  const shuffledResults = shuffleArray(uniqueResults);
 
-  return shuffledResults.slice(0, 2);
+  return uniqueResults;
 }
 
 function shuffleArray(array) {

@@ -4,11 +4,12 @@ export default function RecommendationList({ results }) {
   if (!results || results.length === 0) {
     return null;
   }
+  const visibleResults = results.slice(0, 6);
 
   return (
-    <div className="flex flex-col mt-10 md:grid md:auto-cols-[minmax(350px,40vw)] md:grid-flow-col gap-6 md:overflow-x-auto pb-2.5">
-      {results.map((place) => (
-        <DestinationCard key={place.name} place={place} />
+    <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+      {visibleResults.map((place) => (
+        <DestinationCard key={place.id} place={place} />
       ))}
     </div>
   );

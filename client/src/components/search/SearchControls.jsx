@@ -32,7 +32,7 @@ export default function SearchControls({
           onChange={(event) => onSortChange(event.target.value)}
           className="rounded-lg bg-white px-3 py-1 text-gray-900"
         >
-          <option value="random">Random</option>
+          <option value="default">Default</option>
           <option value="name">Name</option>
           <option value="country">Country</option>
         </select>

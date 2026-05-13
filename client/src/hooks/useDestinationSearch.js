@@ -2,36 +2,50 @@ import { useState } from 'react';
 import travelData from '../data/travelData.json';
 import { searchRecommendations } from '../utils/searchRecommendations';
 import { sortDestinations } from '../utils/sortDestinations';
+import { useSearchParams } from 'react-router-dom';
 
 export function useDestinationSearch() {
-  const [results, setResults] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('all');
-  const [sortBy, setSortBy] = useState('random');
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get('q') || '',
+  );
+  const [selectedType, setSelectedType] = useState(
+    searchParams.get('type') || 'all',
+  );
+  const [sortBy, setSortBy] = useState(
+    searchParams.get('sort') || 'default',
+  );
+  const results =
+    !searchTerm && selectedType === 'all'
+      ? []
+      : sortDestinations(
+          searchRecommendations(travelData, searchTerm, selectedType),
+          sortBy,
+        );
   function handleSearch(searchTerm, selectedType) {
     setSearchTerm(searchTerm);
     setSelectedType(selectedType);
 
-    const searchResults = searchRecommendations(
-      travelData,
-      searchTerm,
-      selectedType,
-    );
-    const sortedResults = sortDestinations(searchResults, sortBy);
-    setResults(sortedResults);
+    setSearchParams({
+      q: searchTerm,
+      type: selectedType,
+      sort: sortBy,
+    });
   }
   function changeSort(sortValue) {
     setSortBy(sortValue);
-    setResults((currentResults) =>
-      sortDestinations(currentResults, sortValue),
-    );
-  }
 
+    setSearchParams({
+      q: searchTerm,
+      type: selectedType,
+      sort: sortValue,
+    });
+  }
   function handleClear() {
     setSearchTerm('');
     setSelectedType('all');
-    setResults([]);
+    setSortBy('default');
+    setSearchParams({});
   }
 
   return {
