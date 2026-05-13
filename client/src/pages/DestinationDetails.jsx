@@ -12,21 +12,17 @@ export default function DestinationDetails() {
   const destination = travelData.destinations.find(
     (destination) => destination.id === destinationId,
   );
-
   const { addToTrip, removeFromTrip, isInTrip } =
     useContext(TripContext);
+  const { toggleFavorite, isFavorite } = useContext(FavContext);
+  if (!destination) {
+    return <PageContainer>Destination not found.</PageContainer>;
+  }
 
   const inTrip = isInTrip(destination.id);
-  const { toggleFavorite, isFavorite } = useContext(FavContext);
-  const favorite = isFavorite(destinationId);
 
-  if (!destination) {
-    return (
-      <div className="min-h-screen pt-32 text-center text-white">
-        Destination not found.
-      </div>
-    );
-  }
+  const favorite = isFavorite(destination.id);
+
   return (
     <PageContainer>
       <div className="min-h-screen text-white">
