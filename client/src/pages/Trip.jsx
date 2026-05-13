@@ -3,6 +3,8 @@ import { useDestinations } from '../hooks/useDestinations';
 import PageContainer from '../components/layout/PageContainer';
 import { TripContext } from '../context/TripContext';
 import TripItemCard from '../components/destination/TripItemCard';
+import LoadingMessage from '../components/shared/LoadingMessage';
+import ErrorMessage from '../components/shared/ErrorMessage';
 
 export default function Trip() {
   const { destinations, isLoading, error } = useDestinations();
@@ -32,16 +34,10 @@ export default function Trip() {
     <PageContainer>
       <section className="mx-auto min-h-screen w-full max-w-6xl px-4 py-10">
         {isLoading && (
-          <div className="py-20 text-center text-white">
-            Loading trip destinations...
-          </div>
+          <LoadingMessage message="Loading trip destinations..." />
         )}
 
-        {error && (
-          <div className="py-20 text-center text-red-200">
-            {error}
-          </div>
-        )}
+        {error && <ErrorMessage message={error} />}
         {!isLoading && !error && (
           <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
             {tripItems.map((item) => (

@@ -3,6 +3,8 @@ import { FavContext } from '../context/FavoriteContext';
 import { useDestinations } from '../hooks/useDestinations';
 import DestinationCard from '../components/destination/DestinationCard';
 import PageContainer from '../components/layout/PageContainer';
+import LoadingMessage from '../components/shared/LoadingMessage';
+import ErrorMessage from '../components/shared/ErrorMessage';
 
 export default function Favorites() {
   const { favorites } = useContext(FavContext);
@@ -21,16 +23,10 @@ export default function Favorites() {
     <PageContainer>
       <section className="mx-auto min-h-screen w-full max-w-6xl px-4 py-10">
         {isLoading && (
-          <div className="py-20 text-center text-white">
-            Loading favorite destinations...
-          </div>
+          <LoadingMessage message="Loading favorite destinations..." />
         )}
 
-        {error && (
-          <div className="py-20 text-center text-red-200">
-            {error}
-          </div>
-        )}
+        {error && <ErrorMessage message={error} />}
         {!isLoading && !error && (
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {favoriteDestinations.map((place) => (

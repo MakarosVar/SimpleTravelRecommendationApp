@@ -2,6 +2,8 @@ import Hero from '../components/layout/Hero';
 import NoResults from '../components/search/NoResults';
 import RecommendationList from '../components/search/RecommendationList';
 import SearchControls from '../components/search/SearchControls';
+import ErrorMessage from '../components/shared/ErrorMessage';
+import LoadingMessage from '../components/shared/LoadingMessage';
 import { useDestinationSearch } from '../hooks/useDestinationSearch';
 
 export default function Home() {
@@ -24,13 +26,13 @@ export default function Home() {
         hasResults={results.length > 0}
       />
       {isLoading && (
-        <div className="mt-8 rounded-2xl border border-white/20 bg-white/10 p-6 text-center text-white backdrop-blur-md">
-          Loading destinations...
+        <div className="mx-auto mt-8 max-w-xl rounded-2xl  border border-white/20 bg-white/10  px-6 py-4  backdrop-blur-md">
+          <LoadingMessage message="Loading destinations..." />
         </div>
       )}
       {error && (
-        <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-red-400/30 bg-red-500/10 p-6 text-center text-red-100 backdrop-blur-md">
-          {error}
+        <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-red-400/30 bg-red-500/10 px-6 py-4 backdrop-blur-md">
+          <ErrorMessage message={error} />
         </div>
       )}
       {results.length > 0 && (
