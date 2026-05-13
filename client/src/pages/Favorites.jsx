@@ -18,8 +18,8 @@ export default function Favorites() {
   }
   return (
     <PageContainer>
-      <section className="min-h-screen">
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2  gap-5 overflow-x-auto pb-2.5">
+      <section className="mx-auto min-h-screen w-full max-w-6xl px-4 py-10">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {favoriteDestinations.map((place) => (
             <DestinationCard key={place.name} place={place} />
           ))}

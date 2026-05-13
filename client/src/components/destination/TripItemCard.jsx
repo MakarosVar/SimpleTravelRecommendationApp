@@ -1,5 +1,10 @@
 export default function TripItemCard({ item, onUpdate, onRemove }) {
   const destination = item.destination;
+  const priorityClasses = {
+    low: 'bg-emerald-500/20 text-emerald-200 border-emerald-300/30',
+    medium: 'bg-yellow-500/20 text-yellow-200 border-yellow-300/30',
+    high: 'bg-red-500/20 text-red-200 border-red-300/30',
+  };
   return (
     <article className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 text-white backdrop-blur-md">
       <div
@@ -9,24 +14,31 @@ export default function TripItemCard({ item, onUpdate, onRemove }) {
         }}
       />
 
-      <div className="absolute inset-0 bg-linear-to-b from-black/10 via-black/30 to-black/60" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/45 to-black/75" />
 
       <div className="relative z-10">
         <div className="flex gap-4">
           <div className="min-w-0 flex-1">
             <h2 className="text-xl font-bold">{destination.name}</h2>
+            <span
+              className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                priorityClasses[item.priority]
+              }`}
+            >
+              {item.priority}
+            </span>
 
-            <p className="mt-1 text-sm font-semibold text-teal-300">
+            <p className="mt-1 text-lg font-semibold text-teal-300">
               {destination.country} • {destination.type}
             </p>
 
-            <p className="mt-2 line-clamp-2 text-sm text-white/90">
+            <p className="mt-2 line-clamp-2 text-lg font-medium text-white/90">
               {destination.description}
             </p>
           </div>
         </div>
         <div className="mt-4">
-          <label className="mb-2 block text-sm font-semibold">
+          <label className="mb-2 block text-lg font-bold text-white">
             Trip notes
           </label>
 
@@ -43,7 +55,7 @@ export default function TripItemCard({ item, onUpdate, onRemove }) {
         </div>
 
         <div className="mt-4">
-          <label className="mb-2 block text-sm font-semibold">
+          <label className="mb-2 block text-lg font-bold text-white">
             Priority
           </label>
 

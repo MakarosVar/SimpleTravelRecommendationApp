@@ -29,8 +29,8 @@ export default function Trip() {
   }
   return (
     <PageContainer>
-      <section className="min-h-screen">
-        <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2">
+      <section className="mx-auto min-h-screen w-full max-w-6xl px-4 py-10">
+        <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
           {tripItems.map((item) => (
             <TripItemCard
               item={item}
