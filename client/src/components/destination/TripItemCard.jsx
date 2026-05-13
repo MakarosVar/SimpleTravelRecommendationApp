@@ -3,13 +3,13 @@ export default function TripItemCard({ item, onUpdate, onRemove }) {
   return (
     <article className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 text-white backdrop-blur-md">
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-30"
+        className="absolute inset-0 bg-cover bg-center opacity-50"
         style={{
           backgroundImage: `url(${destination.imageUrl})`,
         }}
       />
 
-      <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/60" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/10 via-black/30 to-black/60" />
 
       <div className="relative z-10">
         <div className="flex gap-4">
@@ -20,7 +20,7 @@ export default function TripItemCard({ item, onUpdate, onRemove }) {
               {destination.country} • {destination.type}
             </p>
 
-            <p className="mt-2 line-clamp-2 text-sm text-white/80">
+            <p className="mt-2 line-clamp-2 text-sm text-white/90">
               {destination.description}
             </p>
           </div>
@@ -31,7 +31,7 @@ export default function TripItemCard({ item, onUpdate, onRemove }) {
           </label>
 
           <textarea
-            className="h-24 w-full resize-none rounded-xl border border-white/20 bg-white/10 p-3 text-white placeholder:text-white/50 outline-none focus:border-teal-400"
+            className="h-24 w-full resize-none rounded-xl border border-white/20 bg-white/20 p-3 text-white placeholder:text-white/80 outline-none focus:border-teal-400"
             placeholder="Add trip notes..."
             value={item.note}
             onChange={(e) =>
