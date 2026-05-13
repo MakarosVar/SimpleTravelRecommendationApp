@@ -5,23 +5,21 @@ export function useDestinations() {
   const [destinations, setDestinations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  async function loadDestinations() {
+    try {
+      setIsLoading(true);
+      setError(null);
 
-  useEffect(() => {
-    async function loadDestinations() {
-      try {
-        setIsLoading(true);
-        setError(null);
+      const loadedDestinations = await getDestinations();
 
-        const loadedDestinations = await getDestinations();
-
-        setDestinations(loadedDestinations);
-      } catch {
-        setError('Could not load destinations.');
-      } finally {
-        setIsLoading(false);
-      }
+      setDestinations(loadedDestinations);
+    } catch {
+      setError('Could not load destinations.');
+    } finally {
+      setIsLoading(false);
     }
-
+  }
+  useEffect(() => {
     loadDestinations();
   }, []);
 
@@ -29,5 +27,6 @@ export function useDestinations() {
     destinations,
     isLoading,
     error,
+    reloadDestinations: loadDestinations,
   };
 }

@@ -4,6 +4,7 @@ import RecommendationList from '../components/search/RecommendationList';
 import SearchControls from '../components/search/SearchControls';
 import ErrorMessage from '../components/shared/ErrorMessage';
 import LoadingMessage from '../components/shared/LoadingMessage';
+import RetryButton from '../components/shared/RetryButton';
 import { useDestinationSearch } from '../hooks/useDestinationSearch';
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
     error,
     sortBy,
     changeSort,
+    reloadDestinations,
   } = useDestinationSearch();
   return (
     <section className="min-h-screen px-16 pt-30">
@@ -31,8 +33,9 @@ export default function Home() {
         </div>
       )}
       {error && (
-        <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-red-400/30 bg-red-500/10 px-6 py-4 backdrop-blur-md">
+        <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-red-400/30 bg-red-500/10 px-6 py-4 text-center backdrop-blur-md">
           <ErrorMessage message={error} />
+          <RetryButton onRetry={reloadDestinations} />
         </div>
       )}
       {results.length > 0 && (

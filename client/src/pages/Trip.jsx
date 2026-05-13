@@ -5,9 +5,11 @@ import { TripContext } from '../context/TripContext';
 import TripItemCard from '../components/destination/TripItemCard';
 import LoadingMessage from '../components/shared/LoadingMessage';
 import ErrorMessage from '../components/shared/ErrorMessage';
+import RetryButton from '../components/shared/RetryButton';
 
 export default function Trip() {
-  const { destinations, isLoading, error } = useDestinations();
+  const { destinations, isLoading, error, reloadDestinations } =
+    useDestinations();
   const { trip, updateTripItem, removeFromTrip } =
     useContext(TripContext);
 
@@ -37,7 +39,12 @@ export default function Trip() {
           <LoadingMessage message="Loading trip destinations..." />
         )}
 
-        {error && <ErrorMessage message={error} />}
+        {error && (
+          <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-red-400/30 bg-red-500/10 px-6 py-4 text-center backdrop-blur-md">
+            <ErrorMessage message={error} />
+            <RetryButton onRetry={reloadDestinations} />
+          </div>
+        )}
         {!isLoading && !error && (
           <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
             {tripItems.map((item) => (

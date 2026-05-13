@@ -7,6 +7,5 @@ function delay(ms) {
 export async function getDestinations() {
   await delay(1500);
 
-  //   return travelData.destinations;
-  throw new Error('Fake API failure');
+  return travelData.destinations;
 }

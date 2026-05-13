@@ -5,7 +5,8 @@ import { useSearchParams } from 'react-router-dom';
 import { useDestinations } from './useDestinations';
 
 export function useDestinationSearch() {
-  const { destinations, isLoading, error } = useDestinations();
+  const { destinations, isLoading, error, reloadDestinations } =
+    useDestinations();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(
     searchParams.get('q') || '',
@@ -64,5 +65,6 @@ export function useDestinationSearch() {
     handleSearch,
     handleClear,
     changeSort,
+    reloadDestinations,
   };
 }
