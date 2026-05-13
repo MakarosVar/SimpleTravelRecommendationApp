@@ -1,4 +1,5 @@
 import Hero from '../components/layout/Hero';
+import NoResults from '../components/search/NoResults';
 import RecommendationList from '../components/search/RecommendationList';
 import SearchControls from '../components/search/SearchControls';
 import { useDestinationSearch } from '../hooks/useDestinationSearch';
@@ -23,6 +24,12 @@ export default function Home() {
           searchTerm={searchTerm}
           selectedType={selectedType}
           resultCount={results.length}
+        />
+      )}
+      {searchTerm && results.length === 0 && (
+        <NoResults
+          searchTerm={searchTerm}
+          selectedType={selectedType}
         />
       )}
       <div className={results.length > 0 ? 'ml-30' : ''}>
