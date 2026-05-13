@@ -1,14 +1,52 @@
+import { useState } from 'react';
 import Hero from '../components/Hero';
 import RecommendationList from '../components/RecommendationList';
+import travelData from '../data/travelData.json';
+import { searchRecommendations } from '../utils/searchRecommendations';
+import SearchControls from '../components/search/SearchControls';
 
-export default function Home({ results, onSearch, onClear }) {
+export default function Home() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedType, setSelectedType] = useState('all');
+  const [results, setResults] = useState([]);
+
+  function handleSearch(searchTerm, selectedType) {
+    setSearchTerm(searchTerm);
+    setSelectedType(selectedType);
+
+    const searchResults = searchRecommendations(
+      travelData,
+      searchTerm,
+      selectedType,
+    );
+
+    setResults(searchResults);
+  }
+
+  function handleClear() {
+    setSearchTerm('');
+    setSelectedType('all');
+    setResults([]);
+  }
+
   return (
     <section className="min-h-screen px-16 pt-30">
       <Hero
-        onSearch={onSearch}
-        onClear={onClear}
+        searchTerm={searchTerm}
+        selectedType={selectedType}
+        onSearchTermChange={setSearchTerm}
+        onSelectedTypeChange={setSelectedType}
+        onSearch={handleSearch}
+        onClear={handleClear}
         hasResults={results.length > 0}
       />
+      {results.length > 0 && (
+        <SearchControls
+          searchTerm={searchTerm}
+          selectedType={selectedType}
+          resultCount={results.length}
+        />
+      )}
       <div className={results.length > 0 ? 'ml-30' : ''}>
         <RecommendationList results={results} />
       </div>

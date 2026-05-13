@@ -2,15 +2,11 @@ import { NavLink } from 'react-router-dom';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FavContext } from '../context/FavoriteContext';
 
-export default function NavBar({ onClear }) {
+export default function NavBar() {
   const { favorites } = useContext(FavContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
-  function handleMobileNavigation() {
-    onClear();
-    setMenuOpen(false);
-  }
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -75,7 +71,6 @@ export default function NavBar({ onClear }) {
           <NavLink
             key={link.path}
             to={link.path}
-            onClick={onClear}
             className={(navData) =>
               `${getNavLinkClass(navData)} relative inline-flex items-center gap-2`
             }
@@ -105,17 +100,17 @@ export default function NavBar({ onClear }) {
                 : '-translate-y-6 opacity-0 pointer-events-none'
             }`}
         >
-          {renderLinks(
-            mainNavLinks,
-            'block py-2',
-            handleMobileNavigation,
-          )}
+          {renderLinks(mainNavLinks, 'block py-2', () => {
+            setMenuOpen(false);
+          })}
           <div className="mb-2.5 ml-3 w-50 h-0.5 bg-white"></div>
           {userLinks.map((link) => (
             <NavLink
               key={link.path}
               to={link.path}
-              onClick={handleMobileNavigation}
+              onClick={() => {
+                setMenuOpen(false);
+              }}
               className={(navData) =>
                 `${getNavLinkClass(navData, 'flex items-center gap-2 py-2')}`
               }
