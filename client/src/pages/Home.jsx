@@ -1,41 +1,19 @@
-import { useState } from 'react';
 import Hero from '../components/layout/Hero';
 import RecommendationList from '../components/search/RecommendationList';
-import travelData from '../data/travelData.json';
-import { searchRecommendations } from '../utils/searchRecommendations';
 import SearchControls from '../components/search/SearchControls';
+import { useDestinationSearch } from '../hooks/useDestinationSearch';
 
 export default function Home() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('all');
-  const [results, setResults] = useState([]);
-
-  function handleSearch(searchTerm, selectedType) {
-    setSearchTerm(searchTerm);
-    setSelectedType(selectedType);
-
-    const searchResults = searchRecommendations(
-      travelData,
-      searchTerm,
-      selectedType,
-    );
-
-    setResults(searchResults);
-  }
-
-  function handleClear() {
-    setSearchTerm('');
-    setSelectedType('all');
-    setResults([]);
-  }
-
+  const {
+    results,
+    searchTerm,
+    selectedType,
+    handleSearch,
+    handleClear,
+  } = useDestinationSearch();
   return (
     <section className="min-h-screen px-16 pt-30">
       <Hero
-        searchTerm={searchTerm}
-        selectedType={selectedType}
-        onSearchTermChange={setSearchTerm}
-        onSelectedTypeChange={setSelectedType}
         onSearch={handleSearch}
         onClear={handleClear}
         hasResults={results.length > 0}

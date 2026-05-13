@@ -9,7 +9,10 @@ export default function DestinationCard({ place }) {
       />
 
       <div className="flex flex-1 flex-col p-4.5">
-        <h2 className="mb-2.5 text-2xl font-bold">{place.name}</h2>
+        <h2 className="mb-2 text-2xl font-bold">{place.name}</h2>
+        <h2 className="mb-2 text-lg font-semibold text-teal-600">
+          {place.country} • {place.type}
+        </h2>
 
         <p className="mb-4 line-clamp-3 leading-6 text-gray-600">
           {place.description}

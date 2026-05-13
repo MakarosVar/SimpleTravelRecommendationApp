@@ -1,14 +1,6 @@
 import SearchBox from '../search/SearchBox';
 
-export default function Hero({
-  searchTerm,
-  selectedType,
-  onSearchTermChange,
-  onSelectedTypeChange,
-  onSearch,
-  onClear,
-  hasResults,
-}) {
+export default function Hero({ onSearch, onClear, hasResults }) {
   return (
     <div
       className={hasResults ? 'ml-30 max-w-160' : 'ml-15 max-w-130'}
@@ -27,14 +19,7 @@ export default function Hero({
           </p>
         </>
       )}
-      <SearchBox
-        searchTerm={searchTerm}
-        selectedType={selectedType}
-        onSearchTermChange={onSearchTermChange}
-        onSelectedTypeChange={onSelectedTypeChange}
-        onSearch={onSearch}
-        onClear={onClear}
-      />
+      <SearchBox onSearch={onSearch} onClear={onClear} />
     </div>
   );
 }
