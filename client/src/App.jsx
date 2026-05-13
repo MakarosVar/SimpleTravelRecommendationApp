@@ -6,6 +6,7 @@ import Contact from './pages/Contact';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DestinationDetails from './pages/DestinationDetails';
 import Favorites from './pages/Favorites';
+import Trip from './pages/Trip';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/trip" element={<Trip />} />
           <Route path="/contact" element={<Contact />} />
           <Route
             path="/destination/:id"

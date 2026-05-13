@@ -1,9 +1,21 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 export const FavContext = createContext();
 
 export const FavProvider = ({ children }) => {
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState(() => {
+    const storedFavorites = localStorage.getItem(
+      'travelBloomFavorites',
+    );
+
+    return storedFavorites ? JSON.parse(storedFavorites) : [];
+  });
+  useEffect(() => {
+    localStorage.setItem(
+      'travelBloomFavorites',
+      JSON.stringify(favorites),
+    );
+  }, [favorites]);
   function toggleFavorite(destinationId) {
     setFavorites((currentFavorites) => {
       if (currentFavorites.includes(destinationId)) {

@@ -1,11 +1,13 @@
 import { NavLink } from 'react-router-dom';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FavContext } from '../../context/FavoriteContext';
+import { TripContext } from '../../context/TripContext';
 
 export default function NavBar() {
   const { favorites } = useContext(FavContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const { tripItems } = useContext(TripContext);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -55,6 +57,11 @@ export default function NavBar() {
       label: 'Favorites',
       path: '/favorites',
       badge: favorites.length,
+    },
+    {
+      label: 'Trip',
+      path: '/trip',
+      badge: tripItems.length,
     },
   ];
   return (
