@@ -11,6 +11,8 @@ export default function Home() {
     selectedType,
     handleSearch,
     handleClear,
+    sortBy,
+    changeSort,
   } = useDestinationSearch();
   return (
     <section className="min-h-screen px-16 pt-30">
@@ -24,6 +26,8 @@ export default function Home() {
           searchTerm={searchTerm}
           selectedType={selectedType}
           resultCount={results.length}
+          sortBy={sortBy}
+          onSortChange={changeSort}
         />
       )}
       {searchTerm && results.length === 0 && (

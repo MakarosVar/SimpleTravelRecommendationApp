@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import travelData from '../data/travelData.json';
 import { searchRecommendations } from '../utils/searchRecommendations';
+import { sortDestinations } from '../utils/sortDestinations';
 
 export function useDestinationSearch() {
   const [results, setResults] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('all');
+  const [sortBy, setSortBy] = useState('random');
 
   function handleSearch(searchTerm, selectedType) {
     setSearchTerm(searchTerm);
@@ -16,8 +18,14 @@ export function useDestinationSearch() {
       searchTerm,
       selectedType,
     );
-
-    setResults(searchResults);
+    const sortedResults = sortDestinations(searchResults, sortBy);
+    setResults(sortedResults);
+  }
+  function changeSort(sortValue) {
+    setSortBy(sortValue);
+    setResults((currentResults) =>
+      sortDestinations(currentResults, sortValue),
+    );
   }
 
   function handleClear() {
@@ -30,7 +38,9 @@ export function useDestinationSearch() {
     results,
     searchTerm,
     selectedType,
+    sortBy,
     handleSearch,
     handleClear,
+    changeSort,
   };
 }
