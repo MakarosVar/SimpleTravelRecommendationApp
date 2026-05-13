@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import travelData from '../data/travelData.json';
+import { useDestinations } from '../hooks/useDestinations';
 import { useContext } from 'react';
 import { FavContext } from '../context/FavoriteContext';
 import { TripContext } from '../context/TripContext';
@@ -9,14 +9,37 @@ export default function DestinationDetails() {
   const { id } = useParams();
   const destinationId = Number(id);
   const navigate = useNavigate();
-  const destination = travelData.destinations.find(
+  const { destinations, isLoading, error } = useDestinations();
+  const destination = destinations.find(
     (destination) => destination.id === destinationId,
   );
   const { addToTrip, removeFromTrip, isInTrip } =
     useContext(TripContext);
   const { toggleFavorite, isFavorite } = useContext(FavContext);
+  if (isLoading) {
+    return (
+      <PageContainer>
+        <div className="py-20 text-center text-white">
+          Loading destination...
+        </div>
+      </PageContainer>
+    );
+  }
+  if (error) {
+    return (
+      <PageContainer>
+        <div className="py-20 text-center text-red-200">{error}</div>
+      </PageContainer>
+    );
+  }
   if (!destination) {
-    return <PageContainer>Destination not found.</PageContainer>;
+    return (
+      <PageContainer>
+        <div className="py-20 text-center text-white">
+          Destination not found.
+        </div>
+      </PageContainer>
+    );
   }
 
   const inTrip = isInTrip(destination.id);
