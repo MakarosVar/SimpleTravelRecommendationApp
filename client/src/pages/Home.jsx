@@ -11,6 +11,8 @@ export default function Home() {
     selectedType,
     handleSearch,
     handleClear,
+    isLoading,
+    error,
     sortBy,
     changeSort,
   } = useDestinationSearch();
@@ -21,6 +23,16 @@ export default function Home() {
         onClear={handleClear}
         hasResults={results.length > 0}
       />
+      {isLoading && (
+        <div className="mt-8 rounded-2xl border border-white/20 bg-white/10 p-6 text-center text-white backdrop-blur-md">
+          Loading destinations...
+        </div>
+      )}
+      {error && (
+        <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-red-400/30 bg-red-500/10 p-6 text-center text-red-100 backdrop-blur-md">
+          {error}
+        </div>
+      )}
       {results.length > 0 && (
         <SearchControls
           searchTerm={searchTerm}
@@ -30,14 +42,14 @@ export default function Home() {
           onSortChange={changeSort}
         />
       )}
-      {searchTerm && results.length === 0 && (
+      {!isLoading && searchTerm && results.length === 0 && (
         <NoResults
           searchTerm={searchTerm}
           selectedType={selectedType}
         />
       )}
       <div className={results.length > 0 ? 'ml-30' : ''}>
-        <RecommendationList results={results} />
+        {!isLoading && <RecommendationList results={results} />}
       </div>
     </section>
   );
