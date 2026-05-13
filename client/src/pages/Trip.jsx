@@ -1,16 +1,26 @@
 import { useContext } from 'react';
 import travelData from '../data/travelData.json';
-import DestinationCard from '../components/destination/DestinationCard';
 import PageContainer from '../components/layout/PageContainer';
 import { TripContext } from '../context/TripContext';
+import TripItemCard from '../components/destination/TripItemCard';
 
 export default function Trip() {
-  const { tripItems } = useContext(TripContext);
+  const { trip, updateTripItem, removeFromTrip } =
+    useContext(TripContext);
 
-  const tripDestinations = travelData.destinations.filter(
-    (destination) => tripItems.includes(destination.id),
-  );
-  if (tripDestinations.length === 0) {
+  const tripItems = trip
+    .map((tripItem) => {
+      const destination = travelData.destinations.find(
+        (destination) => destination.id === tripItem.destinationId,
+      );
+
+      return {
+        ...tripItem,
+        destination,
+      };
+    })
+    .filter((tripItem) => tripItem.destination);
+  if (tripItems.length === 0) {
     return (
       <div className="min-h-screen pt-32 text-center text-white">
         No Trip destinations yet.
@@ -20,9 +30,13 @@ export default function Trip() {
   return (
     <PageContainer>
       <section className="min-h-screen">
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2  gap-5 overflow-x-auto pb-2.5">
-          {tripDestinations.map((place) => (
-            <DestinationCard key={place.name} place={place} />
+        <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2">
+          {tripItems.map((item) => (
+            <TripItemCard
+              item={item}
+              onUpdate={updateTripItem}
+              onRemove={removeFromTrip}
+            />
           ))}
         </div>
       </section>

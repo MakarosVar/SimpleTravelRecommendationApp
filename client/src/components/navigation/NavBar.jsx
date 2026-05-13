@@ -7,7 +7,7 @@ export default function NavBar() {
   const { favorites } = useContext(FavContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
-  const { tripItems } = useContext(TripContext);
+  const { trip } = useContext(TripContext);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -61,7 +61,7 @@ export default function NavBar() {
     {
       label: 'Trip',
       path: '/trip',
-      badge: tripItems.length,
+      badge: trip.length,
     },
   ];
   return (

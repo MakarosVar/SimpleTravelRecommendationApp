@@ -3,40 +3,60 @@ import { createContext, useEffect, useState } from 'react';
 export const TripContext = createContext();
 
 export const TripProvider = ({ children }) => {
-  const [tripItems, setTripItems] = useState(() => {
+  const [trip, setTrip] = useState(() => {
     const storedTrip = localStorage.getItem('travelBloomTrip');
 
     return storedTrip ? JSON.parse(storedTrip) : [];
   });
   useEffect(() => {
-    localStorage.setItem(
-      'travelBloomTrip',
-      JSON.stringify(tripItems),
-    );
-  }, [tripItems]);
+    localStorage.setItem('travelBloomTrip', JSON.stringify(trip));
+  }, [trip]);
 
   function addToTrip(destinationId) {
-    setTripItems((currentTrip) => {
-      const newTrips = [...currentTrip, destinationId];
-      return newTrips;
+    setTrip((currentTrip) => {
+      if (
+        currentTrip.some(
+          (item) => item.destinationId === destinationId,
+        )
+      ) {
+        return currentTrip;
+      }
+
+      return [
+        ...currentTrip,
+        {
+          destinationId,
+          note: '',
+          priority: 'medium',
+        },
+      ];
     });
   }
   function removeFromTrip(destinationId) {
-    setTripItems((currentTrip) => {
-      const newTrip = currentTrip.filter(
-        (id) => id !== destinationId,
-      );
-      return newTrip;
-    });
+    setTrip((currentTrip) =>
+      currentTrip.filter(
+        (item) => item.destinationId !== destinationId,
+      ),
+    );
   }
   function isInTrip(destinationId) {
-    return tripItems.includes(destinationId);
+    return trip.some((item) => item.destinationId === destinationId);
   }
 
+  function updateTripItem(destinationId, updates) {
+    setTrip((currentTrip) =>
+      currentTrip.map((item) =>
+        item.destinationId === destinationId
+          ? { ...item, ...updates }
+          : item,
+      ),
+    );
+  }
   return (
     <TripContext.Provider
       value={{
-        tripItems,
+        trip,
+        updateTripItem,
         addToTrip,
         removeFromTrip,
         isInTrip,
