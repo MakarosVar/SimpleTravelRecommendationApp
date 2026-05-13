@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Hero from '../components/Hero';
-import RecommendationList from '../components/RecommendationList';
+import Hero from '../components/layout/Hero';
+import RecommendationList from '../components/search/RecommendationList';
 import travelData from '../data/travelData.json';
 import { searchRecommendations } from '../utils/searchRecommendations';
 import SearchControls from '../components/search/SearchControls';

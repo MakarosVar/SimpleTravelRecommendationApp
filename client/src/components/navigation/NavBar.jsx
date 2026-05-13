@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useContext, useEffect, useRef, useState } from 'react';
-import { FavContext } from '../context/FavoriteContext';
+import { FavContext } from '../../context/FavoriteContext';
 
 export default function NavBar() {
   const { favorites } = useContext(FavContext);

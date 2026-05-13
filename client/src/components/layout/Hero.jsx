@@ -1,4 +1,4 @@
-import SearchBox from './SearchBox';
+import SearchBox from '../search/SearchBox';
 
 export default function Hero({
   searchTerm,

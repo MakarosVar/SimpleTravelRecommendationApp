@@ -1,5 +1,5 @@
-import NavBar from './components/NavBar';
-import SocialLinks from './components/SocialLinks';
+import NavBar from './components/navigation/NavBar';
+import SocialLinks from './components/shared/SocialLinks';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';

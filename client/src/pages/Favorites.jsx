@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { FavContext } from '../context/FavoriteContext';
 import travelData from '../data/travelData.json';
-import DestinationCard from '../components/DestinationCard';
+import DestinationCard from '../components/destination/DestinationCard';
 import PageContainer from '../components/layout/PageContainer';
 
 export default function Favorites() {
@@ -19,7 +19,7 @@ export default function Favorites() {
   return (
     <PageContainer>
       <section className="min-h-screen">
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 overflow-x-auto pb-2.5">
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-2  gap-5 overflow-x-auto pb-2.5">
           {favoriteDestinations.map((place) => (
             <DestinationCard key={place.name} place={place} />
           ))}
