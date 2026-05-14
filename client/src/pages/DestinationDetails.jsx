@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDestinations } from '../hooks/useDestinations';
 import { useContext } from 'react';
 import { FavContext } from '../context/FavoriteContext';
 import { TripContext } from '../context/TripContext';
@@ -7,16 +6,15 @@ import PageContainer from '../components/layout/PageContainer';
 import ErrorMessage from '../components/shared/ErrorMessage';
 import RetryButton from '../components/shared/RetryButton';
 import LoadingMessage from '../components/shared/LoadingMessage';
+import { useDestinationDetails } from '../hooks/useDestinationDetails';
 
 export default function DestinationDetails() {
   const { id } = useParams();
   const destinationId = Number(id);
   const navigate = useNavigate();
-  const { destinations, isLoading, error, reloadDestinations } =
-    useDestinations();
-  const destination = destinations.find(
-    (destination) => destination.id === destinationId,
-  );
+  const { destination, isLoading, error, reloadDestination } =
+    useDestinationDetails(destinationId);
+
   const { addToTrip, removeFromTrip, isInTrip } =
     useContext(TripContext);
   const { toggleFavorite, isFavorite } = useContext(FavContext);
@@ -32,7 +30,7 @@ export default function DestinationDetails() {
       <PageContainer>
         <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-red-400/30 bg-red-500/10 px-6 py-4 text-center backdrop-blur-md">
           <ErrorMessage message={error} />
-          <RetryButton onRetry={reloadDestinations} />
+          <RetryButton onRetry={reloadDestination} />
         </div>
       </PageContainer>
     );
