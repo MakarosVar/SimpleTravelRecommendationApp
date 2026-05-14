@@ -1,16 +1,48 @@
 import { createContext, useEffect, useState } from 'react';
+import { getTripItems, saveTripItems } from '../services/tripService';
 
 export const TripContext = createContext();
 
 export const TripProvider = ({ children }) => {
-  const [trip, setTrip] = useState(() => {
-    const storedTrip = localStorage.getItem('travelBloomTrip');
+  const [trip, setTrip] = useState([]);
+  const [isLoadingTrip, setIsLoadingTrip] = useState(true);
+  const [tripError, setTripError] = useState(null);
 
-    return storedTrip ? JSON.parse(storedTrip) : [];
-  });
+  async function loadTrip() {
+    try {
+      setIsLoadingTrip(true);
+      setTripError(null);
+
+      const storedTrip = await getTripItems();
+
+      setTrip(storedTrip);
+    } catch {
+      setTripError('Could not load trip.');
+    } finally {
+      setIsLoadingTrip(false);
+    }
+  }
   useEffect(() => {
-    localStorage.setItem('travelBloomTrip', JSON.stringify(trip));
-  }, [trip]);
+    loadTrip();
+  }, []);
+
+  useEffect(() => {
+    if (isLoadingTrip) {
+      return;
+    }
+
+    async function persistTrip() {
+      try {
+        setTripError(null);
+
+        await saveTripItems(trip);
+      } catch {
+        setTripError('Could not save trip.');
+      }
+    }
+
+    persistTrip();
+  }, [trip, isLoadingTrip]);
 
   function addToTrip(destinationId) {
     setTrip((currentTrip) => {
@@ -32,6 +64,7 @@ export const TripProvider = ({ children }) => {
       ];
     });
   }
+
   function removeFromTrip(destinationId) {
     setTrip((currentTrip) =>
       currentTrip.filter(
@@ -39,6 +72,7 @@ export const TripProvider = ({ children }) => {
       ),
     );
   }
+
   function isInTrip(destinationId) {
     return trip.some((item) => item.destinationId === destinationId);
   }
@@ -52,14 +86,18 @@ export const TripProvider = ({ children }) => {
       ),
     );
   }
+
   return (
     <TripContext.Provider
       value={{
         trip,
+        isLoadingTrip,
+        tripError,
         updateTripItem,
         addToTrip,
         removeFromTrip,
         isInTrip,
+        reloadTrip: loadTrip,
       }}
     >
       {children}
