@@ -1,18 +1,28 @@
-# React + Vite
+# TravelBloom
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TravelBloom is a React travel recommendation web app focused on destination discovery, search, and clean responsive UI design.
+it was evolved from a static website inspired by [IBM coursera course](https://www.coursera.org/learn/javascript-programming-essentials) final project and turned into Tailwind and React app built towards a full MERN stack travel recommendation application
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React
+- Vite
+- JavaScript
+- CSS / Tailwind CSS
 
-## React Compiler
+## Features
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- Travel destination browsing
+- Search functionality
+- Destination details pages
+- Favorites / trip-planning logic
+- Responsive layout
+- Component-based frontend structure
 
-Note: This will impact Vite dev & build performances.
+## Purpose
 
-## Expanding the ESLint configuration
+This project was built to practice modern React development, routing, reusable components, state handling, and UI refinement in a travel-themed application.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Status
+
+In progress. Future improvements may include backend integration, authentication, and persistent trip planning.
