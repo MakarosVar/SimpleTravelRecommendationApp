@@ -1,11 +1,12 @@
 # TravelBloom
 
 TravelBloom is a React travel recommendation web app focused on destination discovery, search, and clean responsive UI design.
-it was evolved from a static website inspired by [IBM coursera course](https://www.coursera.org/learn/javascript-programming-essentials) final project and turned into Tailwind and React app built towards a full MERN stack travel recommendation application
+The project started as a static website inspired by an [IBM coursera course](https://www.coursera.org/learn/javascript-programming-essentials) project and later evolved into a React and Tailwind application aimed toward a full MERN-stack travel recommendation platform.
 
 ## Tech Stack
 
 - React
+- React Router
 - Vite
 - JavaScript
 - CSS / Tailwind CSS
