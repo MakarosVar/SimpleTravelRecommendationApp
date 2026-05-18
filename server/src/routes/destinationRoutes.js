@@ -1,12 +1,13 @@
 import express from 'express';
-import { destinations } from '../data/destinations.js';
+import {
+  getAllDestinations,
+  getDestinationById,
+} from '../controllers/destinationController.js';
 
 const router = express.Router();
 
-// GET /api/destinations
-router.get('/', (req, res) => {
-  res.json(destinations);
-});
-// GET /api/destinations/:id
+router.get('/', getAllDestinations);
+
+router.get('/:id', getDestinationById);
 
 export default router;

@@ -1,18 +1,21 @@
-import travelData from '../data/travelData.json';
-
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+const API_URL = 'http://localhost:5000/api/destinations';
 
 export async function getDestinations() {
-  await delay(500);
+  const response = await fetch(API_URL);
 
-  return travelData.destinations;
+  if (!response.ok) {
+    throw new Error('Could not load destinations.');
+  }
+
+  return response.json();
 }
-export async function getDestinationById(id) {
-  await delay(500);
 
-  return travelData.destinations.find(
-    (destination) => destination.id === id,
-  );
+export async function getDestinationById(id) {
+  const response = await fetch(`${API_URL}/${id}`);
+
+  if (!response.ok) {
+    throw new Error('Could not load destination.');
+  }
+
+  return response.json();
 }
