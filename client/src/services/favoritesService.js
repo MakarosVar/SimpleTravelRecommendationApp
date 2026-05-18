@@ -1,13 +1,13 @@
 import { handleResponse } from '../utils/handleResponse';
 
-const API_URL = 'http://localhost:5000/api/trips';
+const API_URL = 'http://localhost:5000/api/favorites';
 
-export async function getTripItems() {
+export async function getFavorites() {
   const response = await fetch(API_URL);
   return handleResponse(response);
 }
 
-export async function addTripItem(destinationId) {
+export async function addFavorite(destinationId) {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
@@ -15,21 +15,9 @@ export async function addTripItem(destinationId) {
     },
     body: JSON.stringify({ destinationId }),
   });
-
   return handleResponse(response);
 }
-
-export async function updateTripItem(destinationId, updates) {
-  const response = await fetch(API_URL + '/' + destinationId, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(updates),
-  });
-  return handleResponse(response);
-}
-export async function deleteTripItem(destinationId) {
+export async function deleteFavorite(destinationId) {
   const response = await fetch(API_URL + '/' + destinationId, {
     method: 'DELETE',
     headers: {

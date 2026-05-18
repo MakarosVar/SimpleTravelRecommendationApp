@@ -1,21 +1,14 @@
+import { handleResponse } from '../utils/handleResponse';
+
 const API_URL = 'http://localhost:5000/api/destinations';
 
 export async function getDestinations() {
   const response = await fetch(API_URL);
 
-  if (!response.ok) {
-    throw new Error('Could not load destinations.');
-  }
-
-  return response.json();
+  return handleResponse(response);
 }
 
 export async function getDestinationById(id) {
   const response = await fetch(`${API_URL}/${id}`);
-
-  if (!response.ok) {
-    throw new Error('Could not load destination.');
-  }
-
-  return response.json();
+  return handleResponse(response);
 }
