@@ -1,21 +1,52 @@
-const TRIP_STORAGE_KEY = 'travelBloomTrip';
-
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+const API_URL = 'http://localhost:5000/api/trips';
 
 export async function getTripItems() {
-  await delay(500);
+  const response = await fetch(API_URL);
 
-  const storedTrip = localStorage.getItem(TRIP_STORAGE_KEY);
-
-  return storedTrip ? JSON.parse(storedTrip) : [];
+  return response.json();
 }
 
-export async function saveTripItems(tripItems) {
-  await delay(500);
+export async function addTripItem(destinationId) {
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ destinationId }),
+  });
 
-  localStorage.setItem(TRIP_STORAGE_KEY, JSON.stringify(tripItems));
+  if (!response.ok) {
+    throw new Error('Could not add destination to trip.');
+  }
 
-  return tripItems;
+  return response.json();
+}
+
+export async function updateTripItem(destinationId, updates) {
+  const response = await fetch(API_URL + '/' + destinationId, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updates),
+  });
+
+  if (!response.ok) {
+    throw new Error('Could not update trip item.');
+  }
+
+  return response.json();
+}
+export async function deleteTripItem(destinationId) {
+  const response = await fetch(API_URL + '/' + destinationId, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Could not delete trip item.');
+  }
+
+  return response.json();
 }

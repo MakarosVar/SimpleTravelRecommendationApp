@@ -1,5 +1,10 @@
 import { createContext, useEffect, useState } from 'react';
-import { getTripItems, saveTripItems } from '../services/tripService';
+import {
+  getTripItems,
+  addTripItem,
+  updateTripItem as updateTripItemRequest,
+  deleteTripItem,
+} from '../services/tripService';
 
 export const TripContext = createContext();
 
@@ -26,65 +31,39 @@ export const TripProvider = ({ children }) => {
     loadTrip();
   }, []);
 
-  useEffect(() => {
-    if (isLoadingTrip) {
-      return;
+  async function addToTrip(destinationId) {
+    try {
+      setTripError(null);
+
+      await addTripItem(destinationId);
+      await loadTrip();
+    } catch (e) {
+      setTripError(e.message);
     }
-
-    async function persistTrip() {
-      try {
-        setTripError(null);
-
-        await saveTripItems(trip);
-      } catch {
-        setTripError('Could not save trip.');
-      }
-    }
-
-    persistTrip();
-  }, [trip, isLoadingTrip]);
-
-  function addToTrip(destinationId) {
-    setTrip((currentTrip) => {
-      if (
-        currentTrip.some(
-          (item) => item.destinationId === destinationId,
-        )
-      ) {
-        return currentTrip;
-      }
-
-      return [
-        ...currentTrip,
-        {
-          destinationId,
-          note: '',
-          priority: 'medium',
-        },
-      ];
-    });
   }
 
-  function removeFromTrip(destinationId) {
-    setTrip((currentTrip) =>
-      currentTrip.filter(
-        (item) => item.destinationId !== destinationId,
-      ),
-    );
+  async function removeFromTrip(destinationId) {
+    try {
+      setTripError(null);
+      await deleteTripItem(destinationId);
+      await loadTrip();
+    } catch (e) {
+      setTripError(e.message);
+    }
   }
 
   function isInTrip(destinationId) {
     return trip.some((item) => item.destinationId === destinationId);
   }
 
-  function updateTripItem(destinationId, updates) {
-    setTrip((currentTrip) =>
-      currentTrip.map((item) =>
-        item.destinationId === destinationId
-          ? { ...item, ...updates }
-          : item,
-      ),
-    );
+  async function updateTripItem(destinationId, updates) {
+    try {
+      setTripError(null);
+      await updateTripItemRequest(destinationId, updates);
+      await loadTrip();
+    } catch (e) {
+      setTripError(e.message);
+    }
   }
 
   return (

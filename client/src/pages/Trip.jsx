@@ -3,18 +3,19 @@ import TripItemCard from '../components/destination/TripItemCard';
 import LoadingMessage from '../components/shared/LoadingMessage';
 import ErrorMessage from '../components/shared/ErrorMessage';
 import RetryButton from '../components/shared/RetryButton';
-import useTripPageData from '../hooks/useTripPageData';
+import { useContext } from 'react';
+import { TripContext } from '../context/TripContext';
 
 export default function Trip() {
   const {
-    tripItems,
-    isPageLoading,
-    pageError,
-    retry,
+    trip,
+    isLoadingTrip,
+    tripError,
+    reloadTrip,
     updateTripItem,
     removeFromTrip,
-  } = useTripPageData();
-  if (!isPageLoading && !pageError && tripItems.length === 0) {
+  } = useContext(TripContext);
+  if (!isLoadingTrip && !tripError && trip.length === 0) {
     return (
       <div className="min-h-screen pt-32 text-center text-white">
         No Trip destinations yet.
@@ -24,19 +25,19 @@ export default function Trip() {
   return (
     <PageContainer>
       <section className="mx-auto min-h-screen w-full max-w-6xl px-4 py-10">
-        {isPageLoading && (
+        {isLoadingTrip && (
           <LoadingMessage message="Loading trip..." />
         )}
-        {pageError && (
+        {tripError && (
           <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-red-400/30 bg-red-500/10 px-6 py-4 text-center backdrop-blur-md">
-            <ErrorMessage message={pageError} />
+            <ErrorMessage message={tripError} />
 
-            <RetryButton onRetry={retry} />
+            <RetryButton onRetry={reloadTrip} />
           </div>
         )}
-        {!isPageLoading && !pageError && (
+        {!isLoadingTrip && !tripError && (
           <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
-            {tripItems.map((item) => (
+            {trip.map((item) => (
               <TripItemCard
                 key={item.destinationId}
                 item={item}
