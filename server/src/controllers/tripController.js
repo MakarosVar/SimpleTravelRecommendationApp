@@ -1,5 +1,6 @@
 import { trips } from '../data/trips.js';
 import { destinations } from '../data/destinations.js';
+import { sendError } from '../utils/sendError.js';
 
 export function getAllTrips(req, res) {
   const enrichedTrips = trips
@@ -26,9 +27,7 @@ export function addTripItem(req, res) {
   );
 
   if (alreadyExists) {
-    return res.status(409).json({
-      message: 'Destination is already in trip.',
-    });
+    return sendError(res, 409, 'Destination is already in trip.');
   }
 
   const newTripItem = {
@@ -51,9 +50,7 @@ export function updateTripItem(req, res) {
   );
 
   if (!tripItem) {
-    return res.status(404).json({
-      message: 'Trip item not found.',
-    });
+    return sendError(res, 404, 'Trip item not found.');
   }
 
   if (note !== undefined) tripItem.note = note;
@@ -70,9 +67,7 @@ export function deleteTripItem(req, res) {
   );
 
   if (tripIndex === -1) {
-    return res.status(404).json({
-      message: 'Trip item not found.',
-    });
+    return sendError(res, 404, 'Trip item not found.');
   }
 
   trips.splice(tripIndex, 1);

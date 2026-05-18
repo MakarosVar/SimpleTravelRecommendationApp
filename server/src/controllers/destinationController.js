@@ -12,9 +12,7 @@ export function getDestinationById(req, res) {
   );
 
   if (!destination) {
-    return res.status(404).json({
-      message: 'Destination not found.',
-    });
+    return sendError(res, 404, 'Destination not found.');
   }
 
   res.json(destination);

@@ -16,7 +16,10 @@ export async function addTripItem(destinationId) {
   });
 
   if (!response.ok) {
-    throw new Error('Could not add destination to trip.');
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || 'Could not add destination to trip.',
+    );
   }
 
   return response.json();
@@ -32,7 +35,10 @@ export async function updateTripItem(destinationId, updates) {
   });
 
   if (!response.ok) {
-    throw new Error('Could not update trip item.');
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || 'Could not update trip item.',
+    );
   }
 
   return response.json();
@@ -45,7 +51,10 @@ export async function deleteTripItem(destinationId) {
     },
   });
   if (!response.ok) {
-    throw new Error('Could not delete trip item.');
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || 'Could not delete trip item.',
+    );
   }
 
   return response.json();
