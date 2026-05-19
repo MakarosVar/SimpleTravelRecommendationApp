@@ -4,15 +4,16 @@ import {
   getDestinationById,
 } from '../controllers/destinationController.js';
 import { validateDestinationId } from '../middleware/validateDestination.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
 
 const router = express.Router();
 
-router.get('/', getAllDestinations);
+router.get('/', asyncHandler(getAllDestinations));
 
 router.get(
   '/:destinationId',
-  validateDestinationId,
-  getDestinationById,
+  asyncHandler(validateDestinationId),
+  asyncHandler(getDestinationById),
 );
 
 export default router;

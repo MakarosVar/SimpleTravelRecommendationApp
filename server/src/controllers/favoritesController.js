@@ -1,12 +1,11 @@
 import { Favorite } from '../models/Favorite.js';
-import { sendError } from '../utils/sendError.js';
 
 export async function getAllFavorites(req, res) {
   const favorites = await Favorite.find().populate('destination');
   res.json(favorites.map((favorite) => favorite.destination));
 }
 
-export async function addFavorite(req, res) {
+export async function addFavorite(req, res, next) {
   const destinationId = req.destinationId;
   const destination = req.destination;
 
@@ -15,11 +14,10 @@ export async function addFavorite(req, res) {
   });
 
   if (alreadyExists) {
-    return sendError(
-      res,
-      409,
-      'Destination is already in favorites.',
-    );
+    return next({
+      statusCode: 409,
+      message: 'Destination is already in favorites.',
+    });
   }
 
   await Favorite.create({
@@ -29,7 +27,7 @@ export async function addFavorite(req, res) {
   res.status(201).json(destination);
 }
 
-export async function deleteFavorite(req, res) {
+export async function deleteFavorite(req, res, next) {
   const destinationId = req.destinationId;
 
   const favorite = await Favorite.findOneAndDelete({
@@ -37,7 +35,10 @@ export async function deleteFavorite(req, res) {
   });
 
   if (!favorite) {
-    return sendError(res, 404, 'Favorite not found.');
+    return next({
+      statusCode: 404,
+      message: 'Favorite not found.',
+    });
   }
 
   res.json({ message: 'Favorite removed successfully.' });

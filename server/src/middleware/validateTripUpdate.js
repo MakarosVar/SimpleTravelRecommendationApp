@@ -1,5 +1,3 @@
-import { sendError } from '../utils/sendError.js';
-
 const allowedPriorities = ['low', 'medium', 'high'];
 
 export function validateTripUpdate(req, res, next) {
@@ -7,7 +5,10 @@ export function validateTripUpdate(req, res, next) {
   const receivedFields = Object.keys(req.body);
 
   if (receivedFields.length === 0) {
-    return sendError(res, 400, 'At least one field is required.');
+    return next({
+      statusCode: 400,
+      message: 'At least one field is required.',
+    });
   }
 
   const hasInvalidField = receivedFields.some(
@@ -15,23 +16,28 @@ export function validateTripUpdate(req, res, next) {
   );
 
   if (hasInvalidField) {
-    return sendError(res, 400, 'Invalid update fields.');
+    return next({
+      statusCode: 400,
+      message: 'Invalid update fields.',
+    });
   }
   const { note, priority } = req.body;
 
   if (note !== undefined && typeof note !== 'string') {
-    return sendError(res, 400, 'Note must be a string.');
+    return next({
+      statusCode: 400,
+      message: 'Note must be a string.',
+    });
   }
 
   if (
     priority !== undefined &&
     !allowedPriorities.includes(priority)
   ) {
-    return sendError(
-      res,
-      400,
-      'Priority must be low, medium, or high.',
-    );
+    return next({
+      statusCode: 400,
+      message: 'Priority must be low, medium, or high.',
+    });
   }
 
   next();

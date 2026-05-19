@@ -1,5 +1,4 @@
 import { Trip } from '../models/Trip.js';
-import { sendError } from '../utils/sendError.js';
 
 function formatTrip(trip) {
   return {
@@ -17,15 +16,18 @@ export async function getAllTrips(req, res) {
   res.json(trips.map(formatTrip));
 }
 
-export async function addTripItem(req, res) {
-  const destination = req.destinationId;
+export async function addTripItem(req, res, next) {
+  const destinationId = req.destinationId;
 
   const alreadyExists = await Trip.exists({
-    destination: destination,
+    destination: destinationId,
   });
 
   if (alreadyExists) {
-    return sendError(res, 409, 'Destination is already in trip.');
+    return next({
+      statusCode: 409,
+      message: 'Destination is already in trip.',
+    });
   }
 
   const tripItem = await Trip.create({
@@ -39,7 +41,7 @@ export async function addTripItem(req, res) {
   res.status(201).json(formatTrip(populatedTrip));
 }
 
-export async function updateTripItem(req, res) {
+export async function updateTripItem(req, res, next) {
   const destinationId = req.destinationId;
   const { note, priority } = req.body;
 
@@ -48,7 +50,10 @@ export async function updateTripItem(req, res) {
   });
 
   if (!tripItem) {
-    return sendError(res, 404, 'Trip item not found.');
+    return next({
+      statusCode: 404,
+      message: 'Trip item not found',
+    });
   }
 
   if (note !== undefined) tripItem.note = note;
@@ -60,14 +65,17 @@ export async function updateTripItem(req, res) {
   res.json(formatTrip(populatedTrip));
 }
 
-export async function deleteTripItem(req, res) {
+export async function deleteTripItem(req, res, next) {
   const destinationId = req.destinationId;
   const deletedTrip = await Trip.findOneAndDelete({
     destination: destinationId,
   });
 
   if (!deletedTrip) {
-    return sendError(res, 404, 'Trip item not found.');
+    return next({
+      statusCode: 404,
+      message: 'Trip item not found',
+    });
   }
 
   res.json({ message: 'Trip item deleted successfully!' });

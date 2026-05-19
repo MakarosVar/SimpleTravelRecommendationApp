@@ -1,4 +1,3 @@
-import { sendError } from '../utils/sendError.js';
 import { Destination } from '../models/Destination.js';
 
 export async function validateDestinationId(req, res, next) {
@@ -6,12 +5,18 @@ export async function validateDestinationId(req, res, next) {
     req.params.destinationId ?? req.body.destinationId;
 
   if (!destinationId) {
-    return next(sendError(res, 400, 'Destination id is required'));
+    return next({
+      statusCode: 400,
+      message: 'Destination id is required',
+    });
   }
   const destination = await Destination.findById(destinationId);
 
   if (!destination) {
-    return next(sendError(res, 404, 'Destination not found'));
+    return next({
+      statusCode: 404,
+      message: 'Destination not found',
+    });
   }
 
   req.destinationId = destinationId;

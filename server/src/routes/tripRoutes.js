@@ -7,21 +7,29 @@ import {
 } from '../controllers/tripController.js';
 import { validateDestinationId } from '../middleware/validateDestination.js';
 import { validateTripUpdate } from '../middleware/validateTripUpdate.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
 
 const router = express.Router();
 
-router.get('/', getAllTrips);
-router.post('/', validateDestinationId, addTripItem);
+router.get('/', asyncHandler(getAllTrips));
+
+router.post(
+  '/',
+  asyncHandler(validateDestinationId),
+  asyncHandler(addTripItem),
+);
+
 router.patch(
   '/:destinationId',
-  validateDestinationId,
+  asyncHandler(validateDestinationId),
   validateTripUpdate,
-  updateTripItem,
+  asyncHandler(updateTripItem),
 );
+
 router.delete(
   '/:destinationId',
-  validateDestinationId,
-  deleteTripItem,
+  asyncHandler(validateDestinationId),
+  asyncHandler(deleteTripItem),
 );
 
 export default router;

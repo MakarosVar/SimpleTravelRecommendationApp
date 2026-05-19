@@ -5,15 +5,20 @@ import {
   deleteFavorite,
 } from '../controllers/favoritesController.js';
 import { validateDestinationId } from '../middleware/validateDestination.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
 
 const router = express.Router();
 
-router.get('/', getAllFavorites);
-router.post('/', validateDestinationId, addFavorite);
+router.get('/', asyncHandler(getAllFavorites));
+router.post(
+  '/',
+  asyncHandler(validateDestinationId),
+  asyncHandler(addFavorite),
+);
 router.delete(
   '/:destinationId',
-  validateDestinationId,
-  deleteFavorite,
+  asyncHandler(validateDestinationId),
+  asyncHandler(deleteFavorite),
 );
 
 export default router;
