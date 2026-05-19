@@ -10,14 +10,8 @@ export function getAllFavorites(req, res) {
   res.json(favorites);
 }
 export function addFavorite(req, res) {
-  const { destinationId } = req.body;
-
-  const destinationExists = destinations.some(
-    (destination) => destination.id === destinationId,
-  );
-  if (!destinationExists) {
-    return sendError(res, 404, 'Destination not found.');
-  }
+  const destinationId = req.destinationId;
+  const destination = req.destination;
 
   if (favoriteIds.includes(destinationId)) {
     return sendError(
@@ -28,15 +22,11 @@ export function addFavorite(req, res) {
   }
 
   favoriteIds.push(destinationId);
-  const favorite = destinations.find(
-    (destination) => destination.id === destinationId,
-  );
-
-  res.status(201).json(favorite);
+  res.status(201).json(destination);
 }
 
 export function deleteFavorite(req, res) {
-  const destinationId = Number(req.params.destinationId);
+  const destinationId = req.destinationId;
 
   const favoriteIndex = favoriteIds.findIndex(
     (id) => id === destinationId,

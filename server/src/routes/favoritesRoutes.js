@@ -4,11 +4,16 @@ import {
   addFavorite,
   deleteFavorite,
 } from '../controllers/favoritesController.js';
+import { validateDestinationId } from '../middleware/validateDestination.js';
 
 const router = express.Router();
 
 router.get('/', getAllFavorites);
-router.post('/', addFavorite);
-router.delete('/:destinationId', deleteFavorite);
+router.post('/', validateDestinationId, addFavorite);
+router.delete(
+  '/:destinationId',
+  validateDestinationId,
+  deleteFavorite,
+);
 
 export default router;

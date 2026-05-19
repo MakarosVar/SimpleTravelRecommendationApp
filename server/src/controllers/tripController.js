@@ -20,7 +20,7 @@ export function getAllTrips(req, res) {
 }
 
 export function addTripItem(req, res) {
-  const { destinationId } = req.body;
+  const destinationId = req.destinationId;
 
   const alreadyExists = trips.some(
     (item) => item.destinationId === destinationId,
@@ -42,7 +42,7 @@ export function addTripItem(req, res) {
 }
 
 export function updateTripItem(req, res) {
-  const destinationId = Number(req.params.destinationId);
+  const destinationId = req.destinationId;
   const { note, priority } = req.body;
 
   const tripItem = trips.find(
@@ -60,7 +60,7 @@ export function updateTripItem(req, res) {
 }
 
 export function deleteTripItem(req, res) {
-  const destinationId = Number(req.params.destinationId);
+  const destinationId = req.destinationId;
 
   const tripIndex = trips.findIndex(
     (item) => item.destinationId === destinationId,
