@@ -1,9 +1,11 @@
-import { destinations } from '../data/destinations.js';
+import { Destination } from '../models/Destination.js';
 
-export function getAllDestinations(req, res) {
+export async function getAllDestinations(req, res) {
+  const destinations = await Destination.find();
+
   res.json(destinations);
 }
 
-export function getDestinationById(req, res) {
+export async function getDestinationById(req, res) {
   res.json(req.destination);
 }

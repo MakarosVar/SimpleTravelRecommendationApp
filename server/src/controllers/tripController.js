@@ -1,53 +1,51 @@
-import { trips } from '../data/trips.js';
-import { destinations } from '../data/destinations.js';
+import { Trip } from '../models/Trip.js';
 import { sendError } from '../utils/sendError.js';
 
-export function getAllTrips(req, res) {
-  const enrichedTrips = trips
-    .map((tripItem) => {
-      const destination = destinations.find(
-        (destination) => destination.id === tripItem.destinationId,
-      );
-
-      return {
-        ...tripItem,
-        destination,
-      };
-    })
-    .filter((tripItem) => tripItem.destination);
-
-  res.json(enrichedTrips);
+function formatTrip(trip) {
+  return {
+    _id: trip._id,
+    destinationId: trip.destination._id,
+    note: trip.note,
+    priority: trip.priority,
+    destination: trip.destination,
+  };
 }
 
-export function addTripItem(req, res) {
-  const destinationId = req.destinationId;
+export async function getAllTrips(req, res) {
+  const trips = await Trip.find().populate('destination');
 
-  const alreadyExists = trips.some(
-    (item) => item.destinationId === destinationId,
-  );
+  res.json(trips.map(formatTrip));
+}
+
+export async function addTripItem(req, res) {
+  const destination = req.destinationId;
+
+  const alreadyExists = await Trip.exists({
+    destination: destination,
+  });
 
   if (alreadyExists) {
     return sendError(res, 409, 'Destination is already in trip.');
   }
 
-  const newTripItem = {
-    destinationId,
+  const tripItem = await Trip.create({
+    destination: destinationId,
     note: '',
     priority: 'medium',
-  };
+  });
 
-  trips.push(newTripItem);
+  const populatedTrip = await tripItem.populate('destination');
 
-  res.status(201).json(newTripItem);
+  res.status(201).json(formatTrip(populatedTrip));
 }
 
-export function updateTripItem(req, res) {
+export async function updateTripItem(req, res) {
   const destinationId = req.destinationId;
   const { note, priority } = req.body;
 
-  const tripItem = trips.find(
-    (item) => item.destinationId === destinationId,
-  );
+  const tripItem = await Trip.findOne({
+    destination: destinationId,
+  });
 
   if (!tripItem) {
     return sendError(res, 404, 'Trip item not found.');
@@ -55,23 +53,22 @@ export function updateTripItem(req, res) {
 
   if (note !== undefined) tripItem.note = note;
   if (priority !== undefined) tripItem.priority = priority;
+  await tripItem.save();
 
-  res.json(tripItem);
+  const populatedTrip = await tripItem.populate('destination');
+
+  res.json(formatTrip(populatedTrip));
 }
 
-export function deleteTripItem(req, res) {
+export async function deleteTripItem(req, res) {
   const destinationId = req.destinationId;
+  const deletedTrip = await Trip.findOneAndDelete({
+    destination: destinationId,
+  });
 
-  const tripIndex = trips.findIndex(
-    (item) => item.destinationId === destinationId,
-  );
-
-  if (tripIndex === -1) {
+  if (!deletedTrip) {
     return sendError(res, 404, 'Trip item not found.');
   }
 
-  trips.splice(tripIndex, 1);
-  res
-    .status(200)
-    .json({ message: 'Trip item deleted successfully!' });
+  res.json({ message: 'Trip item deleted successfully!' });
 }

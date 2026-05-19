@@ -10,7 +10,7 @@ import { useDestinationDetails } from '../hooks/useDestinationDetails';
 
 export default function DestinationDetails() {
   const { id } = useParams();
-  const destinationId = Number(id);
+  const destinationId = id;
   const navigate = useNavigate();
   const { destination, isLoading, error, reloadDestination } =
     useDestinationDetails(destinationId);
@@ -45,9 +45,9 @@ export default function DestinationDetails() {
     );
   }
 
-  const inTrip = isInTrip(destination.id);
+  const inTrip = isInTrip(destination._id);
 
-  const favorite = isFavorite(destination.id);
+  const favorite = isFavorite(destination._id);
 
   return (
     <PageContainer>
@@ -63,15 +63,15 @@ export default function DestinationDetails() {
             <div className="flex gap-3">
               <button
                 className="rounded-full  bg-teal-700/60  px-4 py-2 text-white  shadow-lg  backdrop-blur-md  border border-white/20"
-                onClick={() => toggleFavorite(destination.id)}
+                onClick={() => toggleFavorite(destination._id)}
               >
                 {favorite ? '♥ Saved' : '♡ Save'}
               </button>
               <button
                 onClick={() =>
                   inTrip
-                    ? removeFromTrip(destination.id)
-                    : addToTrip(destination.id)
+                    ? removeFromTrip(destination._id)
+                    : addToTrip(destination._id)
                 }
                 className={`rounded-full  shadow-lg  backdrop-blur-md  border-white/20 border px-4 py-2 text-white transition ${
                   inTrip

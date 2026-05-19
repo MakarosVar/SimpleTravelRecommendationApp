@@ -1,14 +1,13 @@
+import { FAVORITES_API_URL } from '../config/api';
 import { handleResponse } from '../utils/handleResponse';
 
-const API_URL = 'http://localhost:5000/api/favorites';
-
 export async function getFavorites() {
-  const response = await fetch(API_URL);
+  const response = await fetch(FAVORITES_API_URL);
   return handleResponse(response);
 }
 
 export async function addFavorite(destinationId) {
-  const response = await fetch(API_URL, {
+  const response = await fetch(FAVORITES_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -18,11 +17,14 @@ export async function addFavorite(destinationId) {
   return handleResponse(response);
 }
 export async function deleteFavorite(destinationId) {
-  const response = await fetch(API_URL + '/' + destinationId, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
+  const response = await fetch(
+    FAVORITES_API_URL + '/' + destinationId,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
-  });
+  );
   return handleResponse(response);
 }

@@ -1,14 +1,13 @@
+import { TRIPS_API_URL } from '../config/api';
 import { handleResponse } from '../utils/handleResponse';
 
-const API_URL = 'http://localhost:5000/api/trips';
-
 export async function getTripItems() {
-  const response = await fetch(API_URL);
+  const response = await fetch(TRIPS_API_URL);
   return handleResponse(response);
 }
 
 export async function addTripItem(destinationId) {
-  const response = await fetch(API_URL, {
+  const response = await fetch(TRIPS_API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -20,7 +19,7 @@ export async function addTripItem(destinationId) {
 }
 
 export async function updateTripItem(destinationId, updates) {
-  const response = await fetch(API_URL + '/' + destinationId, {
+  const response = await fetch(TRIPS_API_URL + '/' + destinationId, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -30,7 +29,7 @@ export async function updateTripItem(destinationId, updates) {
   return handleResponse(response);
 }
 export async function deleteTripItem(destinationId) {
-  const response = await fetch(API_URL + '/' + destinationId, {
+  const response = await fetch(TRIPS_API_URL + '/' + destinationId, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

@@ -45,7 +45,7 @@ export const FavProvider = ({ children }) => {
 
   function isFavorite(destinationId) {
     return favorites.some(
-      (destination) => destination.id === destinationId,
+      (destination) => destination._id === destinationId,
     );
   }
 

@@ -1,19 +1,20 @@
-import { favoriteIds } from '../data/favorites.js';
-import { destinations } from '../data/destinations.js';
+import { Favorite } from '../models/Favorite.js';
 import { sendError } from '../utils/sendError.js';
 
-export function getAllFavorites(req, res) {
-  const favorites = destinations.filter((destination) =>
-    favoriteIds.includes(destination.id),
-  );
-
-  res.json(favorites);
+export async function getAllFavorites(req, res) {
+  const favorites = await Favorite.find().populate('destination');
+  res.json(favorites.map((favorite) => favorite.destination));
 }
-export function addFavorite(req, res) {
+
+export async function addFavorite(req, res) {
   const destinationId = req.destinationId;
   const destination = req.destination;
 
-  if (favoriteIds.includes(destinationId)) {
+  const alreadyExists = await Favorite.exists({
+    destination: destinationId,
+  });
+
+  if (alreadyExists) {
     return sendError(
       res,
       409,
@@ -21,22 +22,23 @@ export function addFavorite(req, res) {
     );
   }
 
-  favoriteIds.push(destinationId);
+  await Favorite.create({
+    destination: destinationId,
+  });
+
   res.status(201).json(destination);
 }
 
-export function deleteFavorite(req, res) {
+export async function deleteFavorite(req, res) {
   const destinationId = req.destinationId;
 
-  const favoriteIndex = favoriteIds.findIndex(
-    (id) => id === destinationId,
-  );
+  const favorite = await Favorite.findOneAndDelete({
+    destination: destinationId,
+  });
 
-  if (favoriteIndex === -1) {
+  if (!favorite) {
     return sendError(res, 404, 'Favorite not found.');
   }
-
-  favoriteIds.splice(favoriteIndex, 1);
 
   res.json({ message: 'Favorite removed successfully.' });
 }

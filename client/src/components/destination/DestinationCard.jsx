@@ -5,7 +5,7 @@ export default function DestinationCard({ place }) {
   const { addToTrip, removeFromTrip, isInTrip } =
     useContext(TripContext);
 
-  const inTrip = isInTrip(place.id);
+  const inTrip = isInTrip(place._id);
 
   return (
     <article className="flex flex-col p-4.5 flex-1 min-h-108 overflow-hidden rounded-xl bg-white text-gray-900 shadow-2xl">
@@ -27,7 +27,7 @@ export default function DestinationCard({ place }) {
 
         <div className="mt-auto flex flex-col md:flex-row gap-3">
           <Link
-            to={`/destination/${place.id}`}
+            to={`/destination/${place._id}`}
             className="mt-auto w-fit"
           >
             <button className="rounded bg-teal-700 px-5 py-2.5 text-white transition hover:bg-teal-600">
@@ -36,7 +36,9 @@ export default function DestinationCard({ place }) {
           </Link>
           <button
             onClick={() =>
-              inTrip ? removeFromTrip(place.id) : addToTrip(place.id)
+              inTrip
+                ? removeFromTrip(place._id)
+                : addToTrip(place._id)
             }
             className={`mt-3 rounded px-5 py-2.5 text-white transition ${
               inTrip

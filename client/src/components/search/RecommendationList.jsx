@@ -9,7 +9,7 @@ export default function RecommendationList({ results }) {
   return (
     <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
       {visibleResults.map((place) => (
-        <DestinationCard key={place.id} place={place} />
+        <DestinationCard key={place._id} place={place} />
       ))}
     </div>
   );

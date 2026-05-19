@@ -40,7 +40,7 @@ export default function Favorites() {
         {!isLoadingFavorites && !favoritesError && (
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {favorites.map((place) => (
-              <DestinationCard key={place.id} place={place} />
+              <DestinationCard key={place._id} place={place} />
             ))}
           </div>
         )}
