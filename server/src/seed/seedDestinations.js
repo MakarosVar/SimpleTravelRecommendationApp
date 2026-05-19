@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
-import { Destination } from './src/models/Destination.js';
-import { destinations } from './src/data/destinations.js';
+import { Destination } from '../models/Destination.js';
+import { destinations } from './destinations.js';
 
 dotenv.config();
 
