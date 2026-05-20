@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DestinationDetails from './pages/DestinationDetails';
 import Favorites from './pages/Favorites';
 import Trip from './pages/Trip';
+import LoginPage from './pages/LoginPage';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <SocialLinks />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/trip" element={<Trip />} />

@@ -1,14 +1,25 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FavContext } from '../../context/FavoriteContext';
 import { TripContext } from '../../context/TripContext';
+import { useAuth } from '../../context/AuthContext';
+import { useDestinationSearch } from '../../hooks/useDestinationSearch';
 
 export default function NavBar() {
   const { favorites } = useContext(FavContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const { trip } = useContext(TripContext);
+  const { isAuthenticated, logout } = useAuth();
 
+  const { handleClear } = useDestinationSearch();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    handleClear();
+    navigate('/');
+  }
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -52,18 +63,29 @@ export default function NavBar() {
     { label: 'Contact Us', path: '/contact' },
   ];
 
-  const userLinks = [
-    {
-      label: 'Favorites',
-      path: '/favorites',
-      badge: favorites.length,
-    },
-    {
-      label: 'Trip',
-      path: '/trip',
-      badge: trip.length,
-    },
-  ];
+  const userLinks = isAuthenticated
+    ? [
+        {
+          label: 'Favorites',
+          path: '/favorites',
+          badge: favorites.length,
+        },
+        {
+          label: 'Trip',
+          path: '/trip',
+          badge: trip.length,
+        },
+      ]
+    : [
+        {
+          label: 'Login',
+          path: '/login',
+        },
+        {
+          label: 'Register',
+          path: '/register',
+        },
+      ];
   return (
     <nav className="fixed top-0 left-0 z-50 flex h-17.5 w-full items-center justify-between bg-black/75 px-8 text-white">
       <div className="flex items-center gap-2.5 text-3xl font-bold italic">
@@ -90,6 +112,14 @@ export default function NavBar() {
             )}
           </NavLink>
         ))}
+        {isAuthenticated && (
+          <button
+            onClick={handleLogout}
+            className="text-base font-bold text-white hover:text-teal-300"
+          >
+            Logout
+          </button>
+        )}
       </div>
       <div className="relative md:hidden" ref={menuRef}>
         <button
@@ -130,6 +160,17 @@ export default function NavBar() {
               )}
             </NavLink>
           ))}
+          {isAuthenticated && (
+            <button
+              className="text-base font-bold text-white hover:text-teal-300"
+              onClick={() => {
+                handleLogout();
+                setMenuOpen(false);
+              }}
+            >
+              Logout
+            </button>
+          )}
         </div>
       </div>
     </nav>
