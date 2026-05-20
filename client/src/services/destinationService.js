@@ -1,13 +1,13 @@
-import { DESTINATIONS_API_URL } from '../config/api';
-import { handleResponse } from '../utils/handleResponse';
+import apiClient from './apiClient';
 
 export async function getDestinations() {
-  const response = await fetch(DESTINATIONS_API_URL);
+  const response = await apiClient.get('/destinations');
 
-  return handleResponse(response);
+  return response.data;
 }
 
 export async function getDestinationById(id) {
-  const response = await fetch(`${DESTINATIONS_API_URL}/${id}`);
-  return handleResponse(response);
+  const response = await apiClient.get(`/destinations/${id}`);
+
+  return response.data;
 }

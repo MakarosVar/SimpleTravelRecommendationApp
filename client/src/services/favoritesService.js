@@ -1,30 +1,20 @@
-import { FAVORITES_API_URL } from '../config/api';
-import { handleResponse } from '../utils/handleResponse';
+import apiClient from './apiClient';
 
 export async function getFavorites() {
-  const response = await fetch(FAVORITES_API_URL);
-  return handleResponse(response);
+  const response = await apiClient.get('/favorites');
+  return response.data;
 }
 
 export async function addFavorite(destinationId) {
-  const response = await fetch(FAVORITES_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ destinationId }),
+  const response = await apiClient.post('/favorites', {
+    destinationId,
   });
-  return handleResponse(response);
+
+  return response.data;
 }
 export async function deleteFavorite(destinationId) {
-  const response = await fetch(
-    FAVORITES_API_URL + '/' + destinationId,
-    {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
+  const response = await apiClient.delete(
+    `/favorites/${destinationId}`,
   );
-  return handleResponse(response);
+  return response.data;
 }

@@ -1,39 +1,23 @@
-import { TRIPS_API_URL } from '../config/api';
-import { handleResponse } from '../utils/handleResponse';
+import apiClient from './apiClient';
 
 export async function getTripItems() {
-  const response = await fetch(TRIPS_API_URL);
-  return handleResponse(response);
+  const response = await apiClient.get('/trips');
+  return response.data;
 }
 
 export async function addTripItem(destinationId) {
-  const response = await fetch(TRIPS_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ destinationId }),
-  });
-
-  return handleResponse(response);
+  const response = await apiClient.post('/trips', { destinationId });
+  return response.data;
 }
 
 export async function updateTripItem(destinationId, updates) {
-  const response = await fetch(TRIPS_API_URL + '/' + destinationId, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(updates),
-  });
-  return handleResponse(response);
+  const response = await apiClient.patch(
+    `/trips/${destinationId}`,
+    updates,
+  );
+  return response.data;
 }
 export async function deleteTripItem(destinationId) {
-  const response = await fetch(TRIPS_API_URL + '/' + destinationId, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return handleResponse(response);
+  const response = await apiClient.delete(`/trips/${destinationId}`);
+  return response.data;
 }
