@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { searchRecommendations } from '../utils/searchRecommendations';
 import { sortDestinations } from '../utils/sortDestinations';
 import { useSearchParams } from 'react-router-dom';
@@ -28,6 +28,11 @@ export function useDestinationSearch() {
           ),
           sortBy,
         );
+  useEffect(() => {
+    setSearchTerm(searchParams.get('q') || '');
+    setSelectedType(searchParams.get('type') || 'all');
+    setSortBy(searchParams.get('sort') || 'default');
+  }, [searchParams]);
 
   function handleSearch(searchTerm, selectedType) {
     setSearchTerm(searchTerm);
@@ -62,6 +67,8 @@ export function useDestinationSearch() {
     sortBy,
     error,
     isLoading,
+    setSearchTerm,
+    setSelectedType,
     handleSearch,
     handleClear,
     changeSort,
