@@ -1,13 +1,17 @@
 import { Favorite } from '../models/Favorite.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
 
-export async function getAllFavorites(req, res) {
+export const getAllFavorites = asyncHandler(async (req, res) => {
   const favorites = await Favorite.find({
     user: req.user._id,
   }).populate('destination');
-  res.json(favorites.map((favorite) => favorite.destination));
-}
 
-export async function addFavorite(req, res, next) {
+  res.json(
+    favorites.map((favorite) => favorite.destination).filter(Boolean),
+  );
+});
+
+export const addFavorite = asyncHandler(async (req, res, next) => {
   const destinationId = req.destinationId;
   const destination = req.destination;
 
@@ -23,15 +27,26 @@ export async function addFavorite(req, res, next) {
     });
   }
 
-  await Favorite.create({
-    user: req.user._id,
-    destination: destinationId,
-  });
+  try {
+    await Favorite.create({
+      user: req.user._id,
+      destination: destinationId,
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return next({
+        statusCode: 409,
+        message: 'Destination is already in favorites.',
+      });
+    }
+
+    throw error;
+  }
 
   res.status(201).json(destination);
-}
+});
 
-export async function deleteFavorite(req, res, next) {
+export const deleteFavorite = asyncHandler(async (req, res, next) => {
   const destinationId = req.destinationId;
 
   const favorite = await Favorite.findOneAndDelete({
@@ -47,4 +62,4 @@ export async function deleteFavorite(req, res, next) {
   }
 
   res.json({ message: 'Favorite removed successfully.' });
-}
+});

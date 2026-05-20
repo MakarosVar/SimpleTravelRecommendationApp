@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
 
-export const protect = async (req, res, next) => {
+export const protect = asyncHandler(async (req, res, next) => {
   let token;
 
   if (
@@ -30,4 +31,4 @@ export const protect = async (req, res, next) => {
   req.user = user;
 
   next();
-};
+});

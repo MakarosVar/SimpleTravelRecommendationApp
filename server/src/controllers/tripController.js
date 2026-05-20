@@ -1,6 +1,10 @@
 import { Trip } from '../models/Trip.js';
-
+import { asyncHandler } from '../utils/asyncHandler.js';
 function formatTrip(trip) {
+  if (!trip.destination) {
+    return null;
+  }
+
   return {
     _id: trip._id,
     destinationId: trip.destination._id,
@@ -10,15 +14,15 @@ function formatTrip(trip) {
   };
 }
 
-export async function getAllTrips(req, res) {
+export const getAllTrips = asyncHandler(async (req, res) => {
   const trips = await Trip.find({ user: req.user._id }).populate(
     'destination',
   );
 
-  res.json(trips.map(formatTrip));
-}
+  res.json(trips.map(formatTrip).filter(Boolean));
+});
 
-export async function addTripItem(req, res, next) {
+export const addTripItem = asyncHandler(async (req, res, next) => {
   const destinationId = req.destinationId;
 
   const alreadyExists = await Trip.exists({
@@ -43,9 +47,9 @@ export async function addTripItem(req, res, next) {
   const populatedTrip = await tripItem.populate('destination');
 
   res.status(201).json(formatTrip(populatedTrip));
-}
+});
 
-export async function updateTripItem(req, res, next) {
+export const updateTripItem = asyncHandler(async (req, res, next) => {
   const destinationId = req.destinationId;
   const { note, priority } = req.body;
 
@@ -68,9 +72,9 @@ export async function updateTripItem(req, res, next) {
   const populatedTrip = await tripItem.populate('destination');
 
   res.json(formatTrip(populatedTrip));
-}
+});
 
-export async function deleteTripItem(req, res, next) {
+export const deleteTripItem = asyncHandler(async (req, res, next) => {
   const destinationId = req.destinationId;
   const deletedTrip = await Trip.findOneAndDelete({
     user: req.user._id,
@@ -85,4 +89,4 @@ export async function deleteTripItem(req, res, next) {
   }
 
   res.json({ message: 'Trip item deleted successfully!' });
-}
+});

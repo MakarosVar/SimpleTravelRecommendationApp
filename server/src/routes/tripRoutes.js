@@ -12,13 +12,13 @@ import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.get('/', protect, asyncHandler(getAllTrips));
+router.get('/', protect, getAllTrips);
 
 router.post(
   '/',
   protect,
   asyncHandler(validateDestinationId),
-  asyncHandler(addTripItem),
+  addTripItem,
 );
 
 router.patch(
@@ -26,14 +26,14 @@ router.patch(
   protect,
   asyncHandler(validateDestinationId),
   validateTripUpdate,
-  asyncHandler(updateTripItem),
+  updateTripItem,
 );
 
 router.delete(
   '/:destinationId',
   protect,
   asyncHandler(validateDestinationId),
-  asyncHandler(deleteTripItem),
+  deleteTripItem,
 );
 
 export default router;

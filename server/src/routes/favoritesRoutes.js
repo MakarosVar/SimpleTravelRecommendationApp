@@ -10,18 +10,18 @@ import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.get('/', protect, asyncHandler(getAllFavorites));
+router.get('/', protect, getAllFavorites);
 router.post(
   '/',
   protect,
   asyncHandler(validateDestinationId),
-  asyncHandler(addFavorite),
+  addFavorite,
 );
 router.delete(
   '/:destinationId',
   protect,
   asyncHandler(validateDestinationId),
-  asyncHandler(deleteFavorite),
+  deleteFavorite,
 );
 
 export default router;
