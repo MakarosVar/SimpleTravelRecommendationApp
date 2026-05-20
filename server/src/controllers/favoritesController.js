@@ -1,7 +1,9 @@
 import { Favorite } from '../models/Favorite.js';
 
 export async function getAllFavorites(req, res) {
-  const favorites = await Favorite.find().populate('destination');
+  const favorites = await Favorite.find({
+    user: req.user._id,
+  }).populate('destination');
   res.json(favorites.map((favorite) => favorite.destination));
 }
 
@@ -10,6 +12,7 @@ export async function addFavorite(req, res, next) {
   const destination = req.destination;
 
   const alreadyExists = await Favorite.exists({
+    user: req.user._id,
     destination: destinationId,
   });
 
@@ -21,6 +24,7 @@ export async function addFavorite(req, res, next) {
   }
 
   await Favorite.create({
+    user: req.user._id,
     destination: destinationId,
   });
 
@@ -31,6 +35,7 @@ export async function deleteFavorite(req, res, next) {
   const destinationId = req.destinationId;
 
   const favorite = await Favorite.findOneAndDelete({
+    user: req.user._id,
     destination: destinationId,
   });
 

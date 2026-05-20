@@ -6,12 +6,16 @@ const favoriteSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Destination',
       required: true,
-      unique: true,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
   },
   {
     timestamps: true,
   },
 );
-
+favoriteSchema.index({ user: 1, destination: 1 }, { unique: true });
 export const Favorite = mongoose.model('Favorite', favoriteSchema);

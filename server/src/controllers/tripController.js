@@ -11,7 +11,9 @@ function formatTrip(trip) {
 }
 
 export async function getAllTrips(req, res) {
-  const trips = await Trip.find().populate('destination');
+  const trips = await Trip.find({ user: req.user._id }).populate(
+    'destination',
+  );
 
   res.json(trips.map(formatTrip));
 }
@@ -20,6 +22,7 @@ export async function addTripItem(req, res, next) {
   const destinationId = req.destinationId;
 
   const alreadyExists = await Trip.exists({
+    user: req.user._id,
     destination: destinationId,
   });
 
@@ -34,6 +37,7 @@ export async function addTripItem(req, res, next) {
     destination: destinationId,
     note: '',
     priority: 'medium',
+    user: req.user._id,
   });
 
   const populatedTrip = await tripItem.populate('destination');
@@ -46,6 +50,7 @@ export async function updateTripItem(req, res, next) {
   const { note, priority } = req.body;
 
   const tripItem = await Trip.findOne({
+    user: req.user._id,
     destination: destinationId,
   });
 
@@ -68,6 +73,7 @@ export async function updateTripItem(req, res, next) {
 export async function deleteTripItem(req, res, next) {
   const destinationId = req.destinationId;
   const deletedTrip = await Trip.findOneAndDelete({
+    user: req.user._id,
     destination: destinationId,
   });
 
