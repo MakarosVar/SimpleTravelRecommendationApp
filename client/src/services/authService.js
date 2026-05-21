@@ -12,3 +12,7 @@ export async function register(credentials) {
   );
   return response.data;
 }
+export async function me() {
+  const response = await apiClient.get('/auth/me');
+  return response.data;
+}

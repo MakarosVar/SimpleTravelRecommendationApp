@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/shared/ErrorMessage';
 
 export default function RegisterPage() {
-  const { register } = useAuth();
+  const { register, isAuthenticated, authLoading } = useAuth();
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -15,6 +15,13 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  if (authLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
