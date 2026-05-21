@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
-import NoResults from '../components/search/NoResults';
-import RecommendationList from '../components/search/RecommendationList';
-import SearchBox from '../components/search/SearchBox';
-import SearchControls from '../components/search/SearchControls';
-import { searchRecommendations } from '../utils/searchRecommendations';
-import { sortDestinations } from '../utils/sortDestinations';
-import ErrorMessage from '../components/shared/ErrorMessage';
-import LoadingMessage from '../components/shared/LoadingMessage';
-import RetryButton from '../components/shared/RetryButton';
-import { useDestinations } from '../hooks/useDestinations';
+import NoResults from '../../components/search/NoResults';
+import RecommendationList from '../../components/search/RecommendationList';
+import SearchBox from '../../components/search/SearchBox';
+import SearchControls from '../../components/search/SearchControls';
+import { searchRecommendations } from '../../utils/searchRecommendations';
+import { sortDestinations } from '../../utils/sortDestinations';
+import ErrorMessage from '../../components/shared/ErrorMessage';
+import LoadingMessage from '../../components/shared/LoadingMessage';
+import RetryButton from '../../components/shared/RetryButton';
+import { useDestinations } from '../../hooks/useDestinations';
 import { useSearchParams } from 'react-router-dom';
 
 export default function Home() {

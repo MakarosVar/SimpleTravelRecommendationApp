@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import DestinationCard from '../components/destination/DestinationCard';
-import PageContainer from '../components/layout/PageContainer';
-import LoadingMessage from '../components/shared/LoadingMessage';
-import ErrorMessage from '../components/shared/ErrorMessage';
-import RetryButton from '../components/shared/RetryButton';
-import { FavContext } from '../context/FavoriteContext';
+import DestinationCard from '../../components/destination/DestinationCard';
+import PageContainer from '../../components/layout/PageContainer';
+import LoadingMessage from '../../components/shared/LoadingMessage';
+import ErrorMessage from '../../components/shared/ErrorMessage';
+import RetryButton from '../../components/shared/RetryButton';
+import { FavContext } from '../../context/FavoriteContext';
 
 export default function Favorites() {
   const {

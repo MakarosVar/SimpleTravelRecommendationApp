@@ -1,10 +1,10 @@
-import PageContainer from '../components/layout/PageContainer';
-import TripItemCard from '../components/destination/TripItemCard';
-import LoadingMessage from '../components/shared/LoadingMessage';
-import ErrorMessage from '../components/shared/ErrorMessage';
-import RetryButton from '../components/shared/RetryButton';
+import PageContainer from '../../components/layout/PageContainer';
+import TripItemCard from '../../components/destination/TripItemCard';
+import LoadingMessage from '../../components/shared/LoadingMessage';
+import ErrorMessage from '../../components/shared/ErrorMessage';
+import RetryButton from '../../components/shared/RetryButton';
 import { useContext } from 'react';
-import { TripContext } from '../context/TripContext';
+import { TripContext } from '../../context/TripContext';
 
 export default function Trip() {
   const {

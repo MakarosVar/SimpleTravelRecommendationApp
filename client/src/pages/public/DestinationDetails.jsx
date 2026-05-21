@@ -1,14 +1,14 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useContext } from 'react';
-import { FavContext } from '../context/FavoriteContext';
-import { TripContext } from '../context/TripContext';
-import PageContainer from '../components/layout/PageContainer';
-import ErrorMessage from '../components/shared/ErrorMessage';
-import RetryButton from '../components/shared/RetryButton';
-import LoadingMessage from '../components/shared/LoadingMessage';
-import { useDestinationDetails } from '../hooks/useDestinationDetails';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
+import { FavContext } from '../../context/FavoriteContext';
+import { TripContext } from '../../context/TripContext';
+import PageContainer from '../../components/layout/PageContainer';
+import ErrorMessage from '../../components/shared/ErrorMessage';
+import RetryButton from '../../components/shared/RetryButton';
+import LoadingMessage from '../../components/shared/LoadingMessage';
+import { useDestinationDetails } from '../../hooks/useDestinationDetails';
+import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 
 export default function DestinationDetails() {
   const { id } = useParams();

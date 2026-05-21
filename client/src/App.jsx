@@ -1,18 +1,20 @@
 import NavBar from './components/navigation/NavBar';
 import SocialLinks from './components/shared/SocialLinks';
-import Home from './pages/Home';
-import About from './pages/About';
-import Contact from './pages/Contact';
+import Home from './pages/public/Home';
+import About from './pages/public/About';
+import Contact from './pages/public/Contact';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import DestinationDetails from './pages/DestinationDetails';
-import Favorites from './pages/Favorites';
-import Trip from './pages/Trip';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import DestinationDetails from './pages/public/DestinationDetails';
+import Favorites from './pages/user/Favorites';
+import Trip from './pages/user/Trip';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import ToastContainer from './components/shared/ToastContainer';
-import AdminDashboardPage from './pages/AdminDashboardPage';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminRoute from './components/auth/AdminRoute';
+import AdminDestinationsPage from './pages/admin/AdminDestinationsPage';
+import CreateDestinationPage from './pages/admin/CreateDestinationPage';
 
 export default function App() {
   return (
@@ -52,6 +54,22 @@ export default function App() {
             element={
               <AdminRoute>
                 <AdminDashboardPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/destinations"
+            element={
+              <AdminRoute>
+                <AdminDestinationsPage />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/destinations/new"
+            element={
+              <AdminRoute>
+                <CreateDestinationPage />
               </AdminRoute>
             }
           />
