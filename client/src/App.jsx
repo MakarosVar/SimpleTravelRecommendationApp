@@ -14,7 +14,7 @@ import ToastContainer from './components/shared/ToastContainer';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminRoute from './components/auth/AdminRoute';
 import AdminDestinationsPage from './pages/admin/AdminDestinationsPage';
-import CreateDestinationPage from './pages/admin/CreateDestinationPage';
+import DestinationForm from './pages/admin/DestinationForm';
 
 export default function App() {
   return (
@@ -69,7 +69,16 @@ export default function App() {
             path="/admin/destinations/new"
             element={
               <AdminRoute>
-                <CreateDestinationPage />
+                <DestinationForm />
+              </AdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/destinations/:destinationId/edit"
+            element={
+              <AdminRoute>
+                <DestinationForm />
               </AdminRoute>
             }
           />

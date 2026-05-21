@@ -1,7 +1,9 @@
 import { Destination } from '../models/Destination.js';
 
 export async function getAllDestinations(req, res) {
-  const destinations = await Destination.find();
+  const destinations = await Destination.find({
+    isActive: { $ne: false },
+  });
 
   res.json(destinations);
 }

@@ -8,6 +8,10 @@ const destinationSchema = new mongoose.Schema(
     description: String,
     imageUrl: String,
     tags: [String],
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
