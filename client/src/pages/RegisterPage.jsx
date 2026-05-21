@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Navigate, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/shared/ErrorMessage';
+import { useToast } from '../context/ToastContext';
 
 export default function RegisterPage() {
   const { register, isAuthenticated, authLoading } = useAuth();
@@ -14,6 +15,7 @@ export default function RegisterPage() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { addToast } = useToast();
 
   if (authLoading) {
     return <p>Loading...</p>;
@@ -32,17 +34,22 @@ export default function RegisterPage() {
     const { confirmPassword, ...fields } = form;
     if (fields.password !== confirmPassword) {
       setError({ message: 'Passwords do not match' });
+      addToast('Passwords do not match', 'error');
       setIsLoading(false);
       return;
     }
     try {
       await register(fields);
+      addToast(
+        'Account created successfully. Please login.',
+        'success',
+      );
       navigate('/login');
     } catch (error) {
-      setError({
-        message:
-          error.response?.data?.message || 'Registration failed',
-      });
+      const message =
+        error.response?.data?.message || 'Registration failed';
+      setError({ message });
+      addToast(message, 'error');
     } finally {
       setIsLoading(false);
     }

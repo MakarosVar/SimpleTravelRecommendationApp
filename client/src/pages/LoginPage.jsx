@@ -1,14 +1,20 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/shared/ErrorMessage';
+import { useToast } from '../context/ToastContext';
+import { TripContext } from '../context/TripContext';
+import { FavContext } from '../context/FavoriteContext';
 
 export default function LoginPage() {
   const { login, isAuthenticated, authLoading } = useAuth();
+  const { reloadTrip } = useContext(TripContext);
+  const { reloadFavorites } = useContext(FavContext);
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { addToast } = useToast();
 
   if (authLoading) {
     return <p>Loading...</p>;
@@ -28,11 +34,14 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       await login(form);
+      addToast('Login successful', 'success');
+      await Promise.all([reloadFavorites(), reloadTrip()]);
+
       navigate('/');
     } catch (error) {
-      setError({
-        message: error.response?.data?.message || 'Login failed',
-      });
+      const message = error.response?.data?.message || 'Login failed';
+      setError({ message });
+      addToast(message, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +91,7 @@ export default function LoginPage() {
         </button>
 
         <p className="mt-5 text-center text-sm text-slate-500">
-          Don&apos;t have an account?{' '}
+          Don&apos;t have an account?
           <Link to="/register" className="font-medium text-teal-600">
             Create one
           </Link>

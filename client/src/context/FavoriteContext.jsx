@@ -12,6 +12,9 @@ export const FavProvider = ({ children }) => {
   const [isLoadingFavorites, setIsLoadingFavorites] = useState(true);
   const [favoritesError, setFavoritesError] = useState(null);
 
+  function clearFavorites() {
+    setFavorites([]);
+  }
   async function loadFavorites() {
     try {
       setIsLoadingFavorites(true);
@@ -56,6 +59,7 @@ export const FavProvider = ({ children }) => {
         isLoadingFavorites,
         favoritesError,
         toggleFavorite,
+        clearFavorites,
         isFavorite,
         reloadFavorites: loadFavorites,
       }}

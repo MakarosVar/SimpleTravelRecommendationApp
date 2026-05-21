@@ -1,19 +1,26 @@
 import { useState } from 'react';
+import { useToast } from '../../context/ToastContext';
 
 export default function TripItemCard({ item, onUpdate, onRemove }) {
   const [note, setNote] = useState(item.note);
   const [priority, setPriority] = useState(item.priority);
   const destination = item.destination;
+  const { addToast } = useToast();
   const priorityClasses = {
     low: 'bg-emerald-500/20 text-emerald-200 border-emerald-300/30',
     medium: 'bg-yellow-500/20 text-yellow-200 border-yellow-300/30',
     high: 'bg-red-500/20 text-red-200 border-red-300/30',
   };
+  function handleRemove() {
+    onRemove(item.destinationId);
+    addToast('Removed from trip', 'info');
+  }
   function handleSave() {
     onUpdate(item.destinationId, {
       note,
       priority,
     });
+    addToast('Trip item updated', 'success');
   }
   return (
     <article className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 text-white backdrop-blur-md">
@@ -88,14 +95,14 @@ export default function TripItemCard({ item, onUpdate, onRemove }) {
           <button
             className="mt-4 rounded-lg border border-white/20 bg-black/10 
           px-4 py-2 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-black/80 "
-            onClick={() => onRemove(item.destinationId)}
+            onClick={handleRemove}
           >
             Remove from Trip
           </button>
           <button
             className="mt-4 rounded-lg border border-white/20 bg-teal-400 
           px-4 py-2 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-teal-600 "
-            onClick={() => handleSave()}
+            onClick={handleSave}
           >
             Save
           </button>

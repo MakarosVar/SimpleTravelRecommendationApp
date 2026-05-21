@@ -5,15 +5,18 @@ import App from './App.jsx';
 import { FavProvider } from './context/FavoriteContext.jsx';
 import { TripProvider } from './context/TripContext.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
+import { ToastProvider } from './context/ToastContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthProvider>
-      <FavProvider>
-        <TripProvider>
-          <App />
-        </TripProvider>
-      </FavProvider>
-    </AuthProvider>
+    <ToastProvider>
+      <AuthProvider>
+        <FavProvider>
+          <TripProvider>
+            <App />
+          </TripProvider>
+        </FavProvider>
+      </AuthProvider>
+    </ToastProvider>
   </StrictMode>,
 );

@@ -1,21 +1,25 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FavContext } from '../../context/FavoriteContext';
 import { TripContext } from '../../context/TripContext';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 
 export default function NavBar() {
-  const { favorites } = useContext(FavContext);
+  const { favorites, clearFavorites } = useContext(FavContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
-  const { trip } = useContext(TripContext);
-  const { isAuthenticated, logout } = useAuth();
+  const { trip, clearTrip } = useContext(TripContext);
+  const { isAuthenticated, logout, user } = useAuth();
+  const location = useLocation();
+  const [logoutPending, setLogoutPending] = useState(false);
 
   const navigate = useNavigate();
+  const { addToast } = useToast();
 
   function handleLogout() {
-    logout();
-    navigate('/');
+    setLogoutPending(true);
+    navigate('/', { replace: true });
   }
   useEffect(() => {
     function handleClickOutside(event) {
@@ -33,6 +37,23 @@ export default function NavBar() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    if (!logoutPending) return;
+    if (location.pathname !== '/') return;
+
+    logout();
+    clearFavorites();
+    clearTrip();
+    addToast('Logged out successfully', 'info');
+    setLogoutPending(false);
+  }, [
+    logoutPending,
+    location.pathname,
+    logout,
+    clearFavorites,
+    clearTrip,
+    addToast,
+  ]);
   function getNavLinkClass({ isActive }, extraClasses = '') {
     return `
     text-base font-bold transition
@@ -59,9 +80,18 @@ export default function NavBar() {
     { label: 'About Us', path: '/about' },
     { label: 'Contact Us', path: '/contact' },
   ];
+  const isAdmin = isAuthenticated && user?.role === 'admin';
 
   const userLinks = isAuthenticated
     ? [
+        ...(isAdmin
+          ? [
+              {
+                label: 'Admin',
+                path: '/admin',
+              },
+            ]
+          : []),
         {
           label: 'Favorites',
           path: '/favorites',

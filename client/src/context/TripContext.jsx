@@ -13,6 +13,9 @@ export const TripProvider = ({ children }) => {
   const [isLoadingTrip, setIsLoadingTrip] = useState(true);
   const [tripError, setTripError] = useState(null);
 
+  function clearTrip() {
+    setTrip([]);
+  }
   async function loadTrip() {
     try {
       setIsLoadingTrip(true);
@@ -76,6 +79,7 @@ export const TripProvider = ({ children }) => {
         addToTrip,
         removeFromTrip,
         isInTrip,
+        clearTrip,
         reloadTrip: loadTrip,
       }}
     >

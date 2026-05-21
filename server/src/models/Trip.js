@@ -6,7 +6,6 @@ const tripSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Destination',
       required: true,
-      unique: true,
     },
     note: {
       type: String,
@@ -27,5 +26,5 @@ const tripSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
-
+tripSchema.index({ user: 1, destination: 1 }, { unique: true });
 export const Trip = mongoose.model('Trip', tripSchema);

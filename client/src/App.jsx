@@ -10,6 +10,9 @@ import Trip from './pages/Trip';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import ToastContainer from './components/shared/ToastContainer';
+import AdminDashboardPage from './pages/AdminDashboardPage';
+import AdminRoute from './components/auth/AdminRoute';
 
 export default function App() {
   return (
@@ -17,6 +20,7 @@ export default function App() {
       <BrowserRouter>
         <NavBar />
         <SocialLinks />
+        <ToastContainer />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
@@ -42,6 +46,14 @@ export default function App() {
           <Route
             path="/destination/:id"
             element={<DestinationDetails />}
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboardPage />
+              </AdminRoute>
+            }
           />
         </Routes>
       </BrowserRouter>
