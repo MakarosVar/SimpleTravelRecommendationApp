@@ -3,9 +3,14 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/shared/ErrorMessage';
 
-export default function LoginPage() {
-  const { login } = useAuth();
-  const [form, setForm] = useState({ email: '', password: '' });
+export default function RegisterPage() {
+  const { register } = useAuth();
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -13,17 +18,23 @@ export default function LoginPage() {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
+    setError('');
     setIsLoading(true);
+    const { confirmPassword, ...fields } = form;
+    if (fields.password != confirmPassword) {
+      setError({ message: 'Passwords do not match' });
+      setIsLoading(false);
+      return;
+    }
     try {
-      await login(form);
-      navigate('/');
+      await register(fields);
+      navigate('/login');
     } catch (error) {
       setError({
-        message: error.response?.data?.message || 'Login failed',
+        message:
+          error.response?.data?.message || 'Registration failed',
       });
     } finally {
       setIsLoading(false);
@@ -36,7 +47,15 @@ export default function LoginPage() {
         onSubmit={handleSubmit}
         className="bg-white p-6 shadow w-80"
       >
-        <h2 className="text-xl mb-4">Login</h2>
+        <h2 className="text-xl mb-4">Register</h2>
+
+        <input
+          className="w-full mb-2 p-2 border"
+          placeholder="Username"
+          name="name"
+          value={form.name}
+          onChange={handleChange}
+        />
 
         <input
           className="w-full mb-2 p-2 border"
@@ -54,12 +73,21 @@ export default function LoginPage() {
           value={form.password}
           onChange={handleChange}
         />
+
+        <input
+          type="password"
+          className="w-full mb-4 p-2 border"
+          placeholder="Confirm password"
+          name="confirmPassword"
+          value={form.confirmPassword}
+          onChange={handleChange}
+        />
         {error && <ErrorMessage message={error.message} />}
         <button
           disabled={isLoading}
           className="w-full bg-teal-500 text-white p-2 disabled:opacity-50"
         >
-          {isLoading ? 'Logging in...' : 'Login'}
+          {isLoading ? 'Registering...' : 'Register'}
         </button>
       </form>
     </div>

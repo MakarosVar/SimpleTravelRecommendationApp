@@ -8,6 +8,8 @@ import DestinationDetails from './pages/DestinationDetails';
 import Favorites from './pages/Favorites';
 import Trip from './pages/Trip';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ProtectedRoute from './components/auth/ProtectedRoute';
 
 export default function App() {
   return (
@@ -18,9 +20,24 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/about" element={<About />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/trip" element={<Trip />} />
+          <Route
+            path="/favorites"
+            element={
+              <ProtectedRoute>
+                <Favorites />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trip"
+            element={
+              <ProtectedRoute>
+                <Trip />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/contact" element={<Contact />} />
           <Route
             path="/destination/:id"
