@@ -20,10 +20,10 @@ export default function RegisterPage() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError(null);
     setIsLoading(true);
     const { confirmPassword, ...fields } = form;
-    if (fields.password != confirmPassword) {
+    if (fields.password !== confirmPassword) {
       setError({ message: 'Passwords do not match' });
       setIsLoading(false);
       return;
@@ -42,41 +42,53 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 shadow w-80"
+        className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg"
       >
-        <h2 className="text-xl mb-4">Register</h2>
-
+        <div className="mb-6 text-center">
+          <h2 className="text-2xl font-bold text-slate-800">
+            Create a new account
+          </h2>
+        </div>
+        <label className="mb-1 block text-sm font-medium text-slate-700">
+          Username
+        </label>
         <input
-          className="w-full mb-2 p-2 border"
+          className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
           placeholder="Username"
           name="name"
           value={form.name}
           onChange={handleChange}
         />
-
+        <label className="mb-1 block text-sm font-medium text-slate-700">
+          Email
+        </label>
         <input
-          className="w-full mb-2 p-2 border"
+          className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
           placeholder="Email"
           name="email"
           value={form.email}
           onChange={handleChange}
         />
-
+        <label className="mb-1 block text-sm font-medium text-slate-700">
+          Password
+        </label>
         <input
           type="password"
-          className="w-full mb-4 p-2 border"
+          className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
           placeholder="Password"
           name="password"
           value={form.password}
           onChange={handleChange}
         />
-
+        <label className="mb-1 block text-sm font-medium text-slate-700">
+          Confirm Password
+        </label>
         <input
           type="password"
-          className="w-full mb-4 p-2 border"
+          className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
           placeholder="Confirm password"
           name="confirmPassword"
           value={form.confirmPassword}
@@ -85,7 +97,7 @@ export default function RegisterPage() {
         {error && <ErrorMessage message={error.message} />}
         <button
           disabled={isLoading}
-          className="w-full bg-teal-500 text-white p-2 disabled:opacity-50"
+          className="mt-2 w-full rounded-lg bg-teal-600 p-3 font-medium text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoading ? 'Registering...' : 'Register'}
         </button>

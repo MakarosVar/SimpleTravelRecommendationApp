@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../components/shared/ErrorMessage';
 
 export default function LoginPage() {
@@ -31,24 +31,35 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center  px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 shadow w-80"
+        className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg"
       >
-        <h2 className="text-xl mb-4">Login</h2>
-
+        <div className="mb-6 text-center">
+          <h2 className="text-2xl font-bold text-slate-800">
+            Welcome back
+          </h2>
+          <p className="mt-2 text-sm text-slate-500">
+            Login to manage your trips and favorites.
+          </p>
+        </div>
+        <label className="mb-1 block text-sm font-medium text-slate-700">
+          Email
+        </label>
         <input
-          className="w-full mb-2 p-2 border"
+          className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
           placeholder="Email"
           name="email"
           value={form.email}
           onChange={handleChange}
         />
-
+        <label className="mb-1 block text-sm font-medium text-slate-700">
+          Password
+        </label>
         <input
           type="password"
-          className="w-full mb-4 p-2 border"
+          className="w-full rounded-lg border border-slate-300 p-3 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-100"
           placeholder="Password"
           name="password"
           value={form.password}
@@ -57,10 +68,17 @@ export default function LoginPage() {
         {error && <ErrorMessage message={error.message} />}
         <button
           disabled={isLoading}
-          className="w-full bg-teal-500 text-white p-2 disabled:opacity-50"
+          className="mt-2 w-full rounded-lg bg-teal-600 p-3 font-medium text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
+
+        <p className="mt-5 text-center text-sm text-slate-500">
+          Don&apos;t have an account?{' '}
+          <Link to="/register" className="font-medium text-teal-600">
+            Create one
+          </Link>
+        </p>
       </form>
     </div>
   );

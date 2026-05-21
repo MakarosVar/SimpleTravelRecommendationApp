@@ -7,6 +7,7 @@ import ErrorMessage from '../components/shared/ErrorMessage';
 import RetryButton from '../components/shared/RetryButton';
 import LoadingMessage from '../components/shared/LoadingMessage';
 import { useDestinationDetails } from '../hooks/useDestinationDetails';
+import { useAuth } from '../context/AuthContext';
 
 export default function DestinationDetails() {
   const { id } = useParams();
@@ -18,6 +19,23 @@ export default function DestinationDetails() {
   const { addToTrip, removeFromTrip, isInTrip } =
     useContext(TripContext);
   const { toggleFavorite, isFavorite } = useContext(FavContext);
+  const { isAuthenticated } = useAuth();
+  function handleFavorite() {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    toggleFavorite(destination._id);
+  }
+
+  function handleAddToTrip() {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    addToTrip(destination._id);
+  }
   if (isLoading) {
     return (
       <PageContainer>
@@ -63,7 +81,7 @@ export default function DestinationDetails() {
             <div className="flex gap-3">
               <button
                 className="rounded-full  bg-teal-700/60  px-4 py-2 text-white  shadow-lg  backdrop-blur-md  border border-white/20"
-                onClick={() => toggleFavorite(destination._id)}
+                onClick={handleFavorite}
               >
                 {favorite ? '♥ Saved' : '♡ Save'}
               </button>
@@ -71,7 +89,7 @@ export default function DestinationDetails() {
                 onClick={() =>
                   inTrip
                     ? removeFromTrip(destination._id)
-                    : addToTrip(destination._id)
+                    : handleAddToTrip()
                 }
                 className={`rounded-full  shadow-lg  backdrop-blur-md  border-white/20 border px-4 py-2 text-white transition ${
                   inTrip

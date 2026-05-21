@@ -1,11 +1,23 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { TripContext } from '../../context/TripContext';
+import { useAuth } from '../../context/AuthContext';
 export default function DestinationCard({ place }) {
   const { addToTrip, removeFromTrip, isInTrip } =
     useContext(TripContext);
 
   const inTrip = isInTrip(place._id);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  function handleAddToTrip() {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
+    addToTrip(place._id);
+  }
 
   return (
     <article className="flex flex-col p-4.5 flex-1 min-h-108 overflow-hidden rounded-xl bg-white text-gray-900 shadow-2xl">
@@ -36,9 +48,7 @@ export default function DestinationCard({ place }) {
           </Link>
           <button
             onClick={() =>
-              inTrip
-                ? removeFromTrip(place._id)
-                : addToTrip(place._id)
+              inTrip ? removeFromTrip(place._id) : handleAddToTrip()
             }
             className={`mt-3 rounded px-5 py-2.5 text-white transition ${
               inTrip
