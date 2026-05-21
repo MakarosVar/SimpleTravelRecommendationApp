@@ -3,7 +3,6 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { FavContext } from '../../context/FavoriteContext';
 import { TripContext } from '../../context/TripContext';
 import { useAuth } from '../../context/AuthContext';
-import { useDestinationSearch } from '../../hooks/useDestinationSearch';
 
 export default function NavBar() {
   const { favorites } = useContext(FavContext);
@@ -12,12 +11,10 @@ export default function NavBar() {
   const { trip } = useContext(TripContext);
   const { isAuthenticated, logout } = useAuth();
 
-  const { handleClear } = useDestinationSearch();
   const navigate = useNavigate();
 
   function handleLogout() {
     logout();
-    handleClear();
     navigate('/');
   }
   useEffect(() => {

@@ -1,27 +1,72 @@
+import { useEffect, useState } from 'react';
 import NoResults from '../components/search/NoResults';
 import RecommendationList from '../components/search/RecommendationList';
 import SearchBox from '../components/search/SearchBox';
 import SearchControls from '../components/search/SearchControls';
+import { searchRecommendations } from '../utils/searchRecommendations';
+import { sortDestinations } from '../utils/sortDestinations';
 import ErrorMessage from '../components/shared/ErrorMessage';
 import LoadingMessage from '../components/shared/LoadingMessage';
 import RetryButton from '../components/shared/RetryButton';
-import { useDestinationSearch } from '../hooks/useDestinationSearch';
+import { useDestinations } from '../hooks/useDestinations';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Home() {
-  const {
-    results,
-    searchTerm,
-    selectedType,
-    handleSearch,
-    handleClear,
-    isLoading,
-    error,
-    sortBy,
-    setSearchTerm,
-    setSelectedType,
-    changeSort,
-    reloadDestinations,
-  } = useDestinationSearch();
+  const { destinations, isLoading, error, reloadDestinations } =
+    useDestinations();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(
+    searchParams.get('q') || '',
+  );
+  const [selectedType, setSelectedType] = useState(
+    searchParams.get('type') || 'all',
+  );
+  const [sortBy, setSortBy] = useState(
+    searchParams.get('sort') || 'default',
+  );
+  const results =
+    !searchTerm && selectedType === 'all'
+      ? []
+      : sortDestinations(
+          searchRecommendations(
+            { destinations },
+            searchTerm,
+            selectedType,
+          ),
+          sortBy,
+        );
+  useEffect(() => {
+    setSearchTerm(searchParams.get('q') || '');
+    setSelectedType(searchParams.get('type') || 'all');
+    setSortBy(searchParams.get('sort') || 'default');
+  }, [searchParams]);
+
+  function handleSearch(searchTerm, selectedType) {
+    setSearchTerm(searchTerm);
+    setSelectedType(selectedType);
+
+    setSearchParams({
+      q: searchTerm,
+      type: selectedType,
+      sort: sortBy,
+    });
+  }
+  function changeSort(sortValue) {
+    setSortBy(sortValue);
+
+    setSearchParams({
+      q: searchTerm,
+      type: selectedType,
+      sort: sortValue,
+    });
+  }
+  function handleClear() {
+    setSearchTerm('');
+    setSelectedType('all');
+    setSortBy('default');
+    setSearchParams({});
+  }
+
   return (
     <section className="min-h-screen px-16 pt-30">
       <div
