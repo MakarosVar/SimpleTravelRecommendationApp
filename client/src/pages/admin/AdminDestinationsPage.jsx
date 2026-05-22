@@ -1,37 +1,29 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAdminDestinations } from '../../services/adminService';
 import PageContainer from '../../components/layout/PageContainer';
-import { updateDestinationStatus } from '../../services/adminService';
+import {
+  getAdminDestinations,
+  updateDestinationStatus,
+} from '../../services/adminService';
 import { useToast } from '../../context/ToastContext';
+import { useQuery } from '@tanstack/react-query';
 
 export default function AdminDestinationsPage() {
-  const [destinations, setDestinations] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: destinations = [],
+    isPending,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ['adminDestinations'],
+    queryFn: getAdminDestinations,
+  });
   const { addToast } = useToast();
-  useEffect(() => {
-    async function loadDestinations() {
-      const data = await getAdminDestinations();
-      setDestinations(data);
-      setIsLoading(false);
-    }
-
-    loadDestinations();
-  }, []);
   async function handleStatusToggle(destination) {
     const updatedDestination = await updateDestinationStatus(
       destination._id,
       !destination.isActive,
     );
-
-    setDestinations((current) =>
-      current.map((item) =>
-        item._id === updatedDestination._id
-          ? updatedDestination
-          : item,
-      ),
-    );
-
+    await refetch();
     addToast(
       updatedDestination.isActive
         ? 'Destination reactivated'
@@ -40,8 +32,15 @@ export default function AdminDestinationsPage() {
     );
   }
 
-  if (isLoading)
+  if (isPending)
     return <p className="p-6">Loading destinations...</p>;
+  if (isError) {
+    return (
+      <p className="px-6 py-8 text-white">
+        Could not load destinations.
+      </p>
+    );
+  }
 
   return (
     <PageContainer>
@@ -111,7 +110,7 @@ export default function AdminDestinationsPage() {
                       onClick={() => handleStatusToggle(destination)}
                       className="ml-4 text-amber-600 hover:underline"
                     >
-                      {destination.isActive === false
+                      {!destination.isActive
                         ? 'Reactivate'
                         : 'Archive'}
                     </button>
