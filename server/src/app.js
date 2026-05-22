@@ -21,5 +21,6 @@ app.use('/api/admin', adminRoutes);
 
 //error handler
 app.use(errorHandler);
-
+//upload
+app.use('/uploads', express.static('uploads'));
 export default app;

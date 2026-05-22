@@ -20,10 +20,12 @@ export default function DestinationCard({ place }) {
   }
 
   return (
-    <article className="flex flex-col p-4.5 flex-1 min-h-108 overflow-hidden rounded-xl bg-white text-gray-900 shadow-2xl">
+    <article className="flex flex-col p-4.5 flex-1 min-h-108 overflow-hidden rounded-xl bg-white text-gray-900 shadow-md">
       <img
         src={place.imageUrl}
         alt={place.name}
+        loading="lazy"
+        decoding="async"
         className=" h-60 w-full object-cover"
       />
 

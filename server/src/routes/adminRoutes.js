@@ -10,6 +10,7 @@ import {
 } from '../controllers/adminDestinationController.js';
 import { validateDestinationId } from '../middleware/validateDestination.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import { uploadDestinationImage } from '../middleware/uploadMiddleware.js';
 
 const router = express.Router();
 
@@ -47,5 +48,16 @@ router.patch(
   requireAdmin,
   asyncHandler(validateDestinationId),
   updateDestinationStatus,
+);
+router.post(
+  '/uploads/destination-image',
+  protect,
+  requireAdmin,
+  uploadDestinationImage.single('image'),
+  (req, res) => {
+    res.status(201).json({
+      imageUrl: `${req.protocol}://${req.get('host')}/uploads/destinations/${req.file.filename}`,
+    });
+  },
 );
 export default router;

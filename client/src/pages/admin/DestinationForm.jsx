@@ -4,6 +4,7 @@ import {
   addDestination,
   getAdminDestination,
   updateDestination,
+  uploadDestinationImage,
 } from '../../services/adminService';
 import { useToast } from '../../context/ToastContext';
 import { useEffect } from 'react';
@@ -21,6 +22,7 @@ export default function DestinationForm() {
   const [form, setForm] = useState(emptyForm);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const { destinationId } = useParams();
   const isEditMode = Boolean(destinationId);
@@ -66,9 +68,16 @@ export default function DestinationForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    let finalImageUrl = form.imageUrl;
 
+    if (selectedImage) {
+      const uploadResult =
+        await uploadDestinationImage(selectedImage);
+      finalImageUrl = uploadResult.imageUrl;
+    }
     const payload = {
       ...form,
+      imageUrl: finalImageUrl,
       tags: form.tags
         .split(',')
         .map((tag) => tag.trim())
@@ -155,13 +164,13 @@ export default function DestinationForm() {
             rows="4"
             className="w-full rounded-lg border px-4 py-2"
           />
-
           <input
-            name="imageUrl"
-            value={form.imageUrl}
-            onChange={handleChange}
-            placeholder="Image URL"
-            className="w-full rounded-lg border px-4 py-2"
+            type="file"
+            className="w-full rounded-lg border border-slate-300 p-2 
+            file:mr-4 file:rounded-md file:border-0 file:bg-teal-600 file:px-4 file:py-2 file:text-white file:font-medium
+          hover:file:bg-teal-700"
+            accept="image/*"
+            onChange={(e) => setSelectedImage(e.target.files[0])}
           />
 
           <input

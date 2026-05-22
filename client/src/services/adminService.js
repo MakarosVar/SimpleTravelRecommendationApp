@@ -40,3 +40,14 @@ export async function updateDestinationStatus(
 
   return response.data;
 }
+export async function uploadDestinationImage(file) {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const response = await apiClient.post(
+    '/admin/uploads/destination-image',
+    formData,
+  );
+
+  return response.data;
+}
