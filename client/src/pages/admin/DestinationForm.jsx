@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   addDestination,
@@ -7,8 +7,13 @@ import {
   uploadDestinationImage,
 } from '../../services/adminService';
 import { useToast } from '../../context/ToastContext';
-import { useEffect } from 'react';
+
 import PageContainer from '../../components/layout/PageContainer';
+import {
+  useQueryClient,
+  useQuery,
+  useMutation,
+} from '@tanstack/react-query';
 
 const emptyForm = {
   name: '',
@@ -20,42 +25,52 @@ const emptyForm = {
 };
 export default function DestinationForm() {
   const [form, setForm] = useState(emptyForm);
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const { destinationId } = useParams();
   const isEditMode = Boolean(destinationId);
+  const {
+    data: destination,
+    isPending: isLoading,
+    isError: isDestinationError,
+  } = useQuery({
+    queryKey: ['adminDestination', destinationId],
+    queryFn: () => getAdminDestination(destinationId),
+    enabled: isEditMode,
+  });
 
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!isEditMode) return;
+    if (!destination) return;
 
-    async function loadDestination() {
-      try {
-        setIsLoading(true);
+    setForm({
+      name: destination.name || '',
+      country: destination.country || '',
+      type: destination.type || '',
+      description: destination.description || '',
+      imageUrl: destination.imageUrl || '',
+      tags: destination.tags?.join(', ') || '',
+    });
+  }, [destination]);
 
-        const destination = await getAdminDestination(destinationId);
-
-        setForm({
-          name: destination.name || '',
-          country: destination.country || '',
-          type: destination.type || '',
-          description: destination.description || '',
-          imageUrl: destination.imageUrl || '',
-          tags: destination.tags?.join(', ') || '',
-        });
-      } catch {
-        addToast('Could not load destination', 'error');
-      } finally {
-        setIsLoading(false);
+  const saveDestinationMutation = useMutation({
+    mutationFn: (destination) => {
+      if (isEditMode) {
+        return updateDestination(destinationId, destination);
       }
-    }
-
-    loadDestination();
-  }, [destinationId, isEditMode, addToast]);
+      return addDestination(destination);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['adminDestinations'],
+      });
+      addToast('Destination saved successfully', 'success');
+    },
+  });
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -68,53 +83,47 @@ export default function DestinationForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    let finalImageUrl = form.imageUrl;
-
-    if (selectedImage) {
-      const uploadResult =
-        await uploadDestinationImage(selectedImage);
-      finalImageUrl = uploadResult.imageUrl;
-    }
-    const payload = {
-      ...form,
-      imageUrl: finalImageUrl,
-      tags: form.tags
-        .split(',')
-        .map((tag) => tag.trim())
-        .filter(Boolean),
-    };
 
     try {
       setIsSubmitting(true);
+      let finalImageUrl = form.imageUrl;
 
-      if (isEditMode) {
-        await updateDestination(destinationId, payload);
-        addToast('Destination updated successfully', 'success');
-      } else {
-        await addDestination(payload);
-        addToast('Destination created successfully', 'success');
+      if (selectedImage) {
+        const uploadResult =
+          await uploadDestinationImage(selectedImage);
+        finalImageUrl = uploadResult.imageUrl;
       }
+      const payload = {
+        ...form,
+        imageUrl: finalImageUrl,
+        tags: form.tags
+          .split(',')
+          .map((tag) => tag.trim())
+          .filter(Boolean),
+      };
+
+      await saveDestinationMutation.mutateAsync(payload);
 
       navigate('/admin/destinations');
-    } catch (error) {
-      const message =
-        error.response?.data?.message ||
-        (isEditMode
-          ? 'Could not update destination'
-          : 'Could not create destination');
-
-      addToast(message, 'error');
+    } catch {
+      addToast('Could not save destination', 'error');
     } finally {
       setIsSubmitting(false);
     }
   }
 
-  if (isLoading) {
+  if (isEditMode && isLoading) {
     return (
       <p className="px-6 py-8 text-white">Loading destination...</p>
     );
   }
-
+  if (isEditMode && isDestinationError) {
+    return (
+      <p className="px-6 py-8 text-white">
+        Could not load destination.
+      </p>
+    );
+  }
   return (
     <PageContainer>
       <section className="mx-auto max-w-3xl px-6 py-8">
@@ -170,7 +179,9 @@ export default function DestinationForm() {
             file:mr-4 file:rounded-md file:border-0 file:bg-teal-600 file:px-4 file:py-2 file:text-white file:font-medium
           hover:file:bg-teal-700"
             accept="image/*"
-            onChange={(e) => setSelectedImage(e.target.files[0])}
+            onChange={(e) =>
+              setSelectedImage(e.target.files?.[0] || null)
+            }
           />
 
           <input

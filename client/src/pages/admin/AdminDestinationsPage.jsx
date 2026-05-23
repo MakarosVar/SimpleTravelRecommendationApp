@@ -5,32 +5,50 @@ import {
   updateDestinationStatus,
 } from '../../services/adminService';
 import { useToast } from '../../context/ToastContext';
-import { useQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 export default function AdminDestinationsPage() {
   const {
     data: destinations = [],
     isPending,
     isError,
-    refetch,
   } = useQuery({
     queryKey: ['adminDestinations'],
     queryFn: getAdminDestinations,
   });
+  const queryClient = useQueryClient();
   const { addToast } = useToast();
-  async function handleStatusToggle(destination) {
-    const updatedDestination = await updateDestinationStatus(
-      destination._id,
-      !destination.isActive,
-    );
-    await refetch();
-    addToast(
-      updatedDestination.isActive
-        ? 'Destination reactivated'
-        : 'Destination archived',
-      'success',
-    );
+  function handleStatusToggle(destination) {
+    statusMutation.mutate({
+      destinationId: destination._id,
+      isActive: !destination.isActive,
+    });
   }
+  const statusMutation = useMutation({
+    mutationFn: ({ destinationId, isActive }) =>
+      updateDestinationStatus(destinationId, isActive),
+
+    onSuccess: (updatedDestination) => {
+      queryClient.invalidateQueries({
+        queryKey: ['adminDestinations'],
+      });
+
+      addToast(
+        updatedDestination.isActive
+          ? 'Destination reactivated'
+          : 'Destination archived',
+        'success',
+      );
+    },
+
+    onError: () => {
+      addToast('Could not update destination status', 'error');
+    },
+  });
 
   if (isPending)
     return <p className="p-6">Loading destinations...</p>;
@@ -107,8 +125,9 @@ export default function AdminDestinationsPage() {
                       Edit
                     </Link>
                     <button
+                      disabled={statusMutation.isPending}
                       onClick={() => handleStatusToggle(destination)}
-                      className="ml-4 text-amber-600 hover:underline"
+                      className="ml-4 text-amber-600 hover:underline disabled:opacity-50"
                     >
                       {!destination.isActive
                         ? 'Reactivate'
