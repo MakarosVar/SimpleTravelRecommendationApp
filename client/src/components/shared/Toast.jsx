@@ -6,7 +6,7 @@ function Toast({ message, type, onClose }) {
 
   return (
     <div
-      className={`${bgColor} text-white px-4 py-3 rounded shadow-md min-w-[250px] flex justify-between gap-4`}
+      className={`${bgColor} text-white px-4 py-3 rounded shadow-md min-w-62.5 flex justify-between gap-4`}
     >
       <span>{message}</span>
 

@@ -13,11 +13,14 @@ export function ToastProvider({ children }) {
       type,
     };
 
-    setToasts((currentToasts) => [...currentToasts, toast]);
+    setToasts((currentToasts) => [...currentToasts.slice(-2), toast]);
 
-    setTimeout(() => {
-      removeToast(id);
-    }, 3000);
+    setTimeout(
+      () => {
+        removeToast(id);
+      },
+      toast.type === 'success' ? 1000 : 3000,
+    );
   }
 
   function removeToast(id) {
