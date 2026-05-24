@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useToast } from '../../context/ToastContext';
 
 export default function TripItemCard({ item, onUpdate, onRemove }) {
   const [note, setNote] = useState(item.note);
   const [priority, setPriority] = useState(item.priority);
   const destination = item.destination;
-  const { addToast } = useToast();
+
   const priorityClasses = {
     low: 'bg-emerald-500/20 text-emerald-200 border-emerald-300/30',
     medium: 'bg-yellow-500/20 text-yellow-200 border-yellow-300/30',
@@ -13,14 +12,12 @@ export default function TripItemCard({ item, onUpdate, onRemove }) {
   };
   function handleRemove() {
     onRemove(item.destinationId);
-    addToast('Removed from trip', 'info');
   }
   function handleSave() {
     onUpdate(item.destinationId, {
       note,
       priority,
     });
-    addToast('Trip item updated', 'success');
   }
   return (
     <article className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 text-white backdrop-blur-md">

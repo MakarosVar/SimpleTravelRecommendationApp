@@ -8,18 +8,15 @@ import RetryButton from '../../components/shared/RetryButton';
 import LoadingMessage from '../../components/shared/LoadingMessage';
 import { useDestinationDetails } from '../../hooks/useDestinationDetails';
 import { useAuth } from '../../context/AuthContext';
-import { useToast } from '../../context/ToastContext';
 
 export default function DestinationDetails() {
   const { id } = useParams();
   const destinationId = id;
   const navigate = useNavigate();
-  const { addToast } = useToast();
   const { destination, isLoading, error, reloadDestination } =
     useDestinationDetails(destinationId);
 
-  const { addToTrip, removeFromTrip, isInTrip } =
-    useContext(TripContext);
+  const { toggleTripItem, isInTrip } = useContext(TripContext);
   const { toggleFavorite, isFavorite } = useContext(FavContext);
   const { isAuthenticated } = useAuth();
   function handleFavorite() {
@@ -28,27 +25,14 @@ export default function DestinationDetails() {
       return;
     }
     toggleFavorite(destination._id);
-    addToast(
-      favorite ? 'Removed from favorites' : 'Added to favorites',
-      'success',
-    );
   }
-  function handleRemoveFromTrip() {
+  function handleToggleTrip() {
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
-    removeFromTrip(destination._id);
-    addToast('Removed from trip', 'info');
-  }
 
-  function handleAddToTrip() {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
-    addToTrip(destination._id);
-    addToast('Added to trip', 'success');
+    toggleTripItem(destination._id);
   }
   if (isLoading) {
     return (
@@ -100,9 +84,7 @@ export default function DestinationDetails() {
                 {favorite ? '♥ Saved' : '♡ Save'}
               </button>
               <button
-                onClick={() =>
-                  inTrip ? handleRemoveFromTrip : handleAddToTrip()
-                }
+                onClick={handleToggleTrip}
                 className={`rounded-full  shadow-lg  backdrop-blur-md  border-white/20 border px-4 py-2 text-white transition ${
                   inTrip
                     ? 'bg-slate-600 hover:bg-slate-500'

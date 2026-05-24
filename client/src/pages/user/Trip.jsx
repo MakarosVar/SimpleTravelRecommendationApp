@@ -13,7 +13,7 @@ export default function Trip() {
     tripError,
     reloadTrip,
     updateTripItem,
-    removeFromTrip,
+    toggleTripItem,
   } = useContext(TripContext);
   if (!isLoadingTrip && !tripError && trip.length === 0) {
     return (
@@ -42,7 +42,7 @@ export default function Trip() {
                 key={item.destinationId}
                 item={item}
                 onUpdate={updateTripItem}
-                onRemove={removeFromTrip}
+                onRemove={toggleTripItem}
               />
             ))}
           </div>

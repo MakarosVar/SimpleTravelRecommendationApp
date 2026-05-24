@@ -1,51 +1,79 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 import {
   addFavorite,
   deleteFavorite,
   getFavorites,
 } from '../services/favoritesService';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { useAuth } from './AuthContext';
+import { useToast } from './ToastContext';
 
 export const FavContext = createContext();
 
 export const FavProvider = ({ children }) => {
-  const [favorites, setFavorites] = useState([]);
-  const [isLoadingFavorites, setIsLoadingFavorites] = useState(true);
   const [favoritesError, setFavoritesError] = useState(null);
+  const { authLoading, isAuthenticated } = useAuth();
+  const queryClient = useQueryClient();
+  const { addToast } = useToast();
+  const {
+    data: favorites = [],
+    isPending,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ['favorites'],
+    queryFn: getFavorites,
+    enabled: !authLoading && isAuthenticated,
+  });
 
   function clearFavorites() {
-    setFavorites([]);
+    queryClient.setQueryData(['favorites'], []);
+    setFavoritesError(null);
   }
-  async function loadFavorites() {
-    try {
-      setIsLoadingFavorites(true);
-      setFavoritesError(null);
-      const storedFavorites = await getFavorites();
-      setFavorites(storedFavorites);
-    } catch (e) {
-      setFavoritesError(e.message);
-    } finally {
-      setIsLoadingFavorites(false);
-    }
-  }
-
-  useEffect(() => {
-    loadFavorites();
-  }, []);
-
-  async function toggleFavorite(destinationId) {
-    try {
-      setFavoritesError(null);
-      if (isFavorite(destinationId)) {
-        await deleteFavorite(destinationId);
-      } else {
-        await addFavorite(destinationId);
+  const favoriteMutation = useMutation({
+    mutationFn: ({ destinationId, shouldRemove }) => {
+      if (shouldRemove) {
+        return deleteFavorite(destinationId);
       }
-      await loadFavorites();
-    } catch (e) {
-      setFavoritesError(e.message);
-    }
-  }
+      return addFavorite(destinationId);
+    },
 
+    onMutate: () => {
+      setFavoritesError(null);
+    },
+
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['favorites'],
+      });
+      addToast(
+        variables.shouldRemove
+          ? 'Removed from favorites'
+          : 'Added to favorites',
+        'success',
+      );
+    },
+
+    onError: (error) => {
+      const message =
+        error.response?.data?.message || 'Could not update favorite';
+
+      setFavoritesError(message);
+      addToast(message, 'error');
+    },
+  });
+  function toggleFavorite(destinationId) {
+    const shouldRemove = isFavorite(destinationId);
+
+    favoriteMutation.mutate({
+      destinationId,
+      shouldRemove,
+    });
+  }
   function isFavorite(destinationId) {
     return favorites.some(
       (destination) => destination._id === destinationId,
@@ -56,12 +84,14 @@ export const FavProvider = ({ children }) => {
     <FavContext.Provider
       value={{
         favorites,
-        isLoadingFavorites,
-        favoritesError,
+        isLoadingFavorites: isAuthenticated && isPending,
+        favoritesError: isError
+          ? 'Could not load favorites.'
+          : favoritesError,
         toggleFavorite,
         clearFavorites,
         isFavorite,
-        reloadFavorites: loadFavorites,
+        reloadFavorites: refetch,
       }}
     >
       {children}

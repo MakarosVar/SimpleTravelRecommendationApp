@@ -3,20 +3,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import { TripContext } from '../../context/TripContext';
 import { useAuth } from '../../context/AuthContext';
 export default function DestinationCard({ place }) {
-  const { addToTrip, removeFromTrip, isInTrip } =
-    useContext(TripContext);
+  const { toggleTripItem, isInTrip } = useContext(TripContext);
 
   const inTrip = isInTrip(place._id);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  function handleAddToTrip() {
+  function handleToggleTrip() {
     if (!isAuthenticated) {
       navigate('/login');
       return;
     }
 
-    addToTrip(place._id);
+    toggleTripItem(place._id);
   }
 
   return (
@@ -49,9 +48,7 @@ export default function DestinationCard({ place }) {
             </button>
           </Link>
           <button
-            onClick={() =>
-              inTrip ? removeFromTrip(place._id) : handleAddToTrip()
-            }
+            onClick={handleToggleTrip}
             className={`mt-3 rounded px-5 py-2.5 text-white transition ${
               inTrip
                 ? 'bg-slate-600 hover:bg-slate-500'

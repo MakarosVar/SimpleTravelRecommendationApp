@@ -13,8 +13,8 @@ import {
 const queryClient = new QueryClient();
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ToastProvider>
+    <ToastProvider>
+      <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <FavProvider>
             <TripProvider>
@@ -22,7 +22,7 @@ createRoot(document.getElementById('root')).render(
             </TripProvider>
           </FavProvider>
         </AuthProvider>
-      </ToastProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ToastProvider>
   </StrictMode>,
 );

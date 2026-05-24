@@ -1,86 +1,121 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 import {
   getTripItems,
   addTripItem,
   updateTripItem as updateTripItemRequest,
   deleteTripItem,
 } from '../services/tripService';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import { useAuth } from './AuthContext';
+import { useToast } from './ToastContext';
 
 export const TripContext = createContext();
 
 export const TripProvider = ({ children }) => {
-  const [trip, setTrip] = useState([]);
-  const [isLoadingTrip, setIsLoadingTrip] = useState(true);
   const [tripError, setTripError] = useState(null);
+  const queryClient = useQueryClient();
+  const { authLoading, isAuthenticated } = useAuth();
+  const { addToast } = useToast();
+  const {
+    data: trip = [],
+    isPending,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ['trip'],
+    queryFn: getTripItems,
+    enabled: !authLoading && isAuthenticated,
+  });
 
   function clearTrip() {
-    setTrip([]);
+    queryClient.setQueryData(['trip'], []);
+    setTripError(null);
   }
-  async function loadTrip() {
-    try {
-      setIsLoadingTrip(true);
+  const tripMutation = useMutation({
+    mutationFn: ({ destinationId, shouldRemove }) => {
+      if (shouldRemove) {
+        return deleteTripItem(destinationId);
+      }
+
+      return addTripItem(destinationId);
+    },
+    onMutate: () => {
       setTripError(null);
+    },
 
-      const storedTrip = await getTripItems();
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries({ queryKey: ['trip'] });
 
-      setTrip(storedTrip);
-    } catch {
-      setTripError('Could not load trip.');
-    } finally {
-      setIsLoadingTrip(false);
-    }
-  }
-  useEffect(() => {
-    loadTrip();
-  }, []);
+      addToast(
+        variables.shouldRemove
+          ? 'Removed from trip'
+          : 'Added to trip',
+        'success',
+      );
+    },
 
-  async function addToTrip(destinationId) {
-    try {
+    onError: (error) => {
+      const message =
+        error.response?.data?.message || 'Could not update trip';
+
+      setTripError(message);
+      addToast(message, 'error');
+    },
+  });
+  const updateTripItemMutation = useMutation({
+    mutationFn: ({ destinationId, updates }) =>
+      updateTripItemRequest(destinationId, updates),
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['trip'],
+      });
+
+      addToast('Trip item updated', 'success');
+    },
+    onMutate: () => {
       setTripError(null);
+    },
 
-      await addTripItem(destinationId);
-      await loadTrip();
-    } catch (e) {
-      setTripError(e.message);
-    }
+    onError: (error) => {
+      const message =
+        error.response?.data?.message || 'Could not update trip item';
+
+      setTripError(message);
+      addToast(message, 'error');
+    },
+  });
+  function toggleTripItem(destinationId) {
+    const shouldRemove = isInTrip(destinationId);
+
+    tripMutation.mutate({
+      destinationId,
+      shouldRemove,
+    });
   }
-
-  async function removeFromTrip(destinationId) {
-    try {
-      setTripError(null);
-      await deleteTripItem(destinationId);
-      await loadTrip();
-    } catch (e) {
-      setTripError(e.message);
-    }
-  }
-
   function isInTrip(destinationId) {
     return trip.some((item) => item.destinationId === destinationId);
   }
 
-  async function updateTripItem(destinationId, updates) {
-    try {
-      setTripError(null);
-      await updateTripItemRequest(destinationId, updates);
-      await loadTrip();
-    } catch (e) {
-      setTripError(e.message);
-    }
+  function updateTripItem(destinationId, updates) {
+    updateTripItemMutation.mutate({ destinationId, updates });
   }
 
   return (
     <TripContext.Provider
       value={{
         trip,
-        isLoadingTrip,
-        tripError,
+        isLoadingTrip: isAuthenticated && isPending,
+        tripError: isError ? 'Could not load trip.' : tripError,
         updateTripItem,
-        addToTrip,
-        removeFromTrip,
+        toggleTripItem,
         isInTrip,
         clearTrip,
-        reloadTrip: loadTrip,
+        reloadTrip: refetch,
       }}
     >
       {children}
