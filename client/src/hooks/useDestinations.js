@@ -1,32 +1,21 @@
-import { useEffect, useState } from 'react';
 import { getDestinations } from '../services/destinationService';
+import { useQuery } from '@tanstack/react-query';
 
 export function useDestinations() {
-  const [destinations, setDestinations] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  async function loadDestinations() {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const loadedDestinations = await getDestinations();
-
-      setDestinations(loadedDestinations);
-    } catch {
-      setError('Could not load destinations.');
-    } finally {
-      setIsLoading(false);
-    }
-  }
-  useEffect(() => {
-    loadDestinations();
-  }, []);
+  const {
+    data: destinations = [],
+    isPending,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ['destinations'],
+    queryFn: getDestinations,
+  });
 
   return {
     destinations,
-    isLoading,
-    error,
-    reloadDestinations: loadDestinations,
+    isLoading: isPending,
+    error: isError ? 'Could not load destinations.' : null,
+    reloadDestinations: refetch,
   };
 }

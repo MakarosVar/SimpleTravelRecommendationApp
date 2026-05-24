@@ -32,10 +32,13 @@ export default function AdminDestinationsPage() {
     mutationFn: ({ destinationId, isActive }) =>
       updateDestinationStatus(destinationId, isActive),
 
-    onSuccess: (updatedDestination) => {
-      queryClient.invalidateQueries({
-        queryKey: ['adminDestinations'],
-      });
+    onSuccess: async (updatedDestination) => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['adminDestinations'],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['destinations'] }),
+      ]);
 
       addToast(
         updatedDestination.isActive

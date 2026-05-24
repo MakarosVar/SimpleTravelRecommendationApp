@@ -65,9 +65,12 @@ export default function DestinationForm() {
       return addDestination(destination);
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ['adminDestinations'],
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['adminDestinations'],
+        }),
+        queryClient.invalidateQueries({ queryKey: ['destinations'] }),
+      ]);
       addToast('Destination saved successfully', 'success');
     },
   });
