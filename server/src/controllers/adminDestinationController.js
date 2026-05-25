@@ -14,6 +14,7 @@ export const createDestination = asyncHandler(async (req, res) => {
 
   res.status(201).json(destination);
 });
+
 export const getAdminDestinationById = asyncHandler(
   async (req, res) => {
     const destination = await Destination.findById(

@@ -6,6 +6,7 @@ import tripRouter from './routes/tripRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import adminPackageRoutes from './routes/adminPackageRoutes.js';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use('/api/favorites', favoritesRoutes);
 app.use('/api/trips', tripRouter);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin', adminPackageRoutes);
 
 //error handler
 app.use(errorHandler);
