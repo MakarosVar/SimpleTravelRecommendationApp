@@ -12,10 +12,12 @@ import {
   getAdminPackage,
   updateAdminPackage,
 } from '../../services/admin/adminPackageService';
+import { useDestinations } from '../../hooks/useDestinations';
 
 const emptyForm = {
   title: '',
   description: '',
+  destinations: [],
 };
 export default function PackageBuilderPage() {
   const [form, setForm] = useState(emptyForm);
@@ -30,6 +32,39 @@ export default function PackageBuilderPage() {
     queryFn: () => getAdminPackage(packageId),
     enabled: isEditMode,
   });
+  const {
+    destinations,
+    isLoading: isDestinationsLoading,
+    error: destinationsError,
+  } = useDestinations();
+  const selectedDestinationItems = destinations.filter(
+    (destination) => form.destinations.includes(destination._id),
+  );
+
+  const availableDestinationItems = destinations.filter(
+    (destination) => !form.destinations.includes(destination._id),
+  );
+  function handleAddDestination(destinationId) {
+    setForm((current) => {
+      if (current.destinations.includes(destinationId)) {
+        return current;
+      }
+
+      return {
+        ...current,
+        destinations: [...current.destinations, destinationId],
+      };
+    });
+  }
+
+  function handleRemoveDestination(destinationId) {
+    setForm((current) => ({
+      ...current,
+      destinations: current.destinations.filter(
+        (id) => id !== destinationId,
+      ),
+    }));
+  }
   const navigate = useNavigate();
   const { addToast } = useToast();
   const queryClient = useQueryClient();
@@ -38,6 +73,10 @@ export default function PackageBuilderPage() {
     setForm({
       title: packageItem.title || '',
       description: packageItem.description || '',
+      destinations:
+        packageItem.destinations?.map(
+          (destination) => destination._id,
+        ) ?? [],
     });
   }, [packageItem]);
 
@@ -90,20 +129,36 @@ export default function PackageBuilderPage() {
   }
   return (
     <PageContainer>
-      <section className="mx-auto max-w-3xl px-6 py-8">
-        <h1 className="text-3xl font-bold text-white">
-          {isEditMode ? 'Edit Package' : 'Create Package'}
-        </h1>
-
-        <p className="mt-1 text-white/80">
-          {isEditMode
-            ? 'Update package content shown to users.'
-            : 'Add a new package to the TravelBloom catalog.'}
-        </p>
+      <section className="mx-auto max-w-5xl px-6 py-8">
         <form
           onSubmit={handleSubmit}
           className="mt-6 space-y-5 rounded-xl border bg-white p-6 shadow-sm"
         >
+          <div className="sticky top-18 z-20 -mx-6 border-b bg-white/90 px-6 py-4 backdrop-blur">
+            <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-bold">
+                  {isEditMode ? 'Edit package' : 'Create package'}
+                </h1>
+                <p className="text-sm text-gray-500">
+                  Build a curated travel experience from existing
+                  destinations.
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                disabled={savePackageMutation.isPending}
+                className="rounded-lg bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {savePackageMutation.isPending
+                  ? 'Saving...'
+                  : isEditMode
+                    ? 'Update package'
+                    : 'Create package'}
+              </button>
+            </div>
+          </div>
           <input
             name="title"
             value={form.title}
@@ -119,18 +174,88 @@ export default function PackageBuilderPage() {
             rows="4"
             className="w-full rounded-lg border px-4 py-2"
           />
-          <button
-            disabled={savePackageMutation.isPending}
-            className="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700 disabled:opacity-60"
-          >
-            {savePackageMutation.isPending
-              ? isEditMode
-                ? 'Updating...'
-                : 'Creating...'
-              : isEditMode
-                ? 'Update Package'
-                : 'Create Package'}
-          </button>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div>
+              <h2 className="mb-3 font-semibold">
+                Available destinations
+              </h2>
+
+              {isDestinationsLoading && (
+                <p>Loading destinations...</p>
+              )}
+              {destinationsError && (
+                <p className="text-red-600">{destinationsError}</p>
+              )}
+
+              <div className="space-y-2">
+                {availableDestinationItems.map((destination) => (
+                  <div
+                    key={destination._id}
+                    className="flex items-center justify-between rounded-lg border p-3"
+                  >
+                    <div>
+                      <p className="font-medium">
+                        {destination.name}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {destination.country}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleAddDestination(destination._id)
+                      }
+                      className="rounded-lg border px-3 py-1 text-sm"
+                    >
+                      Add
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h2 className="mb-3 font-semibold">
+                Selected destinations
+              </h2>
+
+              <div className="space-y-2">
+                {selectedDestinationItems.map((destination) => (
+                  <div
+                    key={destination._id}
+                    className="flex items-center justify-between rounded-lg border bg-blue-50 p-3"
+                  >
+                    <div>
+                      <p className="font-medium">
+                        {destination.name}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {destination.country}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleRemoveDestination(destination._id)
+                      }
+                      className="rounded-lg border px-3 py-1 text-sm"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+
+                {selectedDestinationItems.length === 0 && (
+                  <p className="text-sm text-gray-500">
+                    No destinations selected yet.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </form>
       </section>
     </PageContainer>
