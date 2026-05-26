@@ -4,11 +4,11 @@ import {
   addTripItem,
   updateTripItem,
   deleteTripItem,
-} from '../controllers/tripController.js';
-import { validateDestinationId } from '../middleware/validateDestination.js';
-import { validateTripUpdate } from '../middleware/validateTripUpdate.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
-import { protect } from '../middleware/authMiddleware.js';
+} from '../../controllers/user/tripController.js';
+import { validateDestinationId } from '../../middleware/validateDestination.js';
+import { validateTripUpdate } from '../../middleware/validateTripUpdate.js';
+import { asyncHandler } from '../../utils/asyncHandler.js';
+import { protect } from '../../middleware/authMiddleware.js';
 
 const router = express.Router();
 

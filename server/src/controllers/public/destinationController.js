@@ -1,4 +1,4 @@
-import { Destination } from '../models/Destination.js';
+import { Destination } from '../../models/Destination.js';
 
 export async function getAllDestinations(req, res) {
   const destinations = await Destination.find({

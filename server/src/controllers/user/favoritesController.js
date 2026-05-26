@@ -1,5 +1,5 @@
-import { Favorite } from '../models/Favorite.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
+import { Favorite } from '../../models/Favorite.js';
+import { asyncHandler } from '../../utils/asyncHandler.js';
 
 export const getAllFavorites = asyncHandler(async (req, res) => {
   const favorites = await Favorite.find({

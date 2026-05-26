@@ -1,12 +1,12 @@
 import express from 'express';
 import cors from 'cors';
-import destinationRoutes from './routes/destinationRoutes.js';
-import favoritesRoutes from './routes/favoritesRoutes.js';
-import tripRouter from './routes/tripRoutes.js';
+import destinationRoutes from './routes/public/destinationRoutes.js';
+import favoritesRoutes from './routes/user/favoritesRoutes.js';
+import tripRouter from './routes/user/tripRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/authRoutes.js';
-import adminRoutes from './routes/adminRoutes.js';
-import adminPackageRoutes from './routes/adminPackageRoutes.js';
+import adminRoutes from './routes/admin/destinationRoutes.js';
+import adminPackageRoutes from './routes/admin/packageRoutes.js';
 
 const app = express();
 

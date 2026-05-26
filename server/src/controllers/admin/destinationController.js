@@ -1,5 +1,5 @@
-import { Destination } from '../models/Destination.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
+import { Destination } from '../../models/Destination.js';
+import { asyncHandler } from '../../utils/asyncHandler.js';
 
 export const getAdminDestinations = asyncHandler(async (req, res) => {
   const destinations = await Destination.find().sort({

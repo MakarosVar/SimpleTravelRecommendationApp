@@ -1,16 +1,16 @@
 import express from 'express';
-import { protect } from '../middleware/authMiddleware.js';
-import { requireAdmin } from '../middleware/adminMiddleware.js';
+import { protect } from '../../middleware/authMiddleware.js';
+import { requireAdmin } from '../../middleware/adminMiddleware.js';
 import {
   createDestination,
   getAdminDestinationById,
   getAdminDestinations,
   updateDestination,
   updateDestinationStatus,
-} from '../controllers/adminDestinationController.js';
-import { validateDestinationId } from '../middleware/validateDestination.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
-import { uploadDestinationImage } from '../middleware/uploadMiddleware.js';
+} from '../../controllers/admin/destinationController.js';
+import { validateDestinationId } from '../../middleware/validateDestination.js';
+import { asyncHandler } from '../../utils/asyncHandler.js';
+import { uploadDestinationImage } from '../../middleware/uploadMiddleware.js';
 
 const router = express.Router();
 

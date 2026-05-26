@@ -151,7 +151,6 @@ export default function DestinationForm() {
             placeholder="Name"
             className="w-full rounded-lg border px-4 py-2"
           />
-
           <input
             name="country"
             value={form.country}
@@ -159,7 +158,6 @@ export default function DestinationForm() {
             placeholder="Country"
             className="w-full rounded-lg border px-4 py-2"
           />
-
           <input
             name="type"
             value={form.type}
@@ -167,7 +165,6 @@ export default function DestinationForm() {
             placeholder="Type"
             className="w-full rounded-lg border px-4 py-2"
           />
-
           <textarea
             name="description"
             value={form.description}
@@ -186,7 +183,6 @@ export default function DestinationForm() {
               setSelectedImage(e.target.files?.[0] || null)
             }
           />
-
           <input
             name="tags"
             value={form.tags}
@@ -194,7 +190,6 @@ export default function DestinationForm() {
             placeholder="Tags comma separated"
             className="w-full rounded-lg border px-4 py-2"
           />
-
           <button
             disabled={isSubmitting}
             className="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700 disabled:opacity-60"

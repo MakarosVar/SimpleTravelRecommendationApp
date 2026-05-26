@@ -1,5 +1,5 @@
-import { Trip } from '../models/Trip.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
+import { Trip } from '../../models/Trip.js';
+import { asyncHandler } from '../../utils/asyncHandler.js';
 function formatTrip(trip) {
   if (!trip.destination) {
     return null;

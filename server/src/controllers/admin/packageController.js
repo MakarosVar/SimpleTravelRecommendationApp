@@ -1,6 +1,6 @@
-import { Destination } from '../models/Destination.js';
-import { Package } from '../models/Package.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
+import { Destination } from '../../models/Destination.js';
+import { Package } from '../../models/Package.js';
+import { asyncHandler } from '../../utils/asyncHandler.js';
 import mongoose from 'mongoose';
 
 async function validateDestinationIds(destinationIds = []) {
@@ -38,6 +38,14 @@ async function validateDestinationIds(destinationIds = []) {
     };
   }
 }
+function validateCreatePackagePayload(payload) {
+  if (!payload.title || !payload.title.trim()) {
+    throw {
+      statusCode: 400,
+      message: 'Package title is required',
+    };
+  }
+}
 
 function buildPackagePayload(body) {
   const allowedFields = [
@@ -59,13 +67,16 @@ function buildPackagePayload(body) {
 }
 
 export const getAdminPackages = asyncHandler(async (req, res) => {
-  const packageDocs = await Package.find();
+  const packageDocs = await Package.find()
+    .populate('destinations')
+    .sort({ createdAt: -1 });
   res.json(packageDocs);
 });
 
 export const createPackage = asyncHandler(async (req, res) => {
   const payload = buildPackagePayload(req.body);
 
+  validateCreatePackagePayload(payload);
   await validateDestinationIds(payload.destinations);
 
   const packageDoc = await Package.create(payload);
@@ -74,7 +85,11 @@ export const createPackage = asyncHandler(async (req, res) => {
 });
 
 export const getAdminPackageById = asyncHandler(async (req, res) => {
-  res.json(req.packageDoc);
+  const packageDoc = await Package.findById(req.packageId).populate(
+    'destinations',
+  );
+
+  res.json(packageDoc);
 });
 
 export const updatePackage = asyncHandler(async (req, res) => {
@@ -87,6 +102,6 @@ export const updatePackage = asyncHandler(async (req, res) => {
       new: true,
       runValidators: true,
     },
-  );
+  ).populate('destinations');
   res.json(packageDoc);
 });

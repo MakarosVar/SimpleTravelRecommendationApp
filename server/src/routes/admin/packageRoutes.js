@@ -1,14 +1,14 @@
 import express from 'express';
-import { protect } from '../middleware/authMiddleware.js';
-import { requireAdmin } from '../middleware/adminMiddleware.js';
-import { asyncHandler } from '../utils/asyncHandler.js';
-import { validatePackageId } from '../middleware/validatePackage.js';
+import { protect } from '../../middleware/authMiddleware.js';
+import { requireAdmin } from '../../middleware/adminMiddleware.js';
+import { asyncHandler } from '../../utils/asyncHandler.js';
+import { validatePackageId } from '../../middleware/validatePackage.js';
 import {
   createPackage,
   getAdminPackageById,
   getAdminPackages,
   updatePackage,
-} from '../controllers/packageController.js';
+} from '../../controllers/admin/packageController.js';
 
 const router = express.Router();
 router.get('/packages', protect, requireAdmin, getAdminPackages);
