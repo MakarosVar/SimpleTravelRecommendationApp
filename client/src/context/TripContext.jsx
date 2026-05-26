@@ -4,7 +4,7 @@ import {
   addTripItem,
   updateTripItem as updateTripItemRequest,
   deleteTripItem,
-} from '../services/tripService';
+} from '../services/user/tripService';
 import {
   useMutation,
   useQuery,

@@ -1,5 +1,5 @@
 // import { useEffect, useState } from 'react';
-import { getDestinationById } from '../services/destinationService';
+import { getDestinationById } from '../services/public/destinationService';
 import { useQuery } from '@tanstack/react-query';
 
 export function useDestinationDetails(destinationId) {

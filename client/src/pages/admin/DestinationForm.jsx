@@ -5,7 +5,7 @@ import {
   getAdminDestination,
   updateDestination,
   uploadDestinationImage,
-} from '../../services/adminService';
+} from '../../services/admin/adminDestinationService';
 import { useToast } from '../../context/ToastContext';
 
 import PageContainer from '../../components/layout/PageContainer';

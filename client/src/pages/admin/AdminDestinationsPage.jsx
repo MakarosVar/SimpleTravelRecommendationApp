@@ -3,7 +3,7 @@ import PageContainer from '../../components/layout/PageContainer';
 import {
   getAdminDestinations,
   updateDestinationStatus,
-} from '../../services/adminService';
+} from '../../services/admin/adminDestinationService';
 import { useToast } from '../../context/ToastContext';
 import {
   useMutation,

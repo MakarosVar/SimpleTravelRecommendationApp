@@ -122,7 +122,7 @@ export default function NavBar() {
       <div className="hidden md:absolute md:left-1/2 md:flex md:-translate-x-1/2 md:items-center md:gap-8">
         {renderLinks(mainNavLinks)}
       </div>
-      <div className="hidden md:flex items-center gap-4">
+      <div className="hidden lg:flex items-center gap-4">
         {userLinks.map((link) => (
           <NavLink
             key={link.path}
@@ -148,7 +148,7 @@ export default function NavBar() {
           </button>
         )}
       </div>
-      <div className="relative md:hidden" ref={menuRef}>
+      <div className="relative lg:hidden" ref={menuRef}>
         <button
           className="text-3xl"
           onClick={() => setMenuOpen((current) => !current)}

@@ -8,7 +8,7 @@ import {
   me,
   login as loginRequest,
   register as registerRequest,
-} from '../services/authService';
+} from '../services/auth/authService';
 
 const AuthContext = createContext(null);
 

@@ -3,7 +3,7 @@ import {
   addFavorite,
   deleteFavorite,
   getFavorites,
-} from '../services/favoritesService';
+} from '../services/user/favoritesService';
 import {
   useMutation,
   useQuery,

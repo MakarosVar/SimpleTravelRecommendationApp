@@ -1,4 +1,4 @@
-import { getDestinations } from '../services/destinationService';
+import { getDestinations } from '../services/public/destinationService';
 import { useQuery } from '@tanstack/react-query';
 
 export function useDestinations() {
