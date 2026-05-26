@@ -114,7 +114,7 @@ export default function NavBar() {
         },
       ];
   return (
-    <nav className="fixed top-0 left-0 z-50 flex h-17.5 w-full items-center justify-between bg-black/75 px-8 text-white">
+    <nav className="fixed top-0 left-0 z-50 flex h-17.5 w-full items-center justify-between bg-black px-8 text-white">
       <div className="flex items-center gap-2.5 text-3xl font-bold italic">
         <span>✈️</span>
         <span>TravelBloom</span>

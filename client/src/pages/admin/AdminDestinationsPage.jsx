@@ -66,7 +66,7 @@ export default function AdminDestinationsPage() {
   return (
     <PageContainer>
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="sticky top-18 z-20 mb-6 flex items-center justify-between px-6 py-4 backdrop-blur">
           <div>
             <h1 className="text-3xl font-bold">Destinations</h1>
             <p className="mt-1 text-white">
@@ -82,15 +82,23 @@ export default function AdminDestinationsPage() {
           </Link>
         </div>
 
-        <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
+        <div className="max-h-[calc(100vh-280px)] overflow-auto rounded-xl border bg-white shadow-sm">
           <table className="w-full border-collapse text-left">
             <thead className="bg-gray-50 text-sm text-gray-600">
               <tr>
-                <th className="px-3 py-3 font-semibold">Status</th>
-                <th className="px-5 py-3 font-semibold">Name</th>
-                <th className="px-5 py-3 font-semibold">Country</th>
-                <th className="px-5 py-3 font-semibold">Type</th>
-                <th className="px-5 py-3 font-semibold text-right">
+                <th className="sticky top-0 z-10 bg-gray-50 px-3 py-3 font-semibold">
+                  Status
+                </th>
+                <th className="sticky top-0 z-10 bg-gray-50 px-5 py-3 font-semibold">
+                  Name
+                </th>
+                <th className="sticky top-0 z-10 bg-gray-50 px-5 py-3 font-semibold">
+                  Country
+                </th>
+                <th className="sticky top-0 z-10 bg-gray-50 px-5 py-3 font-semibold">
+                  Type
+                </th>
+                <th className="sticky top-0 z-10 bg-gray-50 px-5 py-3 font-semibold text-right">
                   Actions
                 </th>
               </tr>
