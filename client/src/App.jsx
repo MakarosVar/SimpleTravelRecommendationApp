@@ -15,6 +15,8 @@ import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminRoute from './components/auth/AdminRoute';
 import AdminDestinationsPage from './pages/admin/AdminDestinationsPage';
 import DestinationForm from './pages/admin/DestinationForm';
+import AdminPackagesPage from './pages/admin/AdminPackagesPage';
+import PackageBuilderPage from './pages/admin/PackageBuilderPage';
 
 export default function App() {
   return (
@@ -66,6 +68,33 @@ export default function App() {
             }
           />
           <Route
+            path="/admin/packages"
+            element={
+              <AdminRoute>
+                <AdminPackagesPage />
+              </AdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/packages/new"
+            element={
+              <AdminRoute>
+                <PackageBuilderPage />
+              </AdminRoute>
+            }
+          />
+
+          <Route
+            path="/admin/packages/:packageId/edit"
+            element={
+              <AdminRoute>
+                <PackageBuilderPage />
+              </AdminRoute>
+            }
+          />
+
+          <Route
             path="/admin/destinations/new"
             element={
               <AdminRoute>
@@ -73,7 +102,6 @@ export default function App() {
               </AdminRoute>
             }
           />
-
           <Route
             path="/admin/destinations/:destinationId/edit"
             element={
