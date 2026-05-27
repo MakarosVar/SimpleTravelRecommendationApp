@@ -1,39 +1,29 @@
 import express from 'express';
 import {
-  getAllTrips,
+  createTrip,
+  getTripById,
+  getTrips,
   addTripItem,
   updateTripItem,
   deleteTripItem,
+  updateTrip,
 } from '../../controllers/user/tripController.js';
-import { validateDestinationId } from '../../middleware/validateDestination.js';
-import { validateTripUpdate } from '../../middleware/validateTripUpdate.js';
-import { asyncHandler } from '../../utils/asyncHandler.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
 const router = express.Router();
-
-router.get('/', protect, getAllTrips);
-
-router.post(
-  '/',
-  protect,
-  asyncHandler(validateDestinationId),
-  addTripItem,
-);
-
+router.get('/', protect, getTrips);
+router.post('/', protect, createTrip);
+router.get('/:tripId', protect, getTripById);
+router.patch('/:tripId', protect, updateTrip);
+router.post('/:tripId/items', protect, addTripItem);
 router.patch(
-  '/:destinationId',
+  '/:tripId/items/:destinationId',
   protect,
-  asyncHandler(validateDestinationId),
-  validateTripUpdate,
   updateTripItem,
 );
-
 router.delete(
-  '/:destinationId',
+  '/:tripId/items/:destinationId',
   protect,
-  asyncHandler(validateDestinationId),
   deleteTripItem,
 );
-
 export default router;

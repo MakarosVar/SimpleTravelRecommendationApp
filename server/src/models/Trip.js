@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const tripSchema = new mongoose.Schema(
+const tripItemSchema = new mongoose.Schema(
   {
     destination: {
       type: mongoose.Schema.Types.ObjectId,
@@ -10,21 +10,46 @@ const tripSchema = new mongoose.Schema(
     note: {
       type: String,
       default: '',
+      trim: true,
     },
     priority: {
       type: String,
       enum: ['low', 'medium', 'high'],
       default: 'medium',
     },
+    order: {
+      type: Number,
+      default: 0,
+    },
+  },
+  {
+    _id: false,
+  },
+);
+
+const tripSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      default: 'My Travel Plan',
+    },
+    description: {
+      type: String,
+      default: '',
+      trim: true,
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
+    items: [tripItemSchema],
   },
   {
     timestamps: true,
   },
 );
-tripSchema.index({ user: 1, destination: 1 }, { unique: true });
+
 export const Trip = mongoose.model('Trip', tripSchema);
