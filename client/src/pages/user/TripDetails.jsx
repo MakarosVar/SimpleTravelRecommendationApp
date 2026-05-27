@@ -1,9 +1,134 @@
 import { Link, useParams } from 'react-router-dom';
 import { useTripDetails } from '../../hooks/useTripDetails';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  deleteTripItem,
+  updateTrip,
+  updateTripItem,
+} from '../../services/user/tripService';
+import { useToast } from '../../context/ToastContext';
+import TripItemCard from '../../components/trips/TripItemCard';
+import { useEffect, useState } from 'react';
+import TripItemEditModal from '../../components/trips/TripItemEditModal';
+import PageContainer from '../../components/layout/PageContainer';
 
 export default function TripDetails() {
+  const [isEditingTrip, setIsEditingTrip] = useState(false);
+  const [tripForm, setTripForm] = useState({
+    title: '',
+    description: '',
+  });
+  const [editingItem, setEditingItem] = useState(null);
   const { tripId } = useParams();
   const { trip, isLoading, error } = useTripDetails(tripId);
+  const queryClient = useQueryClient();
+  const { addToast } = useToast();
+  const updateTripMutation = useMutation({
+    mutationFn: (payload) => updateTrip(tripId, payload),
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['trip', tripId],
+      });
+      await queryClient.invalidateQueries({ queryKey: ['trips'] });
+
+      setIsEditingTrip(false);
+      addToast('Trip updated successfully', 'success');
+    },
+
+    onError: (error) => {
+      addToast(
+        error?.response?.data?.message ?? 'Could not update trip',
+        'error',
+      );
+    },
+  });
+  const removeItemMutation = useMutation({
+    mutationFn: (destinationId) =>
+      deleteTripItem(tripId, destinationId),
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['trip', tripId],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ['trips'],
+      });
+
+      addToast('Destination removed from trip', 'success');
+    },
+
+    onError: (error) => {
+      addToast(
+        error?.response?.data?.message ??
+          'Could not remove destination',
+        'error',
+      );
+    },
+  });
+  const updateItemMutation = useMutation({
+    mutationFn: ({ destinationId, updates }) =>
+      updateTripItem(tripId, destinationId, updates),
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['trip', tripId],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ['trips'],
+      });
+
+      addToast('Trip Destination updated.', 'success');
+    },
+
+    onError: (error) => {
+      addToast(
+        error?.response?.data?.message ??
+          'Could not remove destination',
+        'error',
+      );
+    },
+  });
+  function handleRemoveTripItem(destinationId) {
+    removeItemMutation.mutate(destinationId);
+  }
+
+  function handleUpdateTrip(e) {
+    e.preventDefault();
+
+    const title = tripForm.title.trim();
+
+    if (!title) {
+      addToast('Trip title is required', 'error');
+      return;
+    }
+
+    updateTripMutation.mutate({
+      title,
+      description: tripForm.description.trim(),
+    });
+  }
+  function handleEditTripItem(item) {
+    setEditingItem(item);
+  }
+  function handleSaveTripItem(destinationId, updates) {
+    updateItemMutation.mutate({
+      destinationId,
+      updates,
+    });
+
+    setEditingItem(null);
+  }
+  useEffect(() => {
+    if (trip) {
+      setTripForm({
+        title: trip.title ?? '',
+        description: trip.description ?? '',
+      });
+    }
+  }, [trip]);
 
   if (isLoading) {
     return (
@@ -33,91 +158,130 @@ export default function TripDetails() {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-10">
-      <Link
-        to="/trip"
-        className="mb-6 inline-flex text-sm font-medium text-teal-400 hover:underline"
-      >
-        ← Back to trips
-      </Link>
+    <PageContainer>
+      <section className="mx-auto max-w-6xl px-6 py-10">
+        <Link
+          to="/trip"
+          className="mb-6 inline-flex text-sm font-medium text-teal-400 hover:underline"
+        >
+          ← Back to trips
+        </Link>
 
-      <div className="mb-8 rounded-2xl bg-white/90 p-8 shadow-sm ring-1 ring-slate-200">
-        <h1 className="text-3xl font-bold text-slate-950">
-          {trip.title}
-        </h1>
+        <div className="mb-8 rounded-2xl bg-white/90 p-8 shadow-sm ring-1 ring-slate-200">
+          {isEditingTrip ? (
+            <form onSubmit={handleUpdateTrip} className="space-y-4">
+              <input
+                value={tripForm.title}
+                onChange={(e) =>
+                  setTripForm((current) => ({
+                    ...current,
+                    title: e.target.value,
+                  }))
+                }
+                className="w-full rounded-lg border px-3 py-2 text-slate-950"
+                required
+              />
 
-        {trip.description && (
-          <p className="mt-3 max-w-3xl text-slate-600">
-            {trip.description}
-          </p>
-        )}
+              <textarea
+                value={tripForm.description}
+                onChange={(e) =>
+                  setTripForm((current) => ({
+                    ...current,
+                    description: e.target.value,
+                  }))
+                }
+                rows={3}
+                className="w-full rounded-lg border px-3 py-2 text-slate-950"
+              />
 
-        <p className="mt-4 text-sm text-slate-500">
-          {trip.items?.length ?? 0} destinations in this trip
-        </p>
-      </div>
+              <div className="flex gap-3">
+                <button
+                  type="submit"
+                  disabled={updateTripMutation.isPending}
+                  className="rounded-lg bg-blue-600 px-4 py-2 text-white disabled:opacity-60"
+                >
+                  {updateTripMutation.isPending
+                    ? 'Saving...'
+                    : 'Save'}
+                </button>
 
-      {trip.items?.length === 0 ? (
-        <div className="rounded-2xl bg-white/90 p-8 shadow-sm ring-1 ring-slate-200">
-          <h2 className="text-xl font-semibold text-slate-900">
-            No destinations yet.
-          </h2>
-          <p className="mt-2 text-slate-600">
-            Later, you will be able to add destinations from packages,
-            favorites, and destination pages.
-          </p>
-        </div>
-      ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {trip.items.map((item) => {
-            const destination = item.destination;
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditingTrip(false);
+                    setTripForm({
+                      title: trip.title ?? '',
+                      description: trip.description ?? '',
+                    });
+                  }}
+                  className="rounded-lg border px-4 py-2 text-slate-700"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <h1 className="text-3xl font-bold text-slate-950">
+                {trip.title}
+              </h1>
 
-            if (!destination) return null;
+              {trip.description && (
+                <p className="mt-3 max-w-3xl text-slate-600">
+                  {trip.description}
+                </p>
+              )}
+              <p className="mt-4 text-sm text-slate-500">
+                {trip.items?.length ?? 0} destinations in this trip
+              </p>
 
-            return (
-              <article
-                key={destination._id}
-                className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200"
+              <button
+                type="button"
+                onClick={() => setIsEditingTrip(true)}
+                className="mt-5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
               >
-                {destination.imageUrl && (
-                  <img
-                    src={destination.imageUrl}
-                    alt={destination.name}
-                    className="h-44 w-full object-cover"
-                  />
-                )}
-
-                <div className="flex flex-1 flex-col p-5">
-                  <h2 className="text-lg font-bold text-slate-950">
-                    {destination.name}
-                  </h2>
-
-                  <p className="mt-1 text-sm text-slate-500">
-                    {destination.country}
-                  </p>
-
-                  <p className="mt-3 text-sm text-slate-600">
-                    Priority: {item.priority}
-                  </p>
-
-                  {item.note && (
-                    <p className="mt-2 line-clamp-3 text-sm text-slate-600">
-                      {item.note}
-                    </p>
-                  )}
-
-                  <Link
-                    to={`/destination/${destination._id}`}
-                    className="mt-auto inline-flex self-start pt-4 text-sm font-medium text-blue-600 hover:underline"
-                  >
-                    View destination
-                  </Link>
-                </div>
-              </article>
-            );
-          })}
+                Edit trip
+              </button>
+            </>
+          )}
         </div>
-      )}
-    </section>
+        {trip.items?.length === 0 ? (
+          <div className="rounded-2xl bg-white/90 p-8 shadow-sm ring-1 ring-slate-200">
+            <h2 className="text-xl font-semibold text-slate-900">
+              No destinations yet.
+            </h2>
+            <p className="mt-2 text-slate-600">
+              You can add destinations from packages, favorites, and
+              destination pages.
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {trip.items.map((item) => {
+              const destination = item.destination;
+
+              if (!destination) return null;
+
+              return (
+                <TripItemCard
+                  key={destination._id}
+                  item={item}
+                  onEdit={handleEditTripItem}
+                  onRemove={handleRemoveTripItem}
+                />
+              );
+            })}
+          </div>
+        )}
+        {editingItem && (
+          <TripItemEditModal
+            item={editingItem}
+            isSaving={updateItemMutation.isPending}
+            onClose={() => setEditingItem(null)}
+            onSave={handleSaveTripItem}
+          />
+        )}
+      </section>
+    </PageContainer>
   );
 }

@@ -7,6 +7,7 @@ import {
   updateTripItem,
   deleteTripItem,
   updateTrip,
+  deleteTrip,
 } from '../../controllers/user/tripController.js';
 import { protect } from '../../middleware/authMiddleware.js';
 
@@ -15,6 +16,7 @@ router.get('/', protect, getTrips);
 router.post('/', protect, createTrip);
 router.get('/:tripId', protect, getTripById);
 router.patch('/:tripId', protect, updateTrip);
+router.delete('/:tripId', protect, deleteTrip);
 router.post('/:tripId/items', protect, addTripItem);
 router.patch(
   '/:tripId/items/:destinationId',

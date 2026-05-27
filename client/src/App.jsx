@@ -64,7 +64,7 @@ export default function App() {
           />
           <Route path="/contact" element={<Contact />} />
           <Route
-            path="/destination/:id"
+            path="/destinations/:id"
             element={<DestinationDetails />}
           />
           <Route

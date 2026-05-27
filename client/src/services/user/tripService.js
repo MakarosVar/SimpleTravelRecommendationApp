@@ -10,6 +10,11 @@ export async function createTrip(payload) {
   return response.data;
 }
 
+export async function deleteTrip(tripId) {
+  const response = await apiClient.delete(`/trips/${tripId}`);
+  return response.data;
+}
+
 export async function getTripById(tripId) {
   const response = await apiClient.get(`/trips/${tripId}`);
   return response.data;

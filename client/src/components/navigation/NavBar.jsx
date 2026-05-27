@@ -49,11 +49,11 @@ export default function NavBar() {
     addToast('Logged out successfully', 'info');
     setLogoutPending(false);
   }, [
+    queryClient,
     logoutPending,
     location.pathname,
     logout,
     clearFavorites,
-
     addToast,
   ]);
   function getNavLinkClass({ isActive }, extraClasses = '') {
