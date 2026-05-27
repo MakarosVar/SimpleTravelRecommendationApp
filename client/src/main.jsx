@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App.jsx';
 import { FavProvider } from './context/FavoriteContext.jsx';
-import { TripProvider } from './context/TripContext.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { ToastProvider } from './context/ToastContext.jsx';
 import {
@@ -17,9 +16,7 @@ createRoot(document.getElementById('root')).render(
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <FavProvider>
-            <TripProvider>
-              <App />
-            </TripProvider>
+            <App />
           </FavProvider>
         </AuthProvider>
       </QueryClientProvider>

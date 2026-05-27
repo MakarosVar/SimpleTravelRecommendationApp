@@ -3,12 +3,11 @@ import { useAuth } from '../../context/AuthContext';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import { useToast } from '../../context/ToastContext';
-import { TripContext } from '../../context/TripContext';
 import { FavContext } from '../../context/FavoriteContext';
 
 export default function LoginPage() {
   const { login, isAuthenticated, authLoading } = useAuth();
-  const { reloadTrip } = useContext(TripContext);
+
   const { reloadFavorites } = useContext(FavContext);
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
@@ -35,7 +34,7 @@ export default function LoginPage() {
     try {
       await login(form);
       addToast('Login successful', 'success');
-      await Promise.all([reloadFavorites(), reloadTrip()]);
+      await reloadFavorites();
 
       navigate('/');
     } catch (error) {

@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useContext } from 'react';
 import { FavContext } from '../../context/FavoriteContext';
-import { TripContext } from '../../context/TripContext';
 import PageContainer from '../../components/layout/PageContainer';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import RetryButton from '../../components/shared/RetryButton';
@@ -16,7 +15,6 @@ export default function DestinationDetails() {
   const { destination, isLoading, error, reloadDestination } =
     useDestinationDetails(destinationId);
 
-  const { toggleTripItem, isInTrip } = useContext(TripContext);
   const { toggleFavorite, isFavorite } = useContext(FavContext);
   const { isAuthenticated } = useAuth();
   function handleFavorite() {
@@ -26,14 +24,7 @@ export default function DestinationDetails() {
     }
     toggleFavorite(destination._id);
   }
-  function handleToggleTrip() {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
 
-    toggleTripItem(destination._id);
-  }
   if (isLoading) {
     return (
       <PageContainer>
@@ -61,8 +52,6 @@ export default function DestinationDetails() {
     );
   }
 
-  const inTrip = isInTrip(destination._id);
-
   const favorite = isFavorite(destination._id);
 
   return (
@@ -82,16 +71,6 @@ export default function DestinationDetails() {
                 onClick={handleFavorite}
               >
                 {favorite ? '♥ Saved' : '♡ Save'}
-              </button>
-              <button
-                onClick={handleToggleTrip}
-                className={`rounded-full  shadow-lg  backdrop-blur-md  border-white/20 border px-4 py-2 text-white transition ${
-                  inTrip
-                    ? 'bg-slate-600 hover:bg-slate-500'
-                    : 'bg-teal-700 hover:bg-teal-600'
-                }`}
-              >
-                {inTrip ? 'Remove from Trip' : 'Add to Trip'}
               </button>
             </div>
           </div>

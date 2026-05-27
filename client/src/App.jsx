@@ -19,6 +19,7 @@ import AdminPackagesPage from './pages/admin/AdminPackagesPage';
 import PackageBuilderPage from './pages/admin/PackageBuilderPage';
 import Packages from './pages/public/Packages';
 import PackageDetails from './pages/public/PackageDetails';
+import TripDetails from './pages/user/TripDetails';
 
 export default function App() {
   return (
@@ -50,6 +51,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Trip />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trip/:tripId"
+            element={
+              <ProtectedRoute>
+                <TripDetails />
               </ProtectedRoute>
             }
           />

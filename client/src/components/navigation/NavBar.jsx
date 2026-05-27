@@ -1,21 +1,23 @@
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { FavContext } from '../../context/FavoriteContext';
-import { TripContext } from '../../context/TripContext';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { useTrips } from '../../hooks/useTrips';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function NavBar() {
   const { favorites, clearFavorites } = useContext(FavContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
-  const { trip, clearTrip } = useContext(TripContext);
   const { isAuthenticated, logout, user } = useAuth();
+  const { trips } = useTrips({ enabled: isAuthenticated });
   const location = useLocation();
   const [logoutPending, setLogoutPending] = useState(false);
 
   const navigate = useNavigate();
   const { addToast } = useToast();
+  const queryClient = useQueryClient();
 
   function handleLogout() {
     setLogoutPending(true);
@@ -43,7 +45,7 @@ export default function NavBar() {
 
     logout();
     clearFavorites();
-    clearTrip();
+    queryClient.removeQueries({ queryKey: ['trips'] });
     addToast('Logged out successfully', 'info');
     setLogoutPending(false);
   }, [
@@ -51,7 +53,7 @@ export default function NavBar() {
     location.pathname,
     logout,
     clearFavorites,
-    clearTrip,
+
     addToast,
   ]);
   function getNavLinkClass({ isActive }, extraClasses = '') {
@@ -101,7 +103,7 @@ export default function NavBar() {
         {
           label: 'Trip',
           path: '/trip',
-          badge: trip.length,
+          badge: trips.length,
         },
       ]
     : [
