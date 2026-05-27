@@ -27,3 +27,11 @@ export async function createAdminPackage(packageItem) {
   );
   return response.data;
 }
+export async function updateAdminPackageStatus(packageId, status) {
+  const { data } = await apiClient.patch(
+    `/admin/packages/${packageId}/status`,
+    { status },
+  );
+
+  return data;
+}

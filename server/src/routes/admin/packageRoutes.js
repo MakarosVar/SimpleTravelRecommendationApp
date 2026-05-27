@@ -8,6 +8,7 @@ import {
   getAdminPackageById,
   getAdminPackages,
   updatePackage,
+  updatePackageStatus,
 } from '../../controllers/admin/packageController.js';
 
 const router = express.Router();
@@ -26,6 +27,13 @@ router.patch(
   requireAdmin,
   asyncHandler(validatePackageId),
   updatePackage,
+);
+router.patch(
+  '/packages/:packageId/status',
+  protect,
+  requireAdmin,
+  asyncHandler(validatePackageId),
+  updatePackageStatus,
 );
 
 export default router;

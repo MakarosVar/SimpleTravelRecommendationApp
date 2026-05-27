@@ -105,3 +105,28 @@ export const updatePackage = asyncHandler(async (req, res) => {
   ).populate('destinations');
   res.json(packageDoc);
 });
+
+export const updatePackageStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+  const packageDoc = req.packageDoc;
+
+  if (!['draft', 'published'].includes(status)) {
+    throw {
+      statusCode: 400,
+      message: 'Invalid package status',
+    };
+  }
+
+  if (
+    status === 'published' &&
+    packageDoc.destinations.length === 0
+  ) {
+    throw {
+      statusCode: 400,
+      message: 'Cannot publish packages with no destinations',
+    };
+  }
+  packageDoc.status = status;
+  const updatedPackage = await packageDoc.save();
+  res.json(updatedPackage);
+});

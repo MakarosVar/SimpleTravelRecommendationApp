@@ -1,7 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import PageContainer from '../../components/layout/PageContainer';
-import { getAllAdminPackages } from '../../services/admin/adminPackageService';
+import {
+  getAllAdminPackages,
+  updateAdminPackageStatus,
+} from '../../services/admin/adminPackageService';
 import { Link } from 'react-router-dom';
+import { useToast } from '../../context/ToastContext';
 
 export default function AdminPackagesPage() {
   const {
@@ -11,6 +19,25 @@ export default function AdminPackagesPage() {
   } = useQuery({
     queryKey: ['adminPackages'],
     queryFn: getAllAdminPackages,
+  });
+  const { addToast } = useToast();
+  const queryClient = useQueryClient();
+  const updateStatusMutation = useMutation({
+    mutationFn: ({ packageId, status }) =>
+      updateAdminPackageStatus(packageId, status),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['adminPackages'] });
+      addToast('Package status updated', 'success');
+    },
+
+    onError: (error) => {
+      addToast(
+        error?.response?.data?.message ??
+          'Could not update package status',
+        'error',
+      );
+    },
   });
 
   if (isPending) return <p className="p-6">Loading packages...</p>;
@@ -85,6 +112,24 @@ export default function AdminPackagesPage() {
                   </td>
 
                   <td className="px-5 py-4 text-right">
+                    <button
+                      disabled={updateStatusMutation.isPending}
+                      type="button"
+                      className={`${packageItem.status === 'published' ? 'text-amber-600' : 'text-green-500'} mr-4 hover:underline disabled:opacity-50`}
+                      onClick={() =>
+                        updateStatusMutation.mutate({
+                          packageId: packageItem._id,
+                          status:
+                            packageItem.status === 'published'
+                              ? 'draft'
+                              : 'published',
+                        })
+                      }
+                    >
+                      {packageItem.status === 'published'
+                        ? 'Unpublish'
+                        : 'Publish'}
+                    </button>
                     <Link
                       to={`/admin/packages/${packageItem._id}/edit`}
                       className="text-blue-600 hover:underline"
