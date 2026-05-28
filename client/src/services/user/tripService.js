@@ -49,3 +49,9 @@ export async function deleteTripItem(tripId, destinationId) {
 
   return response.data;
 }
+export async function createTripFromPackage(packageId) {
+  const response = await apiClient.post(
+    `/trips/from-package/${packageId}`,
+  );
+  return response.data;
+}

@@ -166,7 +166,7 @@ export default function TripDetails() {
           ← Back to trips
         </Link>
 
-        <div className="mb-8 rounded-2xl bg-white/90 p-8 shadow-sm ring-1 ring-slate-200">
+        <div className="relative mb-8 rounded-2xl bg-white/90 p-8 shadow-sm ring-1 ring-slate-200">
           {isEditingTrip ? (
             <form onSubmit={handleUpdateTrip} className="space-y-4">
               <input
@@ -221,6 +221,12 @@ export default function TripDetails() {
             </form>
           ) : (
             <>
+              {trip.sourcePackage && (
+                <p
+                  className="absolute top-5 right-5 hidden md:inline-flex w-fit rounded-full px-3 py-1 text-xs text-slate-500 bg-slate-100
+                 border-slate-200"
+                >{`Based on package:${trip.sourcePackage.title}`}</p>
+              )}
               <h1 className="text-3xl font-bold text-slate-950">
                 {trip.title}
               </h1>
@@ -230,6 +236,7 @@ export default function TripDetails() {
                   {trip.description}
                 </p>
               )}
+
               <p className="mt-4 text-sm text-slate-500">
                 {trip.items?.length ?? 0} destinations in this trip
               </p>

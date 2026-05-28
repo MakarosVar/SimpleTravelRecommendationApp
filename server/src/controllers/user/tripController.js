@@ -53,11 +53,13 @@ function formatTrip(trip) {
     items: trip.items,
     createdAt: trip.createdAt,
     updatedAt: trip.updatedAt,
+    sourcePackage: trip?.sourcePackage,
   };
 }
 
 export const getTrips = asyncHandler(async (req, res) => {
   const trips = await Trip.find({ user: req.user._id })
+    .populate('sourcePackage')
     .populate('items.destination')
     .sort({ createdAt: -1 });
 
@@ -109,7 +111,9 @@ export const getTripById = asyncHandler(async (req, res, next) => {
   const trip = await Trip.findOne({
     _id: tripId,
     user: req.user._id,
-  }).populate('items.destination');
+  })
+    .populate('items.destination')
+    .populate('sourcePackage');
 
   if (!trip) {
     return next({
@@ -150,9 +154,9 @@ export const updateTrip = asyncHandler(async (req, res, next) => {
 
   await trip.save();
 
-  const populatedTrip = await Trip.findById(trip._id).populate(
-    'items.destination',
-  );
+  const populatedTrip = await Trip.findById(trip._id)
+    .populate('sourcePackage')
+    .populate('items.destination');
 
   res.json(formatTrip(populatedTrip));
 });
@@ -232,9 +236,9 @@ export const addTripItem = asyncHandler(async (req, res, next) => {
 
   await trip.save();
 
-  const populatedTrip = await Trip.findById(trip._id).populate(
-    'items.destination',
-  );
+  const populatedTrip = await Trip.findById(trip._id)
+    .populate('sourcePackage')
+    .populate('items.destination');
 
   res.status(201).json(formatTrip(populatedTrip));
 });
@@ -294,9 +298,9 @@ export const updateTripItem = asyncHandler(async (req, res, next) => {
 
   await trip.save();
 
-  const populatedTrip = await Trip.findById(trip._id).populate(
-    'items.destination',
-  );
+  const populatedTrip = await Trip.findById(trip._id)
+    .populate('sourcePackage')
+    .populate('items.destination');
 
   res.json(formatTrip(populatedTrip));
 });
@@ -349,9 +353,36 @@ export const deleteTripItem = asyncHandler(async (req, res, next) => {
 
   await trip.save();
 
-  const populatedTrip = await Trip.findById(trip._id).populate(
-    'items.destination',
-  );
+  const populatedTrip = await Trip.findById(trip._id)
+    .populate('sourcePackage')
+    .populate('items.destination');
 
   res.json(formatTrip(populatedTrip));
 });
+
+export const createTripFromPackage = asyncHandler(
+  async (req, res, next) => {
+    const { _id, title, description, destinations } = req.packageDoc;
+    const uniqueDestinationIds =
+      await validateDestinationIds(destinations);
+
+    const trip = await Trip.create({
+      user: req.user._id,
+      title: `${title} Plan`,
+      description: description?.trim() || '',
+      items: uniqueDestinationIds.map((destinationId, index) => ({
+        destination: destinationId,
+        note: '',
+        priority: 'medium',
+        order: index,
+      })),
+      sourcePackage: _id,
+    });
+
+    const populatedTrip = await Trip.findById(trip._id)
+      .populate('sourcePackage')
+      .populate('items.destination');
+
+    res.status(201).json(formatTrip(populatedTrip));
+  },
+);

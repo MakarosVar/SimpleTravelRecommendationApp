@@ -1,11 +1,38 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { usePackageDetails } from '../../hooks/usePackageDetails.js';
 import PageContainer from '../../components/layout/PageContainer.jsx';
+import { useToast } from '../../context/ToastContext.jsx';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createTripFromPackage } from '../../services/user/tripService.js';
 
 export default function PackageDetails() {
   const { packageId } = useParams();
   const { packageItem, isLoading, error } =
     usePackageDetails(packageId);
+  const navigate = useNavigate();
+  const { addToast } = useToast();
+  const queryClient = useQueryClient();
+  const createTripMutation = useMutation({
+    mutationFn: (packageId) => createTripFromPackage(packageId),
+
+    onSuccess: async (createdTrip) => {
+      await queryClient.invalidateQueries({ queryKey: ['trips'] });
+
+      addToast('Trip created successfully', 'success');
+
+      navigate(`/trip/${createdTrip._id}`);
+    },
+
+    onError: (error) => {
+      addToast(
+        error?.response?.data?.message ?? 'Could not create trip',
+        'error',
+      );
+    },
+  });
+  function handleCreateTripFromPackage() {
+    createTripMutation.mutate(packageId);
+  }
 
   if (isLoading) {
     return (
@@ -64,13 +91,12 @@ export default function PackageDetails() {
             included
           </p>
 
-          {/* Later this becomes: Create trip from package */}
           <button
+            onClick={handleCreateTripFromPackage}
             type="button"
-            disabled
-            className="mt-6 rounded-lg bg-slate-300 px-5 py-2 font-medium text-slate-600"
+            className="mt-6 rounded-lg bg-teal-600 px-5 py-2 font-medium text-white hover:bg-teal-500"
           >
-            Create trip from package — coming soon
+            Create custom trip from package
           </button>
         </div>
 

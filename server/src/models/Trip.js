@@ -40,6 +40,10 @@ const tripSchema = new mongoose.Schema(
       default: '',
       trim: true,
     },
+    sourcePackage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Package',
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

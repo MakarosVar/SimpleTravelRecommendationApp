@@ -101,7 +101,7 @@ export default function NavBar() {
           badge: favorites.length,
         },
         {
-          label: 'Trip',
+          label: 'My Plans',
           path: '/trip',
           badge: trips.length,
         },
