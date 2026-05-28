@@ -70,6 +70,10 @@ export default function AdminPackagesPage() {
                 <th className="px-3 py-3 font-semibold">Status</th>
                 <th className="px-5 py-3 font-semibold">Title</th>
                 <th className="px-5 py-3 font-semibold">
+                  Travel Style
+                </th>
+                <th className="px-5 py-3 font-semibold">Duration</th>
+                <th className="px-5 py-3 font-semibold">
                   Destinations Count
                 </th>
                 <th className="px-5 py-3 font-semibold text-right">
@@ -105,6 +109,14 @@ export default function AdminPackagesPage() {
                         {packageItem.description}
                       </div>
                     )}
+                  </td>
+
+                  <td className="px-3 py-4 font-medium">
+                    {packageItem?.travelStyle}
+                  </td>
+
+                  <td className="px-3 py-4 font-medium">
+                    {packageItem?.duration}
                   </td>
 
                   <td className="px-3 py-4 font-medium">

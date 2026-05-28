@@ -26,7 +26,7 @@ export default function DestinationCard({ place }) {
 
         <div className="mt-auto flex flex-col md:flex-row gap-3">
           <Link
-            to={`/destination/${place._id}`}
+            to={`/destinations/${place._id}`}
             className="mt-auto w-fit"
           >
             <button className="rounded bg-teal-700 px-5 py-2.5 text-white transition hover:bg-teal-600">

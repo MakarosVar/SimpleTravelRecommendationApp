@@ -52,6 +52,8 @@ function buildPackagePayload(body) {
     'title',
     'description',
     'destinations',
+    'travelStyle',
+    'duration',
     'status',
   ];
 

@@ -17,6 +17,8 @@ import { useDestinations } from '../../hooks/useDestinations';
 const emptyForm = {
   title: '',
   description: '',
+  travelStyle: '',
+  duration: '',
   destinations: [],
 };
 export default function PackageBuilderPage() {
@@ -73,6 +75,8 @@ export default function PackageBuilderPage() {
     setForm({
       title: packageItem.title || '',
       description: packageItem.description || '',
+      travelStyle: packageItem.travelStyle || '',
+      duration: packageItem.duration || '',
       destinations:
         packageItem.destinations?.map(
           (destination) => destination._id,
@@ -172,6 +176,20 @@ export default function PackageBuilderPage() {
             onChange={handleChange}
             placeholder="Description"
             rows="4"
+            className="w-full rounded-lg border px-4 py-2"
+          />
+          <input
+            name="travelStyle"
+            value={form.travelStyle}
+            onChange={handleChange}
+            placeholder="Travel Style"
+            className="w-full rounded-lg border px-4 py-2"
+          />
+          <input
+            name="duration"
+            value={form.duration}
+            onChange={handleChange}
+            placeholder="Duration"
             className="w-full rounded-lg border px-4 py-2"
           />
           <div className="grid gap-6 md:grid-cols-2">

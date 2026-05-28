@@ -11,6 +11,14 @@ const packageSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    travelStyle: {
+      type: String,
+      trim: true,
+    },
+    duration: {
+      type: String,
+      trim: true,
+    },
     destinations: [
       {
         type: mongoose.Schema.Types.ObjectId,

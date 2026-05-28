@@ -53,6 +53,11 @@ export default function PackageDetails() {
               {packageItem.description}
             </p>
           )}
+          {(packageItem.travelStyle || packageItem.duration) && (
+            <p className="mb-2 text-sm font-semibold text-teal-600">
+              {packageItem?.travelStyle} • {packageItem?.duration}
+            </p>
+          )}
 
           <p className="mt-4 text-sm text-slate-500">
             {packageItem.destinations?.length ?? 0} destinations

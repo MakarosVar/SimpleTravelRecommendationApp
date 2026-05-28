@@ -8,7 +8,7 @@ export default function Packages() {
   if (isLoading) {
     return (
       <section className="mx-auto max-w-6xl px-6 py-10">
-        <p className="text-slate-600">Loading packages...</p>
+        <p className="text-white">Loading packages...</p>
       </section>
     );
   }
@@ -25,7 +25,7 @@ export default function Packages() {
     <PageContainer>
       <section className="mx-auto max-w-6xl px-6 py-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-950">
+          <h1 className="text-3xl font-bold text-white">
             Curated Travel Packages
           </h1>
           <p className="mt-2 max-w-2xl text-white">
@@ -55,6 +55,13 @@ export default function Packages() {
                     {packageItem.title}
                   </h2>
 
+                  {(packageItem.travelStyle ||
+                    packageItem.duration) && (
+                    <p className="mb-2 text-sm font-semibold text-teal-600">
+                      {packageItem?.travelStyle} •{' '}
+                      {packageItem?.duration}
+                    </p>
+                  )}
                   {packageItem.description && (
                     <p className="mt-2 line-clamp-3 text-sm text-slate-600">
                       {packageItem.description}

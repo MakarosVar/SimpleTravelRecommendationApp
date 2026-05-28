@@ -80,6 +80,7 @@ export default function TripDetails() {
         queryKey: ['trips'],
       });
 
+      setEditingItem(null);
       addToast('Trip Destination updated.', 'success');
     },
 
@@ -118,8 +119,6 @@ export default function TripDetails() {
       destinationId,
       updates,
     });
-
-    setEditingItem(null);
   }
   useEffect(() => {
     if (trip) {
