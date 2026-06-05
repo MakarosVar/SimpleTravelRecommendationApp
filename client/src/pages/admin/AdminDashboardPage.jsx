@@ -5,13 +5,17 @@ export default function AdminDashboardPage() {
   return (
     <PageContainer>
       <section className="mx-auto max-w-6xl px-6 py-8">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold text-white">
+          Admin Dashboard
+        </h1>
         <p className="mt-2 text-white">
           Manage TravelBloom platform content.
         </p>
 
         <div className="mt-8 rounded-xl border bg-white p-6 shadow-sm">
-          <h2 className="text-xl font-semibold">Destinations</h2>
+          <h2 className="text-xl font-semibold">
+            Manage travel content
+          </h2>
           <p className="mt-2 text-gray-600">
             Create, edit, and manage travel operations across
             Travelbloom.

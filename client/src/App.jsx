@@ -20,6 +20,7 @@ import PackageBuilderPage from './pages/admin/PackageBuilderPage';
 import Packages from './pages/public/Packages';
 import PackageDetails from './pages/public/PackageDetails';
 import TripDetails from './pages/user/TripDetails';
+import Discover from './pages/public/Discover';
 
 export default function App() {
   return (
@@ -63,6 +64,7 @@ export default function App() {
             }
           />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/discover" element={<Discover />} />
           <Route
             path="/destinations/:id"
             element={<DestinationDetails />}

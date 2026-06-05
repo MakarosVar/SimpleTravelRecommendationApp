@@ -9,7 +9,7 @@ import ErrorMessage from '../../components/shared/ErrorMessage';
 import LoadingMessage from '../../components/shared/LoadingMessage';
 import RetryButton from '../../components/shared/RetryButton';
 import { useDestinations } from '../../hooks/useDestinations';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 export default function Home() {
   const { destinations, isLoading, error, reloadDestinations } =
@@ -77,7 +77,7 @@ export default function Home() {
         {results.length === 0 && (
           <>
             <h1 className="mb-6 text-5xl md:text-[72px] leading-[1.05] font-black text-white uppercase">
-              Explore Dream Destination
+              Explore Dream Destinations!
             </h1>
 
             <p className="mb-6 rounded-md bg-black/25 p-4 text-lg leading-[1.8] text-white">
@@ -86,6 +86,13 @@ export default function Home() {
               while pursuing the desired destination that captivates
               the heart and ignites a sense of wonder.
             </p>
+            <div className="mt-8 mb-10 flex justify-center">
+              <Link to="/discover" className="mt-auto w-fit">
+                <button className="w-full rounded-full bg-teal-600 px-8 py-4 text-lg font-bold text-white shadow-xl transition hover:bg-teal-500">
+                  Start Discovering!
+                </button>
+              </Link>
+            </div>
           </>
         )}
         <SearchBox
