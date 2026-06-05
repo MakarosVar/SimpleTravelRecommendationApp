@@ -7,7 +7,7 @@ import {
   updateTripItem,
 } from '../../services/user/tripService';
 import { useToast } from '../../context/ToastContext';
-import TripItemCard from '../../components/trips/TripItemCard';
+import TripItemCard from '../../components/cards/TripItemCard';
 import { useEffect, useState } from 'react';
 import TripItemEditModal from '../../components/trips/TripItemEditModal';
 import PageContainer from '../../components/layout/PageContainer';

@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import PageContainer from '../../components/layout/PageContainer';
 import { useDestinations } from '../../hooks/useDestinations';
-import DestinationCard from '../../components/destination/DestinationCard';
-import PackageCard from '../../components/travelPackages/PackageCard';
+import DestinationCard from '../../components/cards/DestinationCard';
+import PackageCard from '../../components/cards/PackageCard';
 import { usePackages } from '../../hooks/usePackages';
+import useAddToTravelPlan from '../../hooks/useAddToTravelPlan';
+import { AddToTravelPlanModal } from '../../components/trips/AddToTravelPlanModal';
 
 export default function Discover() {
+  const addToPlan = useAddToTravelPlan();
   const { destinations, isLoading, error, reloadDestinations } =
     useDestinations();
   const { packages, isPackagesLoading, packagesError } =
@@ -75,6 +78,7 @@ export default function Discover() {
                         <DestinationCard
                           key={place._id}
                           place={place}
+                          onAddToPlan={addToPlan.openAddToPlan}
                         />
                       ))}
                     </div>
@@ -115,6 +119,7 @@ export default function Discover() {
           </div>
         </div>
       </section>
+      <AddToTravelPlanModal {...addToPlan.modalProps} />
     </PageContainer>
   );
 }

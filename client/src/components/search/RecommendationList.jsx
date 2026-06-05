@@ -1,4 +1,4 @@
-import DestinationCard from '../destination/DestinationCard';
+import DestinationCard from '../cards/DestinationCard';
 
 export default function RecommendationList({ results }) {
   if (!results || results.length === 0) {

@@ -1,6 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-export default function DestinationCard({ place }) {
+import { Link } from 'react-router-dom';
+
+export default function DestinationCard({ place, onAddToPlan }) {
   return (
     <article className="flex flex-col p-4.5 flex-1 min-h-108 overflow-hidden rounded-xl bg-white text-gray-900 shadow-md">
       <img
@@ -30,6 +30,12 @@ export default function DestinationCard({ place }) {
               Visit
             </button>
           </Link>
+          <button
+            className="rounded bg-teal-700 px-5 py-2.5 text-white transition hover:bg-teal-600"
+            onClick={() => onAddToPlan(place)}
+          >
+            Add To Travel Plan
+          </button>
         </div>
       </div>
     </article>

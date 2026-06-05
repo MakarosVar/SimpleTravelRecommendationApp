@@ -1,4 +1,4 @@
-import DestinationCard from '../../components/destination/DestinationCard';
+import DestinationCard from '../../components/cards/DestinationCard';
 import PageContainer from '../../components/layout/PageContainer';
 import LoadingMessage from '../../components/shared/LoadingMessage';
 import ErrorMessage from '../../components/shared/ErrorMessage';
