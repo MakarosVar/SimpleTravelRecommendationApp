@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { FavContext } from '../../context/FavoriteContext';
 import PageContainer from '../../components/layout/PageContainer';
 import ErrorMessage from '../../components/shared/ErrorMessage';
@@ -7,29 +7,21 @@ import RetryButton from '../../components/shared/RetryButton';
 import LoadingMessage from '../../components/shared/LoadingMessage';
 import { useDestinationDetails } from '../../hooks/useDestinationDetails';
 import { useAuth } from '../../context/AuthContext';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useToast } from '../../context/ToastContext';
-import { addTripItem } from '../../services/user/tripService';
-import { useTrips } from '../../hooks/useTrips';
 import { AddToTravelPlanModal } from '../../components/trips/AddToTravelPlanModal';
+import useAddToTravelPlan from '../../hooks/useAddToTravelPlan';
 
 export default function DestinationDetails() {
   const { id } = useParams();
   const destinationId = id;
-  const queryClient = useQueryClient();
-  const { addToast } = useToast();
+
   const navigate = useNavigate();
   const { destination, isLoading, error, reloadDestination } =
     useDestinationDetails(destinationId);
-  const [isPlanPickerOpen, setIsPlanPickerOpen] = useState(false);
-  const [selectedTripId, setSelectedTripId] = useState(null);
+  const addToPlan = useAddToTravelPlan();
+
   const { toggleFavorite, isFavorite } = useContext(FavContext);
   const { isAuthenticated } = useAuth();
-  const {
-    trips,
-    isLoading: isTripsLoading,
-    error: TripError,
-  } = useTrips({ enabled: isAuthenticated });
+
   function handleFavorite() {
     if (!isAuthenticated) {
       navigate('/login');
@@ -38,39 +30,6 @@ export default function DestinationDetails() {
     toggleFavorite(destination._id);
   }
 
-  const addToTripPlanMutation = useMutation({
-    mutationFn: (tripId) => addTripItem(tripId, destinationId),
-    onSuccess: async (updatedTrip) => {
-      await queryClient.invalidateQueries({ queryKey: ['trips'] });
-      await queryClient.invalidateQueries({
-        queryKey: ['trip', updatedTrip._id],
-      });
-
-      addToast('Destination added successfully', 'success');
-      setSelectedTripId(null);
-      setIsPlanPickerOpen(false);
-    },
-    onError: (error) => {
-      addToast(
-        error?.response?.data?.message ??
-          'Could not add trip destination',
-        'error',
-      );
-    },
-  });
-  function closeAddToTripModal() {
-    setSelectedTripId(null);
-    setIsPlanPickerOpen(false);
-  }
-
-  function handleAddToTripModal() {
-    setIsPlanPickerOpen(true);
-  }
-  function handleSubmitAddToTrip(e) {
-    e.preventDefault();
-    if (!selectedTripId) return;
-    addToTripPlanMutation.mutate(selectedTripId);
-  }
   if (isLoading) {
     return (
       <PageContainer>
@@ -119,7 +78,7 @@ export default function DestinationDetails() {
                 {favorite ? '♥ Saved' : '♡ Save'}
               </button>
               <button
-                onClick={handleAddToTripModal}
+                onClick={() => addToPlan.openAddToPlan(destination)}
                 className={`rounded-full  shadow-lg  backdrop-blur-md 
                  border-white/20 border px-4 py-2 text-white transition
                   bg-teal-700 hover:bg-teal-600 ${!isAuthenticated ? 'hidden' : ''}`}
@@ -156,18 +115,7 @@ export default function DestinationDetails() {
           </div>
         </section>
       </div>
-      <AddToTravelPlanModal
-        isOpen={isPlanPickerOpen}
-        onClose={closeAddToTripModal}
-        trips={trips}
-        isTripsLoading={isTripsLoading}
-        isTripsError={Boolean(TripError)}
-        selectedTripId={selectedTripId}
-        onSelectTrip={setSelectedTripId}
-        onSubmit={handleSubmitAddToTrip}
-        isPending={addToTripPlanMutation.isPending}
-        destinationId={destination._id}
-      />
+      <AddToTravelPlanModal {...addToPlan.modalProps} />
     </PageContainer>
   );
 }
