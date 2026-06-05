@@ -1,4 +1,3 @@
-import { createContext, useState } from 'react';
 import {
   addFavorite,
   deleteFavorite,
@@ -9,14 +8,14 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { useAuth } from './AuthContext';
-import { useToast } from './ToastContext';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import { useState } from 'react';
 
-export const FavContext = createContext();
-
-export const FavProvider = ({ children }) => {
-  const [favoritesError, setFavoritesError] = useState(null);
+export function useFavorites(options = {}) {
+  const { enabled = true } = options;
   const { authLoading, isAuthenticated } = useAuth();
+  const [favoritesError, setFavoritesError] = useState(null);
   const queryClient = useQueryClient();
   const { addToast } = useToast();
   const {
@@ -27,7 +26,7 @@ export const FavProvider = ({ children }) => {
   } = useQuery({
     queryKey: ['favorites'],
     queryFn: getFavorites,
-    enabled: !authLoading && isAuthenticated,
+    enabled: enabled && !authLoading && isAuthenticated,
   });
 
   function clearFavorites() {
@@ -80,21 +79,15 @@ export const FavProvider = ({ children }) => {
     );
   }
 
-  return (
-    <FavContext.Provider
-      value={{
-        favorites,
-        isLoadingFavorites: isAuthenticated && isPending,
-        favoritesError: isError
-          ? 'Could not load favorites.'
-          : favoritesError,
-        toggleFavorite,
-        clearFavorites,
-        isFavorite,
-        reloadFavorites: refetch,
-      }}
-    >
-      {children}
-    </FavContext.Provider>
-  );
-};
+  return {
+    favorites,
+    isLoadingFavorites: isAuthenticated && isPending,
+    favoritesError: isError
+      ? 'Could not load favorites.'
+      : favoritesError,
+    toggleFavorite,
+    clearFavorites,
+    isFavorite,
+    reloadFavorites: refetch,
+  };
+}

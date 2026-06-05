@@ -1,9 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 export default function DestinationCard({ place }) {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-
   return (
     <article className="flex flex-col p-4.5 flex-1 min-h-108 overflow-hidden rounded-xl bg-white text-gray-900 shadow-md">
       <img

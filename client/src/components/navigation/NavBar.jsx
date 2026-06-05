@@ -1,13 +1,13 @@
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { FavContext } from '../../context/FavoriteContext';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { useTrips } from '../../hooks/useTrips';
 import { useQueryClient } from '@tanstack/react-query';
+import { useFavorites } from '../../hooks/useFavorites';
 
 export default function NavBar() {
-  const { favorites, clearFavorites } = useContext(FavContext);
+  const { favorites, clearFavorites } = useFavorites();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const { isAuthenticated, logout, user } = useAuth();

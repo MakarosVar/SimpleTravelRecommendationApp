@@ -3,12 +3,12 @@ import { useAuth } from '../../context/AuthContext';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import { useToast } from '../../context/ToastContext';
-import { FavContext } from '../../context/FavoriteContext';
+import { useFavorites } from '../../hooks/useFavorites';
 
 export default function LoginPage() {
   const { login, isAuthenticated, authLoading } = useAuth();
 
-  const { reloadFavorites } = useContext(FavContext);
+  const { reloadFavorites } = useFavorites();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);

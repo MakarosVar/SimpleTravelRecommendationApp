@@ -1,6 +1,4 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useContext } from 'react';
-import { FavContext } from '../../context/FavoriteContext';
 import PageContainer from '../../components/layout/PageContainer';
 import ErrorMessage from '../../components/shared/ErrorMessage';
 import RetryButton from '../../components/shared/RetryButton';
@@ -9,6 +7,7 @@ import { useDestinationDetails } from '../../hooks/useDestinationDetails';
 import { useAuth } from '../../context/AuthContext';
 import { AddToTravelPlanModal } from '../../components/trips/AddToTravelPlanModal';
 import useAddToTravelPlan from '../../hooks/useAddToTravelPlan';
+import { useFavorites } from '../../hooks/useFavorites';
 
 export default function DestinationDetails() {
   const { id } = useParams();
@@ -19,7 +18,7 @@ export default function DestinationDetails() {
     useDestinationDetails(destinationId);
   const addToPlan = useAddToTravelPlan();
 
-  const { toggleFavorite, isFavorite } = useContext(FavContext);
+  const { toggleFavorite, isFavorite } = useFavorites();
   const { isAuthenticated } = useAuth();
 
   function handleFavorite() {

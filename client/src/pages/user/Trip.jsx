@@ -157,7 +157,7 @@ export default function Trip() {
         <div className="mb-8 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-white">
-              My Trips
+              My Travel Plans
             </h1>
 
             <p className="mt-2 text-white">
