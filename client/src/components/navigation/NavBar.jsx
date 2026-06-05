@@ -79,7 +79,7 @@ export default function NavBar() {
   }
   const mainNavLinks = [
     { label: 'Home', path: '/' },
-    { label: 'Packages', path: '/packages' },
+    { label: 'Discover', path: '/discover' },
     { label: 'About Us', path: '/about' },
     { label: 'Contact Us', path: '/contact' },
   ];

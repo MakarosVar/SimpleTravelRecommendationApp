@@ -14,8 +14,8 @@ export function usePackages() {
 
   return {
     packages,
-    isLoading: isPending,
-    error: isError
+    isPackagesLoading: isPending,
+    packagesError: isError
       ? (error?.response?.data?.message ?? 'Could not load packages.')
       : null,
   };

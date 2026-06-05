@@ -64,10 +64,10 @@ export default function PackageDetails() {
     <PageContainer>
       <section className="mx-auto max-w-6xl px-6 py-10">
         <Link
-          to="/packages"
+          to="/discover"
           className="mb-6 inline-flex text-sm font-medium text-teal-400  hover:underline"
         >
-          ← Back to packages
+          ← Back to discover
         </Link>
 
         <div className="mb-8 rounded-2xl bg-white/90 p-8 shadow-sm ring-1 ring-slate-200">

@@ -17,7 +17,6 @@ import AdminDestinationsPage from './pages/admin/AdminDestinationsPage';
 import DestinationForm from './pages/admin/DestinationForm';
 import AdminPackagesPage from './pages/admin/AdminPackagesPage';
 import PackageBuilderPage from './pages/admin/PackageBuilderPage';
-import Packages from './pages/public/Packages';
 import PackageDetails from './pages/public/PackageDetails';
 import TripDetails from './pages/user/TripDetails';
 import Discover from './pages/public/Discover';
@@ -34,7 +33,7 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/about" element={<About />} />
-          <Route path="/packages" element={<Packages />} />
+          <Route path="/discover" element={<Discover />} />
           <Route
             path="/packages/:packageId"
             element={<PackageDetails />}
@@ -64,7 +63,6 @@ export default function App() {
             }
           />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/discover" element={<Discover />} />
           <Route
             path="/destinations/:id"
             element={<DestinationDetails />}
