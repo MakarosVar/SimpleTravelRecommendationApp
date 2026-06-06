@@ -23,7 +23,7 @@ export default function Discover() {
   const inactiveTabClass =
     'bg-white/10 text-white/70 border-white/10 hover:bg-white/20';
   return (
-    <PageContainer>
+    <PageContainer className="max-w-screen-2xl">
       <section className="py-10">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">

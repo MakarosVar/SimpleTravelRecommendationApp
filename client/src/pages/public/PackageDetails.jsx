@@ -4,8 +4,10 @@ import PageContainer from '../../components/layout/PageContainer.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createTripFromPackage } from '../../services/user/tripService.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 
 export default function PackageDetails() {
+  const { isAuthenticated } = useAuth();
   const { packageId } = useParams();
   const { packageItem, isLoading, error } =
     usePackageDetails(packageId);
@@ -91,13 +93,22 @@ export default function PackageDetails() {
             included
           </p>
 
-          <button
-            onClick={handleCreateTripFromPackage}
-            type="button"
-            className="mt-6 rounded-lg bg-teal-600 px-5 py-2 font-medium text-white hover:bg-teal-500"
-          >
-            Create custom trip from package
-          </button>
+          <div>
+            <button
+              disabled={!isAuthenticated}
+              onClick={handleCreateTripFromPackage}
+              type="button"
+              className={`mt-6 rounded-lg px-5 py-2 font-medium text-white 
+              ${isAuthenticated ? 'hover:bg-teal-500 bg-teal-600' : 'bg-slate-500'}`}
+            >
+              Create custom trip from package
+            </button>
+            {!isAuthenticated && (
+              <p className="ml-10 mb-6 inline-flex text-sm font-medium text-teal-400">
+                Login to Create Trip form Package!
+              </p>
+            )}
+          </div>
         </div>
 
         <div>

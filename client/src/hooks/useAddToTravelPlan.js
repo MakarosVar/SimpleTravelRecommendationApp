@@ -4,8 +4,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '../context/ToastContext';
 import { addTripItem } from '../services/user/tripService';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function useAddToTravelPlan() {
+  const navigate = useNavigate();
   const [isPlanPickerOpen, setIsPlanPickerOpen] = useState(false);
   const [selectedDestination, setSelectedDestination] =
     useState(null);
@@ -37,6 +39,11 @@ export default function useAddToTravelPlan() {
   });
 
   function openAddToPlan(destination) {
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+
     setSelectedDestination(destination);
     setSelectedTripId(null);
     setIsPlanPickerOpen(true);
