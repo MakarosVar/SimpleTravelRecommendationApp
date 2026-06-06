@@ -1,7 +1,7 @@
 import apiClient from '../apiClient';
 
-export async function getDestinations() {
-  const response = await apiClient.get('/destinations');
+export async function getDestinations(params = {}) {
+  const response = await apiClient.get('/destinations', { params });
 
   return response.data;
 }

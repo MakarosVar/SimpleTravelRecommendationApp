@@ -9,8 +9,29 @@ import { AddToTravelPlanModal } from '../../components/trips/AddToTravelPlanModa
 
 export default function Discover() {
   const addToPlan = useAddToTravelPlan();
-  const { destinations, isLoading, error, reloadDestinations } =
-    useDestinations();
+  const [destinationQuery, setDestinationQuery] = useState({
+    search: '',
+    type: 'all',
+    sort: 'default',
+    page: 1,
+    limit: 9,
+  });
+  const [packageQuery, setPackageQuery] = useState({
+    search: '',
+    travelStyle: 'all',
+    duration: 'all',
+    sort: 'default',
+    page: 1,
+    limit: 9,
+  });
+  const {
+    destinations,
+    pagination,
+    filters,
+    isLoading,
+    error,
+    reloadDestinations,
+  } = useDestinations(destinationQuery);
   const { packages, isPackagesLoading, packagesError } =
     usePackages();
   const [activeTab, setActiveTab] = useState('destinations');
@@ -22,6 +43,12 @@ export default function Discover() {
 
   const inactiveTabClass =
     'bg-white/10 text-white/70 border-white/10 hover:bg-white/20';
+  function goToDestinationPage(nextPage) {
+    setDestinationQuery((current) => ({
+      ...current,
+      page: nextPage,
+    }));
+  }
   return (
     <PageContainer className="max-w-screen-2xl">
       <section className="py-10">
@@ -59,7 +86,64 @@ export default function Discover() {
             </div>
             <div className="rounded-b-3xl rounded-tr-3xl bg-black/30 p-6">
               {activeTab === 'destinations' && (
-                <div>
+                <div className="min-h-130">
+                  <div className="mb-6 rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                      <input
+                        type="text"
+                        value={destinationQuery.search}
+                        onChange={(event) =>
+                          setDestinationQuery((current) => ({
+                            ...current,
+                            search: event.target.value,
+                            page: 1,
+                          }))
+                        }
+                        placeholder="Search destinations by name, country, type, or tag..."
+                        className="w-full rounded-full bg-white px-4 py-2 text-sm text-slate-900 outline-none lg:max-w-md"
+                      />
+
+                      <select
+                        value={destinationQuery.sort}
+                        onChange={(event) =>
+                          setDestinationQuery((current) => ({
+                            ...current,
+                            sort: event.target.value,
+                            page: 1,
+                          }))
+                        }
+                        className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-900 outline-none"
+                      >
+                        <option value="default">Default</option>
+                        <option value="newest">Newest</option>
+                        <option value="name">Name</option>
+                        <option value="country">Country</option>
+                      </select>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {['all', ...filters.types].map((type) => (
+                        <button
+                          key={type}
+                          type="button"
+                          onClick={() =>
+                            setDestinationQuery((current) => ({
+                              ...current,
+                              type,
+                              page: 1,
+                            }))
+                          }
+                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                            destinationQuery.type === type
+                              ? 'bg-teal-500 text-white'
+                              : 'bg-white/15 text-white hover:bg-white/25'
+                          }`}
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                   {isLoading && (
                     <p className="text-white">
                       Loading destinations...
@@ -81,6 +165,38 @@ export default function Discover() {
                           onAddToPlan={addToPlan.openAddToPlan}
                         />
                       ))}
+                    </div>
+                  )}
+                  {pagination.totalPages > 1 && (
+                    <div className="mt-8 flex items-center justify-center gap-4">
+                      <button
+                        type="button"
+                        disabled={pagination.page <= 1}
+                        onClick={() =>
+                          goToDestinationPage(pagination.page - 1)
+                        }
+                        className="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Previous
+                      </button>
+
+                      <span className="text-sm font-medium text-white">
+                        Page {pagination.page} of{' '}
+                        {pagination.totalPages}
+                      </span>
+
+                      <button
+                        type="button"
+                        disabled={
+                          pagination.page >= pagination.totalPages
+                        }
+                        onClick={() =>
+                          goToDestinationPage(pagination.page + 1)
+                        }
+                        className="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Next
+                      </button>
                     </div>
                   )}
                 </div>
