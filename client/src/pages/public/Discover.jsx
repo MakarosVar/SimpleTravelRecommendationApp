@@ -6,6 +6,7 @@ import PackageCard from '../../components/cards/PackageCard';
 import { usePackages } from '../../hooks/usePackages';
 import useAddToTravelPlan from '../../hooks/useAddToTravelPlan';
 import { AddToTravelPlanModal } from '../../components/trips/AddToTravelPlanModal';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Discover() {
   const addToPlan = useAddToTravelPlan();
@@ -24,17 +25,15 @@ export default function Discover() {
     page: 1,
     limit: 9,
   });
+  const { destinations, pagination, filters, isLoading, error } =
+    useDestinations(destinationQuery);
   const {
-    destinations,
-    pagination,
-    filters,
-    isLoading,
-    error,
-    reloadDestinations,
-  } = useDestinations(destinationQuery);
-  const { packages, isPackagesLoading, packagesError } =
-    usePackages();
-  const [activeTab, setActiveTab] = useState('destinations');
+    packages,
+    packagePagination,
+    packageFilters,
+    isPackagesLoading,
+    packagesError,
+  } = usePackages(packageQuery);
   const tabBase =
     'rounded-t-2xl border px-6 py-3 text-sm font-semibold transition';
 
@@ -48,6 +47,26 @@ export default function Discover() {
       ...current,
       page: nextPage,
     }));
+  }
+  function goToPackagePage(nextPage) {
+    setPackageQuery((current) => ({
+      ...current,
+      page: nextPage,
+    }));
+  }
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const activeTab =
+    searchParams.get('tab') === 'packages'
+      ? 'packages'
+      : 'destinations';
+
+  function handleTabChange(tab) {
+    setSearchParams((currentParams) => {
+      const nextParams = new URLSearchParams(currentParams);
+      nextParams.set('tab', tab);
+      return nextParams;
+    });
   }
   return (
     <PageContainer className="max-w-screen-2xl">
@@ -68,7 +87,7 @@ export default function Discover() {
                     ? activeTabClass
                     : inactiveTabClass
                 }`}
-                onClick={() => setActiveTab('destinations')}
+                onClick={() => handleTabChange('destinations')}
               >
                 Destinations
               </button>
@@ -79,7 +98,7 @@ export default function Discover() {
                     ? activeTabClass
                     : inactiveTabClass
                 }`}
-                onClick={() => setActiveTab('packages')}
+                onClick={() => handleTabChange('packages')}
               >
                 Packages
               </button>
@@ -203,7 +222,68 @@ export default function Discover() {
               )}
 
               {activeTab === 'packages' && (
-                <section>
+                <div className="min-h-130">
+                  <div className="mb-6 rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                      <input
+                        type="text"
+                        value={packageQuery.search}
+                        onChange={(event) =>
+                          setPackageQuery((current) => ({
+                            ...current,
+                            search: event.target.value,
+                            page: 1,
+                          }))
+                        }
+                        placeholder="Search packages by title or travel style..."
+                        className="w-full rounded-full bg-white px-4 py-2 text-sm text-slate-900 outline-none lg:max-w-md"
+                      />
+
+                      <select
+                        value={packageQuery.sort}
+                        onChange={(event) =>
+                          setPackageQuery((current) => ({
+                            ...current,
+                            sort: event.target.value,
+                            page: 1,
+                          }))
+                        }
+                        className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-900 outline-none"
+                      >
+                        <option value="default">Default</option>
+                        <option value="newest">Newest</option>
+                        <option value="title">Title</option>
+                        <option value="travelStyle">
+                          Travel Style
+                        </option>
+                      </select>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {['all', ...packageFilters.travelStyles].map(
+                        (travelStyle) => (
+                          <button
+                            key={travelStyle}
+                            type="button"
+                            onClick={() =>
+                              setPackageQuery((current) => ({
+                                ...current,
+                                travelStyle,
+                                page: 1,
+                              }))
+                            }
+                            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                              packageQuery.travelStyle === travelStyle
+                                ? 'bg-teal-500 text-white'
+                                : 'bg-white/15 text-white hover:bg-white/25'
+                            }`}
+                          >
+                            {travelStyle}
+                          </button>
+                        ),
+                      )}
+                    </div>
+                  </div>
                   {isPackagesLoading && (
                     <p className="text-white">Loading packages...</p>
                   )}
@@ -228,8 +308,41 @@ export default function Discover() {
                         />
                       ))}
                     </div>
+                  )}{' '}
+                  {packagePagination.totalPages > 1 && (
+                    <div className="mt-8 flex items-center justify-center gap-4">
+                      <button
+                        type="button"
+                        disabled={packagePagination.page <= 1}
+                        onClick={() =>
+                          goToPackagePage(packagePagination.page - 1)
+                        }
+                        className="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Previous
+                      </button>
+
+                      <span className="text-sm font-medium text-white">
+                        Page {packagePagination.page} of{' '}
+                        {packagePagination.totalPages}
+                      </span>
+
+                      <button
+                        type="button"
+                        disabled={
+                          packagePagination.page >=
+                          packagePagination.totalPages
+                        }
+                        onClick={() =>
+                          goToPackagePage(packagePagination.page + 1)
+                        }
+                        className="rounded-full bg-white/15 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/25 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        Next
+                      </button>
+                    </div>
                   )}
-                </section>
+                </div>
               )}
             </div>
           </div>

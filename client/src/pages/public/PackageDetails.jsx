@@ -49,7 +49,7 @@ export default function PackageDetails() {
       <section className="mx-auto max-w-6xl px-6 py-10">
         <p className="text-red-600">{error}</p>
         <Link
-          to="/packages"
+          to="/discover?tab=packages"
           className="mt-4 inline-flex text-teal-400 hover:underline"
         >
           Back to packages
@@ -66,7 +66,7 @@ export default function PackageDetails() {
     <PageContainer>
       <section className="mx-auto max-w-6xl px-6 py-10">
         <Link
-          to="/discover"
+          to="/discover?tab=packages"
           className="mb-6 inline-flex text-sm font-medium text-teal-400  hover:underline"
         >
           ← Back to discover

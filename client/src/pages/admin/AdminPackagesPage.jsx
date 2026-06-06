@@ -51,7 +51,9 @@ export default function AdminPackagesPage() {
       <section className="mx-auto max-w-6xl px-6 py-8">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Packages</h1>
+            <h1 className="text-3xl font-bold text-white">
+              Packages
+            </h1>
             <p className="mt-1 text-white">
               Manage package content shown across TravelBloom.
             </p>
@@ -64,95 +66,95 @@ export default function AdminPackagesPage() {
           </Link>
         </div>
         <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
-          <table className="w-full border-collapse text-left">
-            <thead className="bg-gray-50 text-sm text-gray-600">
-              <tr>
-                <th className="px-3 py-3 font-semibold">Status</th>
-                <th className="px-5 py-3 font-semibold">Title</th>
-                <th className="px-5 py-3 font-semibold">
-                  Travel Style
-                </th>
-                <th className="px-5 py-3 font-semibold">Duration</th>
-                <th className="px-5 py-3 font-semibold">
-                  Destinations Count
-                </th>
-                <th className="px-5 py-3 font-semibold text-right">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {packageItems.map((packageItem) => (
-                <tr
-                  key={packageItem._id}
-                  className="hover:bg-gray-50"
-                >
-                  <td className="px-3 py-4 font-medium">
-                    <span
-                      className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
-                        packageItem.status === 'published'
-                          ? 'bg-green-200 text-green-700'
-                          : 'bg-yellow-200 text-yellow-700'
-                      }`}
-                    >
-                      {packageItem.status}
-                    </span>
-                  </td>
-
-                  <td className="px-3 py-4 font-medium">
-                    <div className="font-semibold">
-                      {packageItem.title}
-                    </div>
-
-                    {packageItem.description && (
-                      <div className="mt-1 max-w-xl truncate text-sm text-gray-500">
-                        {packageItem.description}
-                      </div>
-                    )}
-                  </td>
-
-                  <td className="px-3 py-4 font-medium">
-                    {packageItem?.travelStyle}
-                  </td>
-
-                  <td className="px-3 py-4 font-medium">
-                    {packageItem?.duration}
-                  </td>
-
-                  <td className="px-3 py-4 font-medium">
-                    {packageItem.destinations?.length ?? 0}
-                  </td>
-
-                  <td className="px-5 py-4 text-right">
-                    <button
-                      disabled={updateStatusMutation.isPending}
-                      type="button"
-                      className={`${packageItem.status === 'published' ? 'text-amber-600' : 'text-green-500'} mr-4 hover:underline disabled:opacity-50`}
-                      onClick={() =>
-                        updateStatusMutation.mutate({
-                          packageId: packageItem._id,
-                          status:
-                            packageItem.status === 'published'
-                              ? 'draft'
-                              : 'published',
-                        })
-                      }
-                    >
-                      {packageItem.status === 'published'
-                        ? 'Unpublish'
-                        : 'Publish'}
-                    </button>
-                    <Link
-                      to={`/admin/packages/${packageItem._id}/edit`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      Edit
-                    </Link>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-250 w-full border-collapse text-left">
+              <thead className="bg-gray-50 text-sm text-gray-600">
+                <tr>
+                  <th className="w-24 px-5 py-4 ">Status</th>
+                  <th className="px-5 py-4 ">Title</th>
+                  <th className="w-36 px-5 py-4">Travel Style</th>
+                  <th className="w-28 px-5 py-4">Duration</th>
+                  <th className="w-20 px-3 py-4 text-center">
+                    Dest. Count
+                  </th>
+                  <th className="w-28 px-5 py-4 text-right">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y">
+                {packageItems.map((packageItem) => (
+                  <tr
+                    key={packageItem._id}
+                    className="hover:bg-gray-50"
+                  >
+                    <td className="px-3 py-4 font-medium">
+                      <span
+                        className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${
+                          packageItem.status === 'published'
+                            ? 'bg-green-200 text-green-700'
+                            : 'bg-yellow-200 text-yellow-700'
+                        }`}
+                      >
+                        {packageItem.status}
+                      </span>
+                    </td>
+
+                    <td className="px-3 py-4 font-medium">
+                      <div className="font-semibold">
+                        {packageItem.title}
+                      </div>
+
+                      {packageItem.description && (
+                        <div className="mt-1 max-w-lg truncate text-sm text-gray-500">
+                          {packageItem.description}
+                        </div>
+                      )}
+                    </td>
+
+                    <td className="px-3 py-4 font-medium">
+                      {packageItem?.travelStyle}
+                    </td>
+
+                    <td className="px-3 py-4 font-medium">
+                      {packageItem?.duration}
+                    </td>
+
+                    <td className="px-3 py-4 font-medium text-center">
+                      {packageItem.destinations?.length ?? 0}
+                    </td>
+
+                    <td className="whitespace-nowrap px-5 py-4 text-right">
+                      <button
+                        disabled={updateStatusMutation.isPending}
+                        type="button"
+                        className={`${packageItem.status === 'published' ? 'text-amber-600' : 'text-green-500'} mr-4 hover:underline disabled:opacity-50`}
+                        onClick={() =>
+                          updateStatusMutation.mutate({
+                            packageId: packageItem._id,
+                            status:
+                              packageItem.status === 'published'
+                                ? 'draft'
+                                : 'published',
+                          })
+                        }
+                      >
+                        {packageItem.status === 'published'
+                          ? 'Unpublish'
+                          : 'Publish'}
+                      </button>
+                      <Link
+                        to={`/admin/packages/${packageItem._id}/edit`}
+                        className="text-blue-600 hover:underline"
+                      >
+                        Edit
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
     </PageContainer>

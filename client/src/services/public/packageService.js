@@ -1,7 +1,7 @@
 import apiClient from '../apiClient';
 
-export async function getPackages() {
-  const { data } = await apiClient.get('/packages');
+export async function getPackages(params = {}) {
+  const { data } = await apiClient.get('/packages', { params });
   return data;
 }
 
