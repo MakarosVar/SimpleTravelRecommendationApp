@@ -221,7 +221,7 @@ Make sure you have installed:
 Navigate to the backend folder:
 
 ```bash
-cd backend
+cd server
 ```
 
 Install dependencies:
@@ -252,7 +252,7 @@ npm run dev
 Navigate to the frontend folder:
 
 ```bash
-cd frontend
+cd client
 ```
 
 Install dependencies:
